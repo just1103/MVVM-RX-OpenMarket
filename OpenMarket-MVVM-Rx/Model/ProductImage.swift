@@ -5,9 +5,9 @@ struct ProductImage: Codable {
     let url: String
     let thumbnailUrl: String
     let isUploadSucceed: Bool
-    let issuedAt: String
+    let issuedAt: Date
     
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id, url, thumbnailUrl, issuedAt
         
         case isUploadSucceed = "succeed"

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		36C0A07D281000130031C83C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425D280FDC640046D916 /* AppDelegate.swift */; };
+		36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */; };
+		36C0A0862810292B0031C83C /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0A0852810292A0031C83C /* JSONParser.swift */; };
 		DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425F280FDC640046D916 /* SceneDelegate.swift */; };
 		DEC34262280FDC640046D916 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34261280FDC640046D916 /* ViewController.swift */; };
 		DEC34267280FDC650046D916 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEC34266280FDC650046D916 /* Assets.xcassets */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+DateFormat.swift"; sourceTree = "<group>"; };
+		36C0A0852810292A0031C83C /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMarket-MVVM-Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC3425D280FDC640046D916 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEC3425F280FDC640046D916 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +57,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36C0A07E281020F00031C83C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		36C0A081281027310031C83C /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				36C0A0852810292A0031C83C /* JSONParser.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		36C0A082281027580031C83C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		DEC34251280FDC640046D916 = {
 			isa = PBXGroup;
 			children = (
@@ -73,8 +100,11 @@
 		DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
 			isa = PBXGroup;
 			children = (
+				36C0A07E281020F00031C83C /* Network */,
 				DEC3427B281008440046D916 /* App */,
 				DEC3427D281009300046D916 /* Model */,
+				36C0A081281027310031C83C /* Utility */,
+				36C0A082281027580031C83C /* Extensions */,
 				DEC3427C2810085B0046D916 /* Resources */,
 				DEC34261280FDC640046D916 /* ViewController.swift */,
 				DEC3426B280FDC650046D916 /* Info.plist */,
@@ -218,8 +248,10 @@
 				36C0A07D281000130031C83C /* AppDelegate.swift in Sources */,
 				DEC3428128100AEB0046D916 /* Currency.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
+				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
 				DEC34262280FDC640046D916 /* ViewController.swift in Sources */,
 				DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */,
+				36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
