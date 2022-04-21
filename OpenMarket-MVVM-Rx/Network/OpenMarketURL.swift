@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 struct OpenMarketBaseURL: BaseURLProtocol {
     var baseURL = "https://market-training.yagom-academy.kr/"

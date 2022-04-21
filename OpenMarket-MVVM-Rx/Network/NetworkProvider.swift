@@ -31,9 +31,9 @@ struct NetworkProvider {
                 let successStatusCode = 200..<300
                 guard let httpResponse = response as? HTTPURLResponse,
                       successStatusCode.contains(httpResponse.statusCode) else {
-                    emitter.onError(NetworkError.statusCodeError)
-                    return
-                }
+                          emitter.onError(NetworkError.statusCodeError)
+                          return
+                      }
                 
                 if let data = data {
                     emitter.onNext(data)
@@ -43,9 +43,43 @@ struct NetworkProvider {
             }
             task.resume()
             
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    func request(api: APIProtocol) -> Observable<Data> {
+        return Observable.create { emitter in
+            guard let urlRequest = URLRequest(api: api) else {
+                emitter.onError(NetworkError.urlIsNil)
+                return Disposables.create()
+            }
+            
+            _ = loadData(request: urlRequest)
+                .map { emitter.onNext($0) }
+            
+            emitter.onCompleted()
+            
             return Disposables.create()
         }
     }
     
-    
+    func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
+        return Observable.create { emitter in
+            let result = request(api: api)
+            _ = result.map {
+                let decodedData = JSONParser<T>().decode(from: $0)
+                switch decodedData {
+                case .success(let data):
+                    emitter.onNext(data)
+                    emitter.onCompleted()
+                case .failure:
+                    emitter.onError(JSONParserError.decodingFail)
+                }
+            }
+            
+            return Disposables.create()
+        }
+    }
 }
