@@ -13,7 +13,7 @@ struct MultipartFormData {
     mutating func appendToBody(from data: Data) {
         self.body.append(data)
     }
-      
+    
     func createFormData<Item: Codable>(params: String, item: Item) -> Data {
         var data = Data()
         data.append(BoundaryGenerator.boundaryData(forBoundaryType: .startSymbol, boundary: boundary))

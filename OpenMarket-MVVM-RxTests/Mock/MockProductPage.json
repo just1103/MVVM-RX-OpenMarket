@@ -1,0 +1,77 @@
+{
+  "page_no": 1,
+  "items_per_page": 20,
+  "total_count": 5,
+  "offset": 0,
+  "limit": 20,
+  "pages": [
+    {
+      "id": 15,
+      "vendor_id": 3,
+      "name": "pizza",
+      "thumbnail": "https://s3.ap-northeast-2.amazonaws.com/media.yagom-academy.kr/training-resources/3/thumb/f510cb6e689f11ecbf33d124b2c61dc4.jpg",
+      "currency": "KRW",
+      "price": 25000,
+      "bargain_price": 25000,
+      "discounted_price": 0,
+      "stock": 0,
+      "created_at": "2021-12-29 00:00:00.000",
+      "issued_at": "2021-12-29 00:00:00.000"
+    },
+    {
+      "id": 13,
+      "vendor_id": 2,
+      "name": "팥빙수",
+      "thumbnail": "https://s3.ap-northeast-2.amazonaws.com/media.yagom-academy.kr/training-resources/2/thumb/f70ad56a689911ecbf33f11af721febf.png",
+      "currency": "KRW",
+      "price": 2000,
+      "bargain_price": 2000,
+      "discounted_price": 0,
+      "stock": 0,
+      "created_at": "2021-12-29 00:00:00.000",
+      "issued_at": "2021-12-29 00:00:00.000"
+    },
+    {
+      "id": 4,
+      "vendor_id": 3,
+      "name": "Test Product",
+      "thumbnail": "https://s3.ap-northeast-2.amazonaws.com/media.yagom-academy.kr/training-resources/3/thumb/87aa7c8966df11ecad1df993f20d4a2a.jpg",
+      "currency": "KRW",
+      "price": 1000,
+      "bargain_price": 900,
+      "discounted_price": 100,
+      "stock": 0,
+      "created_at": "2021-12-27 00:00:00.000",
+      "issued_at": "2021-12-27 00:00:00.000"
+    },
+    {
+      "id": 3,
+      "vendor_id": 3,
+      "name": "Test Product",
+      "thumbnail": "https://s3.ap-northeast-2.amazonaws.com/media.yagom-academy.kr/training-resources/3/thumb/2f6021a066dc11ec9626955448777bf5.jpg",
+      "currency": "KRW",
+      "price": 1000,
+      "bargain_price": 1000,
+      "discounted_price": 0,
+      "stock": 0,
+      "created_at": "2021-12-27 00:00:00.000",
+      "issued_at": "2021-12-27 00:00:00.000"
+    },
+    {
+      "id": 2,
+      "vendor_id": 2,
+      "name": "팥빙수",
+      "thumbnail": "https://s3.ap-northeast-2.amazonaws.com/media.yagom-academy.kr/training-resources/2/thumb/a3257844661911ec8eff5b6e36134cb4.png",
+      "currency": "KRW",
+      "price": 2000,
+      "bargain_price": 2000,
+      "discounted_price": 0,
+      "stock": 0,
+      "created_at": "2021-12-26 00:00:00.000",
+      "issued_at": "2021-12-26 00:00:00.000"
+    }
+  ],
+  "last_page": 1,
+  "has_next": false,
+  "has_prev": false
+}

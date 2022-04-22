@@ -20,10 +20,40 @@ enum NetworkError: Error, LocalizedError {
 
 struct NetworkProvider {
     private let session: URLSessionProtocol
+    private let disposeBag = DisposeBag()
     
     init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
+    
+//    func request(api: APIProtocol) -> Observable<Data> {
+//        return Observable.create { emitter in
+//            guard let urlRequest = URLRequest(api: api) else {
+//                emitter.onError(NetworkError.urlIsNil)
+//                return Disposables.create()
+//            }
+//
+//            let task = session.dataTask(with: urlRequest) { data, response, _ in
+//                let successStatusCode = 200..<300
+//                guard let httpResponse = response as? HTTPURLResponse,
+//                      successStatusCode.contains(httpResponse.statusCode) else {
+//                          emitter.onError(NetworkError.statusCodeError)
+//                          return
+//                      }
+//
+//                if let data = data {
+//                    emitter.onNext(data)
+//                }
+//
+//                emitter.onCompleted()
+//            }
+//            task.resume()
+//
+//            return Disposables.create {
+//                task.cancel()
+//            }
+//        }
+//    }
     
     private func loadData(request: URLRequest) -> Observable<Data> {
         return Observable.create { emitter in
@@ -57,9 +87,17 @@ struct NetworkProvider {
             }
             
             _ = loadData(request: urlRequest)
-                .map { emitter.onNext($0) }
-            
-            emitter.onCompleted()
+                .subscribe { event in
+                    switch event {
+                    case .next(let data):
+                        emitter.onNext(data)
+                    case .error(let error):
+                        emitter.onError(error)
+                    case .completed:
+                        emitter.onCompleted()
+                    }
+                    emitter.onCompleted()
+                }.disposed(by: disposeBag)
             
             return Disposables.create()
         }
@@ -68,16 +106,22 @@ struct NetworkProvider {
     func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
         return Observable.create { emitter in
             let result = request(api: api)
-            _ = result.map {
-                let decodedData = JSONParser<T>().decode(from: $0)
-                switch decodedData {
-                case .success(let data):
-                    emitter.onNext(data)
+            _ = result.subscribe { event in
+                switch event {
+                case .next(let data):
+                    guard let decodedData = JSONParser<T>().decode(from: data) else {
+                        emitter.onError(JSONParserError.decodingFail)
+                        return
+                    }
+                    emitter.onNext(decodedData)
+                case .error(let error):
+                    emitter.onError(error)
+                case .completed:
                     emitter.onCompleted()
-                case .failure:
-                    emitter.onError(JSONParserError.decodingFail)
                 }
+                emitter.onCompleted()
             }
+            .disposed(by: disposeBag)
             
             return Disposables.create()
         }

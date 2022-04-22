@@ -15,9 +15,9 @@ enum JSONParserError: Error, LocalizedError {
 }
 
 struct JSONParser<Item: Codable> {
-    func decode(from json: Data?) -> Result<Item, JSONParserError> {
+    func decode(from json: Data?) -> Item? {
         guard let data = json else {
-            return .failure(.decodingFail)
+            return nil
         }
         
         let decoder = JSONDecoder()
@@ -25,12 +25,13 @@ struct JSONParser<Item: Codable> {
         decoder.dateDecodingStrategy = .formatted(DateFormatter.shared)
         
         guard let decodedData = try? decoder.decode(Item.self, from: data) else {
-            return .failure(.decodingFail)
+            return nil
         }
         
-        return .success(decodedData)
+        return decodedData
     }
     
+    // TODO: - encode 메서드 반환 타입 고려 (Result, 옵셔널)
     func encode(from item: Item?) -> Result<Data, JSONParserError> {
         guard let item = item else {
             return .failure(.encodingFail)
