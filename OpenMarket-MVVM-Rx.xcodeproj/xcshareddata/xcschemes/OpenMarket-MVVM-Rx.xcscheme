@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DEC34259280FDC640046D916"
-               BuildableName = "NewOpenMarket.app"
-               BlueprintName = "NewOpenMarket"
-               ReferencedContainer = "container:NewOpenMarket.xcodeproj">
+               BuildableName = "OpenMarket-MVVM-Rx.app"
+               BlueprintName = "OpenMarket-MVVM-Rx"
+               ReferencedContainer = "container:OpenMarket-MVVM-Rx.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "DE23D43B281149690097A8C3"
                BuildableName = "NetworkProviderTests.xctest"
                BlueprintName = "NetworkProviderTests"
-               ReferencedContainer = "container:NewOpenMarket.xcodeproj">
+               ReferencedContainer = "container:OpenMarket-MVVM-Rx.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DEC34259280FDC640046D916"
-            BuildableName = "NewOpenMarket.app"
-            BlueprintName = "NewOpenMarket"
-            ReferencedContainer = "container:NewOpenMarket.xcodeproj">
+            BuildableName = "OpenMarket-MVVM-Rx.app"
+            BlueprintName = "OpenMarket-MVVM-Rx"
+            ReferencedContainer = "container:OpenMarket-MVVM-Rx.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DEC34259280FDC640046D916"
-            BuildableName = "NewOpenMarket.app"
-            BlueprintName = "NewOpenMarket"
-            ReferencedContainer = "container:NewOpenMarket.xcodeproj">
+            BuildableName = "OpenMarket-MVVM-Rx.app"
+            BlueprintName = "OpenMarket-MVVM-Rx"
+            ReferencedContainer = "container:OpenMarket-MVVM-Rx.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

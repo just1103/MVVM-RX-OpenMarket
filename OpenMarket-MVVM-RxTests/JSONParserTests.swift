@@ -1,5 +1,5 @@
 import XCTest
-@testable import NewOpenMarket
+@testable import OpenMarket_MVVM_Rx
 
 class JSONParserTests: XCTestCase {
     func test_Product타입_decode했을때_Nil이_아닌지_테스트() {

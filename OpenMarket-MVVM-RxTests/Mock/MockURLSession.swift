@@ -1,5 +1,5 @@
 import Foundation
-@testable import NewOpenMarket
+@testable import OpenMarket_MVVM_Rx
 
 class MockURLSessionDataTask: URLSessionDataTask {
     var resumeDidCall: () -> Void = {}

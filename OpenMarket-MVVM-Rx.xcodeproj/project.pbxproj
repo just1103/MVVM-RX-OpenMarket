@@ -60,7 +60,7 @@
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
-		DEC3425A280FDC640046D916 /* NewOpenMarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewOpenMarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMarket-MVVM-Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC3425D280FDC640046D916 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEC3425F280FDC640046D916 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DEC34261280FDC640046D916 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
-		DE23D43D281149690097A8C3 /* NewOpenMarketTests */ = {
+		DE23D43D281149690097A8C3 /* OpenMarket-MVVM-RxTests */ = {
 			isa = PBXGroup;
 			children = (
 				36C0C0962812A5B900B57492 /* Mock */,
@@ -146,15 +146,15 @@
 				DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */,
 				36C0C094281287EE00B57492 /* NetworkProviderTests.swift */,
 			);
-			path = NewOpenMarketTests;
+			path = "OpenMarket-MVVM-RxTests";
 			sourceTree = "<group>";
 		};
 		DEC34251280FDC640046D916 = {
 			isa = PBXGroup;
 			children = (
 				DEC34272280FDD460046D916 /* .swiftlint.yml */,
-				DEC3425C280FDC640046D916 /* NewOpenMarket */,
-				DE23D43D281149690097A8C3 /* NewOpenMarketTests */,
+				DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */,
+				DE23D43D281149690097A8C3 /* OpenMarket-MVVM-RxTests */,
 				DEC3425B280FDC640046D916 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -162,13 +162,13 @@
 		DEC3425B280FDC640046D916 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DEC3425A280FDC640046D916 /* NewOpenMarket.app */,
+				DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */,
 				DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DEC3425C280FDC640046D916 /* NewOpenMarket */ = {
+		DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
 			isa = PBXGroup;
 			children = (
 				36C0A07E281020F00031C83C /* Network */,
@@ -181,7 +181,7 @@
 				DEC34261280FDC640046D916 /* ViewController.swift */,
 				DEC3426B280FDC650046D916 /* Info.plist */,
 			);
-			path = NewOpenMarket;
+			path = "OpenMarket-MVVM-Rx";
 			sourceTree = "<group>";
 		};
 		DEC3427B281008440046D916 /* App */ = {
@@ -245,9 +245,9 @@
 			productReference = DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DEC34259280FDC640046D916 /* NewOpenMarket */ = {
+		DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "NewOpenMarket" */;
+			buildConfigurationList = DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "OpenMarket-MVVM-Rx" */;
 			buildPhases = (
 				DEC34256280FDC640046D916 /* Sources */,
 				DEC34257280FDC640046D916 /* Frameworks */,
@@ -258,14 +258,14 @@
 			);
 			dependencies = (
 			);
-			name = NewOpenMarket;
+			name = "OpenMarket-MVVM-Rx";
 			packageProductDependencies = (
 				DEC34275280FDE4A0046D916 /* RxCocoa */,
 				DEC34277280FDE4A0046D916 /* RxRelay */,
 				DEC34279280FDE4A0046D916 /* RxSwift */,
 			);
 			productName = "OpenMarket-MVVM-Rx";
-			productReference = DEC3425A280FDC640046D916 /* NewOpenMarket.app */;
+			productReference = DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -287,7 +287,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DEC34255280FDC640046D916 /* Build configuration list for PBXProject "NewOpenMarket" */;
+			buildConfigurationList = DEC34255280FDC640046D916 /* Build configuration list for PBXProject "OpenMarket-MVVM-Rx" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -303,7 +303,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DEC34259280FDC640046D916 /* NewOpenMarket */,
+				DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */,
 				DE23D43B281149690097A8C3 /* NetworkProviderTests */,
 			);
 		};
@@ -392,7 +392,7 @@
 /* Begin PBXTargetDependency section */
 		DE23D441281149690097A8C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DEC34259280FDC640046D916 /* NewOpenMarket */;
+			target = DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */;
 			targetProxy = DE23D440281149690097A8C3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -424,7 +424,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewOpenMarket.app/NewOpenMarket";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMarket-MVVM-Rx.app/OpenMarket-MVVM-Rx";
 			};
 			name = Debug;
 		};
@@ -443,7 +443,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewOpenMarket.app/NewOpenMarket";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMarket-MVVM-Rx.app/OpenMarket-MVVM-Rx";
 			};
 			name = Release;
 		};
@@ -570,7 +570,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NewOpenMarket/Info.plist;
+				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -580,7 +580,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.NewOpenMarket;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.OpenMarket-MVVM-Rx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -597,7 +597,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NewOpenMarket/Info.plist;
+				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -607,7 +607,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.NewOpenMarket;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.OpenMarket-MVVM-Rx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -627,7 +627,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEC34255280FDC640046D916 /* Build configuration list for PBXProject "NewOpenMarket" */ = {
+		DEC34255280FDC640046D916 /* Build configuration list for PBXProject "OpenMarket-MVVM-Rx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEC3426C280FDC650046D916 /* Debug */,
@@ -636,7 +636,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "NewOpenMarket" */ = {
+		DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "OpenMarket-MVVM-Rx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEC3426F280FDC650046D916 /* Debug */,

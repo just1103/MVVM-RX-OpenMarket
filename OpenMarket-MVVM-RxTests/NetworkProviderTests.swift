@@ -1,15 +1,14 @@
 import XCTest
 import RxSwift
-@testable import NewOpenMarket
+@testable import OpenMarket_MVVM_Rx
 
-class MockNetworkProviderTests: XCTestCase {
-    let mockSession: URLSessionProtocol! = MockURLSession()
+class NetworkProviderTests: XCTestCase {
     var sut: NetworkProvider!
     var disposeBag: DisposeBag!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        sut = NetworkProvider(session: mockSession)
+        sut = NetworkProvider()
         disposeBag = DisposeBag()
     }
 
@@ -18,32 +17,54 @@ class MockNetworkProviderTests: XCTestCase {
         sut = nil
         disposeBag = nil
     }
-
+    
     // TODO : 이것도 비동기테스트가 필요없는지 체크
     func test_getHealthChecker가_정상작동_하는지() {
+        let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
+        
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onNext: { data in
-                let resultString = String(data: data, encoding: .utf8)
-                let successString = #""OK""#
-                XCTAssertEqual(resultString, successString)
+            let resultString = String(data: data, encoding: .utf8)
+            let successString = #""OK""#
+            XCTAssertEqual(resultString, successString)
+            expectation.fulfill()
         }).disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 10)
     }
     
     func test_getHealthChecker가_정상실패_하는지() {
         let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
         sut = NetworkProvider(session: MockURLSession(isRequestSuccess: false))
-
+        
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onError: { error in
-            let statusCodeError = NetworkError.statusCodeError
-            XCTAssertEqual(error as? NetworkError, statusCodeError)
+            let urlError = NetworkError.statusCodeError
+            XCTAssertEqual(error as? NetworkError, urlError)
             expectation.fulfill()
-
+            
         }).disposed(by: disposeBag)
-
+        
         wait(for: [expectation], timeout: 10)
     }
-
+    
+    func test_getHealthChecker가_오류를_정상반환_하는지() {
+        let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
+        
+        var healthCheckerAPI = HealthCheckerAPI()
+        healthCheckerAPI.url = URL(string: "wrongURL")
+        
+        let observableData = sut.request(api: healthCheckerAPI)
+        _ = observableData.subscribe(onError: { error in
+            let urlError = NetworkError.statusCodeError
+            XCTAssertEqual(error as? NetworkError, urlError)
+            expectation.fulfill()
+            
+        }).disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 10)
+    }
+  
 //    func test_getProductDetail가_정상작동_하는지() {
 //        let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
 //
