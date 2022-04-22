@@ -39,8 +39,7 @@ class NetworkProviderTests: XCTestCase {
         
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onError: { error in
-            let urlError = NetworkError.statusCodeError
-            XCTAssertEqual(error as? NetworkError, urlError)
+            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
             
         }).disposed(by: disposeBag)
@@ -56,8 +55,7 @@ class NetworkProviderTests: XCTestCase {
         
         let observableData = sut.request(api: healthCheckerAPI)
         _ = observableData.subscribe(onError: { error in
-            let urlError = NetworkError.statusCodeError
-            XCTAssertEqual(error as? NetworkError, urlError)
+            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
             
         }).disposed(by: disposeBag)
@@ -65,117 +63,66 @@ class NetworkProviderTests: XCTestCase {
         wait(for: [expectation], timeout: 10)
     }
   
-//    func test_getProductDetail가_정상작동_하는지() {
-//        let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
-//
-//        let observable = sut.request(api: ProductDetailAPI(id: 15))
-//        _ = observable.subscribe(onNext: { data in
-//            let product = JSONParser<Product>().decode(from: data)
-//            XCTAssertEqual(product?.id, 15)
-//            XCTAssertEqual(product?.name, "pizza")
-//            expectation.fulfill()
-//        }).disposed(by: disposeBag)
-//
-//        wait(for: [expectation], timeout: 10.0)
-//    }
-    
-//    func test_getProductDetail가_정상작동_하는지() {
-//        let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
-//
-//        let observableData = sut.fetchData(api: ProductDetailAPI(id: 2), decodingType: Product.self)
-//        _ = observableData.subscribe(onNext: { product in
-//            XCTAssertEqual(product.id, 2)
-//            XCTAssertEqual(product.name, "팥빙수")
-//            expectation.fulfill()
-//        }).disposed(by: disposeBag)
-//
-//        wait(for: [expectation], timeout: 10.0)
-//    }
+    // 서버 용량 제한으로 해당 id가 자동 삭제되어 테스트 Fail 발생 가능
+    func test_getProductDetail가_정상작동_하는지() {
+        let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
 
-//    func test_getProductPage가_정상작동_하는지() {
-//        let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
-//
-//        sut.request(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 10)) { result in
-//            switch result {
-//            case .success(let data):
-//                let productPage = try? JSONParser<ProductPage>().decode(from: data).get()
-//                XCTAssertEqual(productPage?.pageNumber, 1)
-//                XCTAssertEqual(productPage?.itemsPerPage, 10)
-//            case .failure(_):
-//                XCTFail()
-//            }
-//            expectation.fulfill()
-//        }
-//        wait(for: [expectation], timeout: 10.0)
-//    }
-//
-//    func test_URL이_유효하지않을때_statusCodeError가_나오는지() {
-//        struct TestAPI: APIProtocol {
-//            var url: URL? = URL(string: "www")
-//            var method: HttpMethod = .get
-//        }
-//
-//        sut.request(api: TestAPI()) { result in
-//            switch result {
-//            case .success(_):
-//                XCTFail()
-//            case .failure(let error):
-//                XCTAssertEqual(error, .statusCodeError)
-//            }
-//        }
-//    }
-//
-//    func test_URL이_Nil일때_invalidURLError가_나오는지() {
-//        struct TestAPI: APIProtocol {
-//            var url: URL?
-//            var method: HttpMethod = .get
-//        }
-//
-//        sut.request(api: TestAPI()) { result in
-//            switch result {
-//            case .success(_):
-//                XCTFail()
-//            case .failure(let error):
-//                XCTAssertEqual(error, .urlIsNil)
-//            }
-//        }
-//    }
-//
-//    func test_MockURLSession의_StatusCode가_200번일때_정상동작_하는지() {
-//        let mockSession = MockURLSession(isRequestSuccess: true)
-//        sut = NetworkDataTransfer(session: mockSession)
-//
-//        let expectation = XCTestExpectation(description: "MockURLSession의 getHealthChecker 비동기 테스트")
-//
-//        sut.request(api: HealthCheckerAPI()) { result in
-//            switch result {
-//            case .success(let data):
-//                let resultString = String(data: data, encoding: .utf8)
-//                let successString = #""OK""#
-//                XCTAssertEqual(resultString, successString)
-//            case .failure(_):
-//                XCTFail()
-//            }
-//            expectation.fulfill()
-//        }
-//        wait(for: [expectation], timeout: 10.0)
-//    }
-//
-//    func test_MockURLSession의_StatusCode가_200번이_아닐때_실패하는지() {
-//        let mockSession = MockURLSession(isRequestSuccess: false)
-//        sut = NetworkDataTransfer(session: mockSession)
-//
-//        let expectation = XCTestExpectation(description: "MockURLSession의 getHealthChecker 비동기 테스트")
-//
-//        sut.request(api: HealthCheckerAPI()) { result in
-//            switch result {
-//            case .success(_):
-//                XCTFail()
-//            case .failure(let error):
-//                XCTAssertEqual(error, NetworkError.statusCodeError)
-//            }
-//            expectation.fulfill()
-//        }
-//        wait(for: [expectation], timeout: 10.0)
-//    }
+        let observable = sut.request(api: ProductDetailAPI(id: 600))
+        _ = observable.subscribe(onNext: { data in
+            let product = JSONParser<Product>().decode(from: data)
+            XCTAssertEqual(product?.id, 600)
+            XCTAssertEqual(product?.name, "Test Product")
+            expectation.fulfill()
+        }).disposed(by: disposeBag)
+
+        wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func test_getProductPage가_정상작동_하는지() {
+        let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
+
+        let observableData = sut.request(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 10))
+        _ = observableData.subscribe(onNext: { data in
+            let productPage = JSONParser<ProductPage>().decode(from: data)
+            XCTAssertEqual(productPage?.pageNumber, 1)
+            XCTAssertEqual(productPage?.itemsPerPage, 10)
+            expectation.fulfill()
+        }).disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func test_URL이_유효하지않을때_statusCodeError가_나오는지() {
+        let expectation = XCTestExpectation(description: "Request 비동기 테스트")
+        
+        struct TestAPI: APIProtocol {
+            var url: URL? = URL(string: "wrongURL")
+            var method: HttpMethod = .get
+        }
+
+        let observableData = sut.request(api: TestAPI())
+        _ = observableData.subscribe(onError: { error in
+            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
+            expectation.fulfill()
+        }).disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func test_URL이_Nil일때_urlIsNil_Error가_나오는지() {
+        let expectation = XCTestExpectation(description: "Request 비동기 테스트")
+        
+        struct TestAPI: APIProtocol {
+            var url: URL?
+            var method: HttpMethod = .get
+        }
+
+        let observableData = sut.request(api: TestAPI())
+        _ = observableData.subscribe(onError: { error in
+            XCTAssertEqual(error as? NetworkError, NetworkError.urlIsNil)
+            expectation.fulfill()
+        }).disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 10.0)
+    }
 }

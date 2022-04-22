@@ -32,9 +32,9 @@ struct NetworkProvider {
                 let successStatusCode = 200..<300
                 guard let httpResponse = response as? HTTPURLResponse,
                       successStatusCode.contains(httpResponse.statusCode) else {
-                          emitter.onError(NetworkError.statusCodeError)
-                          return
-                      }
+                    emitter.onError(NetworkError.statusCodeError)
+                    return
+                }
                 
                 if let data = data {
                     emitter.onNext(data)
@@ -45,7 +45,7 @@ struct NetworkProvider {
             task.resume()
             
             return Disposables.create {
-                task.cancel()  
+                task.cancel()
             }
         }
     }
@@ -58,12 +58,12 @@ struct NetworkProvider {
             }
             
             _ = loadData(request: urlRequest)
-                .subscribe { event in  // stream이 끊기면 안된다. map으로 observable을 그대로 받아야 함
+                .subscribe { event in
                     switch event {
                     case .next(let data):
                         emitter.onNext(data)
                     case .error(let error):
-                        emitter.onError(error) // error 상황에서도 안걸림
+                        emitter.onError(error)
                     case .completed:
                         emitter.onCompleted()
                     }
@@ -76,34 +76,25 @@ struct NetworkProvider {
     
     func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
         return Observable.create { emitter in
-                    let result = request(api: api)
-                    _ = result.subscribe { event in
-                        switch event {
-                        case .next(let data):
-                            guard let decodedData = JSONParser<T>().decode(from: data) else {
-                                emitter.onError(JSONParserError.decodingFail)
-                                return
-                            }
-                            emitter.onNext(decodedData)
-                        case .error(let error):
-                            emitter.onError(error)
-                        case .completed:
-                            emitter.onCompleted()
-                        }
-                        emitter.onCompleted()
+            let result = request(api: api)
+            _ = result.subscribe { event in
+                switch event {
+                case .next(let data):
+                    guard let decodedData = JSONParser<T>().decode(from: data) else {
+                        emitter.onError(JSONParserError.decodingFail)
+                        return
                     }
-                    .disposed(by: disposeBag)
-                    
-                    return Disposables.create()
+                    emitter.onNext(decodedData)
+                case .error(let error):
+                    emitter.onError(error)
+                case .completed:
+                    emitter.onCompleted()
                 }
-        
-        // TODO : stream 유지 필요
-//            let observable = request(api: api).map { data -> T in
-//                    let decodedData = JSONParser<T>().decode(from: data)!
-//                    // 실패처리 못함
-//
-//                    return decodedData
-//                }
-//            return observable // repository로 보내줌
+                emitter.onCompleted()
+            }
+            .disposed(by: disposeBag)
+            
+            return Disposables.create()
+        }
     }
 }
