@@ -24,7 +24,7 @@ struct JSONParser<Item: Codable> {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         decoder.dateDecodingStrategy = .formatted(DateFormatter.shared)
         
-        guard let decodedData = try? decoder.decode(Item.self, from: data) else {
+        guard let decodedData = try? decoder.decode(Item.self, from: data) else { 
             return nil
         }
         

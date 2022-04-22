@@ -11,10 +11,13 @@
 		36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */; };
 		36C0A0862810292B0031C83C /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0A0852810292A0031C83C /* JSONParser.swift */; };
 		36C0BFF02810F6B300B57492 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0BFEF2810F6B300B57492 /* MultipartFormData.swift */; };
-		DE23D43F281149690097A8C3 /* NetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* NetworkProviderTests.swift */; };
-		DE23D447281149B50097A8C3 /* MockProduct.json in Resources */ = {isa = PBXBuildFile; fileRef = DE23D446281149B50097A8C3 /* MockProduct.json */; };
-		DE23D449281149C40097A8C3 /* MockProductPage.json in Resources */ = {isa = PBXBuildFile; fileRef = DE23D448281149C40097A8C3 /* MockProductPage.json */; };
-		DE23D44B281149DA0097A8C3 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D44A281149DA0097A8C3 /* MockURLSession.swift */; };
+		36C0C00B28125A7D00B57492 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D44A281149DA0097A8C3 /* MockURLSession.swift */; };
+		36C0C08428126B0200B57492 /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0C08328126B0200B57492 /* NetworkProvider.swift */; };
+		36C0C0882812783500B57492 /* JSONParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0C0872812783500B57492 /* JSONParserTests.swift */; };
+		36C0C09228127FE600B57492 /* MockProduct.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09028127FE600B57492 /* MockProduct.json */; };
+		36C0C09328127FE600B57492 /* MockProductPage.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09128127FE600B57492 /* MockProductPage.json */; };
+		36C0C095281287EE00B57492 /* NetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0C094281287EE00B57492 /* NetworkProviderTests.swift */; };
+		DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */; };
 		DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425F280FDC640046D916 /* SceneDelegate.swift */; };
 		DEC34262280FDC640046D916 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34261280FDC640046D916 /* ViewController.swift */; };
 		DEC34267280FDC650046D916 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEC34266280FDC650046D916 /* Assets.xcassets */; };
@@ -28,7 +31,6 @@
 		DEC3428328100DE70046D916 /* ProductPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428228100DE70046D916 /* ProductPage.swift */; };
 		DEC3428528100E7F0046D916 /* DetailViewProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428428100E7F0046D916 /* DetailViewProduct.swift */; };
 		DEC3428728100E8C0046D916 /* ProductImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428628100E8C0046D916 /* ProductImage.swift */; };
-		DEC3428928102C430046D916 /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428828102C430046D916 /* NetworkProvider.swift */; };
 		DEC3428C281030330046D916 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428B281030330046D916 /* URLSessionProtocol.swift */; };
 		DEC3428E281034400046D916 /* BaseURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428D281034400046D916 /* BaseURLProtocol.swift */; };
 		DEC34290281034440046D916 /* APIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428F281034440046D916 /* APIProtocol.swift */; };
@@ -50,12 +52,15 @@
 		36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+DateFormat.swift"; sourceTree = "<group>"; };
 		36C0A0852810292A0031C83C /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		36C0BFEF2810F6B300B57492 /* MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFormData.swift; sourceTree = "<group>"; };
+		36C0C08328126B0200B57492 /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
+		36C0C0872812783500B57492 /* JSONParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParserTests.swift; sourceTree = "<group>"; };
+		36C0C09028127FE600B57492 /* MockProduct.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProduct.json; sourceTree = "<group>"; };
+		36C0C09128127FE600B57492 /* MockProductPage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProductPage.json; sourceTree = "<group>"; };
+		36C0C094281287EE00B57492 /* NetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE23D43E281149690097A8C3 /* NetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProviderTests.swift; sourceTree = "<group>"; };
-		DE23D446281149B50097A8C3 /* MockProduct.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProduct.json; sourceTree = "<group>"; };
-		DE23D448281149C40097A8C3 /* MockProductPage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProductPage.json; sourceTree = "<group>"; };
+		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
-		DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMarket-MVVM-Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEC3425A280FDC640046D916 /* NewOpenMarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewOpenMarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC3425D280FDC640046D916 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEC3425F280FDC640046D916 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DEC34261280FDC640046D916 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,7 +73,6 @@
 		DEC3428228100DE70046D916 /* ProductPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductPage.swift; sourceTree = "<group>"; };
 		DEC3428428100E7F0046D916 /* DetailViewProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewProduct.swift; sourceTree = "<group>"; };
 		DEC3428628100E8C0046D916 /* ProductImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductImage.swift; sourceTree = "<group>"; };
-		DEC3428828102C430046D916 /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkProvider.swift; path = "OpenMarket-MVVM-Rx/Network/NetworkProvider.swift"; sourceTree = SOURCE_ROOT; };
 		DEC3428B281030330046D916 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		DEC3428D281034400046D916 /* BaseURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseURLProtocol.swift; sourceTree = "<group>"; };
 		DEC3428F281034440046D916 /* APIProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIProtocol.swift; sourceTree = "<group>"; };
@@ -100,7 +104,7 @@
 		36C0A07E281020F00031C83C /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				DEC3428828102C430046D916 /* NetworkProvider.swift */,
+				36C0C08328126B0200B57492 /* NetworkProvider.swift */,
 				DEC342912810355F0046D916 /* OpenMarketURL.swift */,
 				36C0BFEF2810F6B300B57492 /* MultipartFormData.swift */,
 			);
@@ -124,31 +128,33 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		DE23D43D281149690097A8C3 /* OpenMarket-MVVM-RxTests */ = {
+		36C0C0962812A5B900B57492 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
-				DE23D445281149750097A8C3 /* Mock */,
-				DE23D43E281149690097A8C3 /* NetworkProviderTests.swift */,
-			);
-			path = "OpenMarket-MVVM-RxTests";
-			sourceTree = "<group>";
-		};
-		DE23D445281149750097A8C3 /* Mock */ = {
-			isa = PBXGroup;
-			children = (
+				36C0C09028127FE600B57492 /* MockProduct.json */,
+				36C0C09128127FE600B57492 /* MockProductPage.json */,
 				DE23D44A281149DA0097A8C3 /* MockURLSession.swift */,
-				DE23D446281149B50097A8C3 /* MockProduct.json */,
-				DE23D448281149C40097A8C3 /* MockProductPage.json */,
 			);
 			path = Mock;
+			sourceTree = "<group>";
+		};
+		DE23D43D281149690097A8C3 /* NewOpenMarketTests */ = {
+			isa = PBXGroup;
+			children = (
+				36C0C0962812A5B900B57492 /* Mock */,
+				36C0C0872812783500B57492 /* JSONParserTests.swift */,
+				DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */,
+				36C0C094281287EE00B57492 /* NetworkProviderTests.swift */,
+			);
+			path = NewOpenMarketTests;
 			sourceTree = "<group>";
 		};
 		DEC34251280FDC640046D916 = {
 			isa = PBXGroup;
 			children = (
 				DEC34272280FDD460046D916 /* .swiftlint.yml */,
-				DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */,
-				DE23D43D281149690097A8C3 /* OpenMarket-MVVM-RxTests */,
+				DEC3425C280FDC640046D916 /* NewOpenMarket */,
+				DE23D43D281149690097A8C3 /* NewOpenMarketTests */,
 				DEC3425B280FDC640046D916 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -156,13 +162,13 @@
 		DEC3425B280FDC640046D916 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */,
+				DEC3425A280FDC640046D916 /* NewOpenMarket.app */,
 				DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
+		DEC3425C280FDC640046D916 /* NewOpenMarket */ = {
 			isa = PBXGroup;
 			children = (
 				36C0A07E281020F00031C83C /* Network */,
@@ -175,7 +181,7 @@
 				DEC34261280FDC640046D916 /* ViewController.swift */,
 				DEC3426B280FDC650046D916 /* Info.plist */,
 			);
-			path = "OpenMarket-MVVM-Rx";
+			path = NewOpenMarket;
 			sourceTree = "<group>";
 		};
 		DEC3427B281008440046D916 /* App */ = {
@@ -239,9 +245,9 @@
 			productReference = DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
+		DEC34259280FDC640046D916 /* NewOpenMarket */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "OpenMarket-MVVM-Rx" */;
+			buildConfigurationList = DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "NewOpenMarket" */;
 			buildPhases = (
 				DEC34256280FDC640046D916 /* Sources */,
 				DEC34257280FDC640046D916 /* Frameworks */,
@@ -252,14 +258,14 @@
 			);
 			dependencies = (
 			);
-			name = "OpenMarket-MVVM-Rx";
+			name = NewOpenMarket;
 			packageProductDependencies = (
 				DEC34275280FDE4A0046D916 /* RxCocoa */,
 				DEC34277280FDE4A0046D916 /* RxRelay */,
 				DEC34279280FDE4A0046D916 /* RxSwift */,
 			);
 			productName = "OpenMarket-MVVM-Rx";
-			productReference = DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */;
+			productReference = DEC3425A280FDC640046D916 /* NewOpenMarket.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -281,7 +287,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DEC34255280FDC640046D916 /* Build configuration list for PBXProject "OpenMarket-MVVM-Rx" */;
+			buildConfigurationList = DEC34255280FDC640046D916 /* Build configuration list for PBXProject "NewOpenMarket" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -297,7 +303,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */,
+				DEC34259280FDC640046D916 /* NewOpenMarket */,
 				DE23D43B281149690097A8C3 /* NetworkProviderTests */,
 			);
 		};
@@ -308,6 +314,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36C0C09328127FE600B57492 /* MockProductPage.json in Resources */,
+				36C0C09228127FE600B57492 /* MockProduct.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,8 +326,6 @@
 				DEC34273280FDD460046D916 /* .swiftlint.yml in Resources */,
 				DEC3426A280FDC650046D916 /* LaunchScreen.storyboard in Resources */,
 				DEC34267280FDC650046D916 /* Assets.xcassets in Resources */,
-				DE23D449281149C40097A8C3 /* MockProductPage.json in Resources */,
-				DE23D447281149B50097A8C3 /* MockProduct.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,7 +356,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE23D43F281149690097A8C3 /* NetworkProviderTests.swift in Sources */,
+				36C0C0882812783500B57492 /* JSONParserTests.swift in Sources */,
+				36C0C095281287EE00B57492 /* NetworkProviderTests.swift in Sources */,
+				36C0C00B28125A7D00B57492 /* MockURLSession.swift in Sources */,
+				DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,14 +373,13 @@
 				DEC3428728100E8C0046D916 /* ProductImage.swift in Sources */,
 				DEC342922810355F0046D916 /* OpenMarketURL.swift in Sources */,
 				36C0BFF02810F6B300B57492 /* MultipartFormData.swift in Sources */,
-				DE23D44B281149DA0097A8C3 /* MockURLSession.swift in Sources */,
 				DEC3428328100DE70046D916 /* ProductPage.swift in Sources */,
 				36C0A07D281000130031C83C /* AppDelegate.swift in Sources */,
 				DEC3428128100AEB0046D916 /* Currency.swift in Sources */,
+				36C0C08428126B0200B57492 /* NetworkProvider.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
 				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
 				DEC34290281034440046D916 /* APIProtocol.swift in Sources */,
-				DEC3428928102C430046D916 /* NetworkProvider.swift in Sources */,
 				DEC34262280FDC640046D916 /* ViewController.swift in Sources */,
 				DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */,
 				36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */,
@@ -384,7 +392,7 @@
 /* Begin PBXTargetDependency section */
 		DE23D441281149690097A8C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DEC34259280FDC640046D916 /* OpenMarket-MVVM-Rx */;
+			target = DEC34259280FDC640046D916 /* NewOpenMarket */;
 			targetProxy = DE23D440281149690097A8C3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -409,14 +417,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FA464JRW3F;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.NetworkProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMarket-MVVM-Rx.app/OpenMarket-MVVM-Rx";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewOpenMarket.app/NewOpenMarket";
 			};
 			name = Debug;
 		};
@@ -428,14 +436,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FA464JRW3F;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.NetworkProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMarket-MVVM-Rx.app/OpenMarket-MVVM-Rx";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewOpenMarket.app/NewOpenMarket";
 			};
 			name = Release;
 		};
@@ -560,9 +568,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FA464JRW3F;
+				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
+				INFOPLIST_FILE = NewOpenMarket/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -572,7 +580,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.yagom.OpenMarket-MVVM-Rx";
+				PRODUCT_BUNDLE_IDENTIFIER = net.NewOpenMarket;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -587,9 +595,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FA464JRW3F;
+				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
+				INFOPLIST_FILE = NewOpenMarket/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -599,7 +607,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.yagom.OpenMarket-MVVM-Rx";
+				PRODUCT_BUNDLE_IDENTIFIER = net.NewOpenMarket;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -619,7 +627,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEC34255280FDC640046D916 /* Build configuration list for PBXProject "OpenMarket-MVVM-Rx" */ = {
+		DEC34255280FDC640046D916 /* Build configuration list for PBXProject "NewOpenMarket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEC3426C280FDC650046D916 /* Debug */,
@@ -628,7 +636,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "OpenMarket-MVVM-Rx" */ = {
+		DEC3426E280FDC650046D916 /* Build configuration list for PBXNativeTarget "NewOpenMarket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEC3426F280FDC650046D916 /* Debug */,

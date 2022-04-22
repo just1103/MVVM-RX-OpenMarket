@@ -1,12 +1,14 @@
 import Foundation
-@testable import OpenMarket_MVVM_Rx
+@testable import NewOpenMarket
 
 class MockURLSessionDataTask: URLSessionDataTask {
     var resumeDidCall: () -> Void = {}
-
+    
     override func resume() {
         resumeDidCall()
     }
+    
+    override func cancel() {}
 }
 
 class MockURLSession: URLSessionProtocol {
