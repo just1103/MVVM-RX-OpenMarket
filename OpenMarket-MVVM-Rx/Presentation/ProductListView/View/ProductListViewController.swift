@@ -35,7 +35,7 @@ class ProductListViewController: UIViewController {
     }
     
     private static var isTable: Bool = true
-    private var collectionView = ProductCollectionView()
+    private var collectionView = ProductCollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var verticalStackView = UIStackView()
     private var dataSource: UICollectionViewDiffableDataSource<SectionKind, Product>! = nil
 
@@ -50,7 +50,6 @@ class ProductListViewController: UIViewController {
     
     private func configureStackView() {
         view.addSubview(verticalStackView)
-        
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
         verticalStackView.axis = .vertical
         verticalStackView.alignment = .fill
@@ -65,9 +64,13 @@ class ProductListViewController: UIViewController {
     
     private func configureCollectionView() {
         verticalStackView.addArrangedSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false // TODO: 없어도 되는지 테스트
+
+        let layout = createLayout()
+        collectionView.collectionViewLayout = layout
     }
     
-    private func configureLayout() -> UICollectionViewLayout {
+    private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else {
                 print("알 수 없는 Section")
