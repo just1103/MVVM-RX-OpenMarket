@@ -36,6 +36,10 @@
 		DEC34290281034440046D916 /* APIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3428F281034440046D916 /* APIProtocol.swift */; };
 		DEC342922810355F0046D916 /* OpenMarketURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC342912810355F0046D916 /* OpenMarketURL.swift */; };
 		DEC34294281036D90046D916 /* URLRequest+Initializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34293281036D90046D916 /* URLRequest+Initializer.swift */; };
+		DECD164E28166FDA00F34993 /* FlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD164D28166FDA00F34993 /* FlowCoordinator.swift */; };
+		DECD1650281672DD00F34993 /* ProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD164F281672DD00F34993 /* ProductListViewModel.swift */; };
+		DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD16572816885B00F34993 /* ProductListViewController.swift */; };
+		DECD165A2816887F00F34993 /* ProductCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD16592816887F00F34993 /* ProductCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +82,10 @@
 		DEC3428F281034440046D916 /* APIProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIProtocol.swift; sourceTree = "<group>"; };
 		DEC342912810355F0046D916 /* OpenMarketURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenMarketURL.swift; sourceTree = "<group>"; };
 		DEC34293281036D90046D916 /* URLRequest+Initializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+Initializer.swift"; sourceTree = "<group>"; };
+		DECD164D28166FDA00F34993 /* FlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinator.swift; sourceTree = "<group>"; };
+		DECD164F281672DD00F34993 /* ProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewModel.swift; sourceTree = "<group>"; };
+		DECD16572816885B00F34993 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
+		DECD16592816887F00F34993 /* ProductCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,8 +179,9 @@
 		DEC3425C280FDC640046D916 /* OpenMarket-MVVM-Rx */ = {
 			isa = PBXGroup;
 			children = (
-				36C0A07E281020F00031C83C /* Network */,
 				DEC3427B281008440046D916 /* App */,
+				DECD164828166F6000F34993 /* Presentation */,
+				36C0A07E281020F00031C83C /* Network */,
 				DEC3427D281009300046D916 /* Model */,
 				36C0A081281027310031C83C /* Utility */,
 				DEC3428A28102FEC0046D916 /* Protocol */,
@@ -222,6 +231,41 @@
 				DEC3428F281034440046D916 /* APIProtocol.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		DECD164828166F6000F34993 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				DECD164D28166FDA00F34993 /* FlowCoordinator.swift */,
+				DECD164928166F7000F34993 /* ProductListView */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		DECD164928166F7000F34993 /* ProductListView */ = {
+			isa = PBXGroup;
+			children = (
+				DECD164B28166FB700F34993 /* View */,
+				DECD164C28166FBC00F34993 /* ViewModel */,
+			);
+			path = ProductListView;
+			sourceTree = "<group>";
+		};
+		DECD164B28166FB700F34993 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DECD16572816885B00F34993 /* ProductListViewController.swift */,
+				DECD16592816887F00F34993 /* ProductCollectionView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DECD164C28166FBC00F34993 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DECD164F281672DD00F34993 /* ProductListViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -369,12 +413,15 @@
 			files = (
 				DEC3428C281030330046D916 /* URLSessionProtocol.swift in Sources */,
 				DEC3428528100E7F0046D916 /* DetailViewProduct.swift in Sources */,
+				DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */,
 				DEC34294281036D90046D916 /* URLRequest+Initializer.swift in Sources */,
+				DECD165A2816887F00F34993 /* ProductCollectionView.swift in Sources */,
 				DEC3428728100E8C0046D916 /* ProductImage.swift in Sources */,
 				DEC342922810355F0046D916 /* OpenMarketURL.swift in Sources */,
 				36C0BFF02810F6B300B57492 /* MultipartFormData.swift in Sources */,
 				DEC3428328100DE70046D916 /* ProductPage.swift in Sources */,
 				36C0A07D281000130031C83C /* AppDelegate.swift in Sources */,
+				DECD164E28166FDA00F34993 /* FlowCoordinator.swift in Sources */,
 				DEC3428128100AEB0046D916 /* Currency.swift in Sources */,
 				36C0C08428126B0200B57492 /* NetworkProvider.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
@@ -383,6 +430,7 @@
 				DEC34262280FDC640046D916 /* ViewController.swift in Sources */,
 				DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */,
 				36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */,
+				DECD1650281672DD00F34993 /* ProductListViewModel.swift in Sources */,
 				DEC3428E281034400046D916 /* BaseURLProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

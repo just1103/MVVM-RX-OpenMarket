@@ -68,7 +68,8 @@ struct NetworkProvider {
                         emitter.onCompleted()
                     }
                     emitter.onCompleted()
-                }.disposed(by: disposeBag)
+                }
+                .disposed(by: disposeBag)
             
             return Disposables.create()
         }

@@ -25,7 +25,8 @@ class MockNetworkProviderTests: XCTestCase {
                 let resultString = String(data: data, encoding: .utf8)
                 let successString = #""OK""#
                 XCTAssertEqual(resultString, successString)
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
     }
     
     func test_getHealthChecker가_정상실패_하는지() {
@@ -35,6 +36,7 @@ class MockNetworkProviderTests: XCTestCase {
         _ = observableData.subscribe(onError: { error in
             let statusCodeError = NetworkError.statusCodeError
             XCTAssertEqual(error as? NetworkError, statusCodeError)
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
     }
 }

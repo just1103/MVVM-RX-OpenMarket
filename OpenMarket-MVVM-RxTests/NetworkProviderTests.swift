@@ -28,7 +28,8 @@ class NetworkProviderTests: XCTestCase {
             let successString = #""OK""#
             XCTAssertEqual(resultString, successString)
             expectation.fulfill()
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -42,7 +43,8 @@ class NetworkProviderTests: XCTestCase {
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
             
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -58,7 +60,8 @@ class NetworkProviderTests: XCTestCase {
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
             
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -73,7 +76,8 @@ class NetworkProviderTests: XCTestCase {
             XCTAssertEqual(product?.id, 600)
             XCTAssertEqual(product?.name, "Test Product")
             expectation.fulfill()
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
 
         wait(for: [expectation], timeout: 10.0)
     }
@@ -87,7 +91,8 @@ class NetworkProviderTests: XCTestCase {
             XCTAssertEqual(productPage?.pageNumber, 1)
             XCTAssertEqual(productPage?.itemsPerPage, 10)
             expectation.fulfill()
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10.0)
     }
@@ -104,7 +109,8 @@ class NetworkProviderTests: XCTestCase {
         _ = observableData.subscribe(onError: { error in
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10.0)
     }
@@ -121,7 +127,8 @@ class NetworkProviderTests: XCTestCase {
         _ = observableData.subscribe(onError: { error in
             XCTAssertEqual(error as? NetworkError, NetworkError.urlIsNil)
             expectation.fulfill()
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10.0)
     }
