@@ -29,17 +29,12 @@ class MockNetworkProviderTests: XCTestCase {
     }
     
     func test_getHealthChecker가_정상실패_하는지() {
-        let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
         sut = NetworkProvider(session: MockURLSession(isRequestSuccess: false))
 
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onError: { error in
             let statusCodeError = NetworkError.statusCodeError
             XCTAssertEqual(error as? NetworkError, statusCodeError)
-            expectation.fulfill()
-
         }).disposed(by: disposeBag)
-
-        wait(for: [expectation], timeout: 10)
     }
 }
