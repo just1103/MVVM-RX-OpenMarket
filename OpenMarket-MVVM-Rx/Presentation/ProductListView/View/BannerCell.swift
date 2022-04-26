@@ -2,8 +2,17 @@ import UIKit
 
 class BannerCell: UICollectionViewCell {
     private enum Design {
-        static let imageViewInset: CGFloat = 8.0
+        static let imageViewInset: CGFloat = 0
     }
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        return stackView
+    }()
     
     private let imageView = UIImageView()
     
@@ -18,14 +27,15 @@ class BannerCell: UICollectionViewCell {
     }
     
     private func configureUI() {
-        addSubview(imageView)
+        addSubview(stackView)
+        stackView.addArrangedSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: Design.imageViewInset),
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Design.imageViewInset),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Design.imageViewInset),
-            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Design.imageViewInset)
+            stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: Design.imageViewInset),
+            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Design.imageViewInset),
+            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Design.imageViewInset),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Design.imageViewInset)
         ])
     }
     

@@ -37,6 +37,15 @@ class TableListCell: UICollectionViewCell {
         return stackView
     }()
     
+    private let nameAndStockStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -61,8 +70,8 @@ class TableListCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
-    private let nameAndStockStackView: UIStackView = {
+    
+    private let priceAndBargainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
@@ -96,15 +105,6 @@ class TableListCell: UICollectionViewCell {
         label.font = Design.bargainRateLabelFont
         label.textColor = Design.bargainRateLabelTextColor
         return label
-    }()
-    
-    private let priceAndBargainStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        return stackView
     }()
     
     override init(frame: CGRect) {

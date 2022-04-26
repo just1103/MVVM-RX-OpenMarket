@@ -1,4 +1,5 @@
 import UIKit
+import RxSwift
 
 class ProductListViewController: UIViewController {
     enum SectionKind: Int {
@@ -35,12 +36,67 @@ class ProductListViewController: UIViewController {
     }
     
     private static var isTable: Bool = true
-    private var collectionView = ProductCollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var verticalStackView = UIStackView()
-    private var dataSource: UICollectionViewDiffableDataSource<SectionKind, Product>! = nil
+    private var bannerDataSource: BannerDiffableDataSource! = nil
+    private var listDataSource: ListDiffableDataSource! = nil
+    private let viewDidLoadObserver: PublishSubject<Void> = .init()
+    private let cellPressedObserver: PublishSubject<IndexPath> = .init()
+    private var viewModel: ProductListViewModel!
+    private let disposeBag = DisposeBag()
+    
+    convenience init(viewModel: ProductListViewModel) {
+        self.init()
+        self.viewModel = viewModel
+    }
+    
+    typealias BannerDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UIImage>
+    typealias ListDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
+    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UIImage>
+    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, Product>
+    typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, Product>
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
+        configureHierarchy()
+        viewDidLoadObserver.onNext(())
+    }
+    
+    private func bind() {
+        let input = ProductListViewModel.Input(viewDidLoadObserver: viewDidLoadObserver.asObservable(),
+                                               cellPressedObserver: cellPressedObserver.asObservable())
+        
+        let output = viewModel.transform(input)
+        
+        configureBannerObserver(output)
+    }
+    
+    private func configureBannerObserver(_ output: ProductListViewModel.Output) {
+        output.bannerObserver
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] images in
+                self?.configureBannerCellDataSource(from: images)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureBannerCellDataSource(from images: [UIImage]) {
+        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, image in
+            cell.apply(image: images[indexPath.row])
+//            cell.apply(image: images[0])
+        }
+        
+        bannerDataSource = BannerDiffableDataSource(collectionView: collectionView,
+                                                    cellProvider: { collectionView, indexPath, itemIdentifier in
+            return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration,
+                                                                for: indexPath,
+                                                                item: itemIdentifier)
+        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, UIImage>()
+        snapshot.appendSections([.banner])
+        snapshot.appendItems(images)
+        bannerDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configureHierarchy() {
@@ -57,7 +113,7 @@ class ProductListViewController: UIViewController {
         NSLayoutConstraint.activate([
             verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            verticalStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            verticalStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             verticalStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
@@ -79,7 +135,6 @@ class ProductListViewController: UIViewController {
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 0.0, leading: 10.0, bottom: 0.0, trailing: 10.0)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: .fractionalHeight(1.0))
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
