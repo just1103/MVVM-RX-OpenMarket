@@ -32,9 +32,9 @@ struct NetworkProvider {
                 let successStatusCode = 200..<300
                 guard let httpResponse = response as? HTTPURLResponse,
                       successStatusCode.contains(httpResponse.statusCode) else {
-                    emitter.onError(NetworkError.statusCodeError)
-                    return
-                }
+                          emitter.onError(NetworkError.statusCodeError)
+                          return
+                      }
                 
                 if let data = data {
                     emitter.onNext(data)
@@ -77,8 +77,9 @@ struct NetworkProvider {
     
     func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
         return Observable.create { emitter in
-            let result = request(api: api)
-            _ = result.subscribe { event in
+            _ = request(api: api)
+                .debug()  // FIXME: 없으면 products가 nil이 됨
+                .subscribe { event in
                 switch event {
                 case .next(let data):
                     guard let decodedData = JSONParser<T>().decode(from: data) else {

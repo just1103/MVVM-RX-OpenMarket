@@ -34,8 +34,8 @@ class BannerCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: Design.imageViewInset),
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Design.imageViewInset),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Design.imageViewInset),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Design.imageViewInset)
+            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -1 * Design.imageViewInset),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -1 * Design.imageViewInset)
         ])
     }
     

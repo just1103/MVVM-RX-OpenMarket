@@ -40,11 +40,19 @@ class NetworkProviderTests: XCTestCase {
         
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onError: { error in
+            print(error)
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
             
         })
         .disposed(by: disposeBag)
+        
+        //        _ = observableData.subscribe(onError: { error in
+//            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
+//            expectation.fulfill()
+//
+//        })
+//        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -56,12 +64,18 @@ class NetworkProviderTests: XCTestCase {
         healthCheckerAPI.url = URL(string: "wrongURL")
         
         let observableData = sut.request(api: healthCheckerAPI)
-        _ = observableData.subscribe(onError: { error in
-            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
-            expectation.fulfill()
-            
-        })
-        .disposed(by: disposeBag)
+        _ = observableData
+            .debug()
+            .subscribe(onNext: { _ in
+                print("!!!!")
+                expectation.fulfill()
+                
+            }, onError: { error in
+                XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
+                expectation.fulfill()
+            }
+            )
+            .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -131,5 +145,21 @@ class NetworkProviderTests: XCTestCase {
         .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func test_fetchData가_정상작동_하는지() {
+        let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
+
+        let observableData = sut.fetchData(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 10),
+                                           decodingType: ProductPage.self)
+        _ = observableData.subscribe(onNext: { productPage in
+            XCTAssertEqual(productPage.pageNumber, 1)
+            XCTAssertEqual(productPage.itemsPerPage, 10)
+            XCTAssertEqual(productPage.products[0].id, 2018)
+            expectation.fulfill()
+        })
+        .disposed(by: disposeBag)
+        
+        wait(for: [expectation], timeout: 20.0)
     }
 }

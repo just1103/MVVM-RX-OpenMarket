@@ -17,7 +17,16 @@ class TableListCell: UICollectionViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 8
+        
+        let sideInset: Double = 10
+        let topBottomInset: Double = 0
+        stackView.layoutMargins = UIEdgeInsets(top: topBottomInset,
+                                               left: sideInset,
+                                               bottom: topBottomInset,
+                                               right: sideInset)
+        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
     
@@ -25,6 +34,9 @@ class TableListCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 100).isActive = true
+        imageView.setContentHuggingPriority(.init(rawValue: 900), for: .horizontal)
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()
     
@@ -43,6 +55,8 @@ class TableListCell: UICollectionViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
+        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        stackView.spacing = 10
         return stackView
     }()
     
@@ -68,6 +82,7 @@ class TableListCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: Design.accessoryImageName)
         imageView.contentMode = .scaleAspectFit
+        imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return imageView
     }()
     
@@ -77,6 +92,7 @@ class TableListCell: UICollectionViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
+        stackView.spacing = 8
         return stackView
     }()
     
@@ -95,6 +111,7 @@ class TableListCell: UICollectionViewCell {
         label.textAlignment = .left
         label.font = Design.priceLabelFont
         label.textColor = Design.priceLabelTextColor
+        label.setContentHuggingPriority(.init(rawValue: 900), for: .horizontal)
         return label
     }()
     
@@ -119,14 +136,21 @@ class TableListCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(containerStackView)
+        NSLayoutConstraint.activate([
+            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
         containerStackView.addArrangedSubview(imageView)
         containerStackView.addArrangedSubview(verticalStackView)
-        
+
         verticalStackView.addArrangedSubview(nameAndStockStackView)
         nameAndStockStackView.addArrangedSubview(nameLabel)
         nameAndStockStackView.addArrangedSubview(stockLabel)
         nameAndStockStackView.addArrangedSubview(accessoryImageView)
-        
+
         verticalStackView.addArrangedSubview(priceAndBargainStackView)
         priceAndBargainStackView.addArrangedSubview(bargainPriceLabel)
         priceAndBargainStackView.addArrangedSubview(priceLabel)
@@ -149,14 +173,14 @@ class TableListCell: UICollectionViewCell {
                                                     currency: Currency) {
         if discountedPrice == 0 {
             priceLabel.attributedText = nil
-            priceLabel.textColor = .systemGray
+            priceLabel.textColor = .systemRed
             priceLabel.text = "\(currency.rawValue) \(price.formattedWithComma())"
             
             bargainPriceLabel.isHidden = true
         } else {
             let priceText = "\(currency.rawValue) \(price.formattedWithComma())"
             priceLabel.strikeThrough(text: priceText)
-            priceLabel.textColor = .systemRed
+            priceLabel.textColor = .systemGray
             
             bargainPriceLabel.isHidden = false
             bargainPriceLabel.text = "\(currency.rawValue) \(bargainPrice.formattedWithComma())"
