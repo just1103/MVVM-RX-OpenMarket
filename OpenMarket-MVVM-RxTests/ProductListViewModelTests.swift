@@ -1,4 +1,5 @@
 import XCTest
+import RxSwift
 @testable import OpenMarket_MVVM_Rx
 
 class ProductListViewModelTests: XCTestCase {
@@ -12,16 +13,14 @@ class ProductListViewModelTests: XCTestCase {
         sut = nil
     }
     
-    func test_setupProducts가_정상작동하는지() {
+    func test_fetchProducts가_정상작동하는지() {
         let expectation = XCTestExpectation(description: "Request 비동기 테스트")
-        guard let products = sut.test_fetchProducts() else {  // FIXME: fail
-            XCTFail()
-            return
-        }
-        let firstProductId = products[0].id
-        let serverFirstProductId = 2018  // MARK: - Server에 데이터가 업데이트되면 테스트를 위해 값을 변경해야 함
-        XCTAssertEqual(firstProductId, serverFirstProductId)
-        expectation.fulfill()
+        _ = sut.test_fetchProducts()
+            .subscribe(onNext: { productPage in
+                XCTAssertEqual(productPage.itemsPerPage, 20)
+                XCTAssertEqual(productPage.pageNumber, 1)
+                expectation.fulfill()
+            })
         
         wait(for: [expectation], timeout: 10.0)
     }

@@ -48,12 +48,10 @@ class ProductListViewController: UIViewController {
     private static var isTable: Bool = true
     private var currentBannerPage: Int = 0
     
-    typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
-//    typealias BannerDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UIImage>
-//    typealias ListDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
-    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, Product>
-    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, Product>
-    typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, Product>
+    typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
+    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
+    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
+    typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
     
     // MARK: - Initializer
     convenience init(viewModel: ProductListViewModel) {
@@ -64,9 +62,44 @@ class ProductListViewController: UIViewController {
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureCollectionView()
         bind()
-        configureHierarchy()
         invokedViewDidLoad.onNext(())
+    }
+    
+    private func configureCollectionView() {
+        self.view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        let layout = createLayout()
+        collectionView.collectionViewLayout = layout
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
+            guard let sectionKind = SectionKind(rawValue: sectionIndex) else {
+                print("알 수 없는 Section")
+                return nil
+            }
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .fractionalHeight(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: .fractionalHeight(0.5))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitem: item,
+                                                         count: sectionKind.columnCount)
+            let section = NSCollectionLayoutSection(group: group)
+            section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
+            
+            return section
+        }
+        return layout
     }
     
     private func bind() {
@@ -75,130 +108,91 @@ class ProductListViewController: UIViewController {
         let output = viewModel.transform(input)
 
         configureItemsWith(output.bannerProducts, output.listProducts)
-//        configureBannerObserver(output.bannerProducts)
-//        configureListObserver(output.listProducts)
-//        drawwww(observable: output.productsObserver)
     }
     
     private func configureItemsWith(_ bannerProducts: Observable<[Product]>, _ listProducts: Observable<[Product]>) {
         bannerProducts
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
-                self?.configureBannerCellDataSource(with: products)
-                self?.autoScrollBannerTimer(with: 2, productCount: products.count)
+                
             })
-    }
-    
-//    private func configureBannerObserver(_ observable: Observable<[Product]>) {
-//        observable
-//            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { [weak self] images in
-//                self?.configureBannerCellDataSource()
-//
-//                self?.autoScrollBannerTimer(with: 2, productCount: images.count)
-//            })
-//            .disposed(by: disposeBag)
-//    }
-    
-    private func configureBannerCellDataSource(with bannerProducts: [Product]) {
-        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, product in
-            cell.apply(imageURL: product.thumbnail)
-        }
+            .disposed(by: disposeBag)
         
-        dataSource = DiffableDataSource(collectionView: collectionView,
-                                                    cellProvider: { collectionView, indexPath, product in
-            return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration,
-                                                                for: indexPath,
-                                                                item: product)
-        })
-        
-        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
-        snapshot.appendSections([.banner])
-        snapshot.appendItems(bannerProducts)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    private func configureListObserver(_ observable: Observable<[Product]>) {
-        observable
+        listProducts
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] products in  // FIXME: products 없어서 dispose로 넘어감
-                self?.configureListCellDataSource(from: products)
+            .subscribe(onNext: { [weak self] products in
+                guard let self = self else { return }
+                let recentBargainProducts = products.filter { product in
+                    product.discountedPrice != 0
+                }
+                let bannerProductsCount = 5
+                let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
+                
+                // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
+                self.configureDataSourceWith(listProducts: self.makeHashable(from: products),
+                                             bannerProducts: self.makeHashable(from: bannerProducts))
+                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount)
             })
             .disposed(by: disposeBag)
     }
     
-    private func configureListCellDataSource(from products: [Product]) {
-//        let tableListCellRegistration = TableListCellRegistration { cell, indexPath, product in // TODO: product 왜있는거지?
-//            cell.apply(data: products[indexPath.row])
-//        }
-//
-//        let gridListCellRegistration = GridListCellRegistration { cell, indexPath, product in
-//            cell.apply(data: products[indexPath.row])
-//        }
-//
-//        switch ProductListViewController.isTable {
-//        case true:
-//            tableListDataSource = ListDiffableDataSource(collectionView: collectionView,
-//                                                         cellProvider: { collectionView, indexPath, product in
-//                return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
-//                                                                    for: indexPath,
-//                                                                    item: product)
-//            })
-//        case false:
-//            gridListDataSource = ListDiffableDataSource(collectionView: collectionView,
-//                                                        cellProvider: { collectionView, indexPath, product in
-//                return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
-//                                                                    for: indexPath,
-//                                                                    item: product)
-//            })
-//        }
-//
-//        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
-//        snapshot.appendSections([.list])
-//        snapshot.appendItems(products)  // fetchProducts 다되면 또는 products 변경되면 -> Rx로 연결해서 다시 그려라
-////        tableListDataSource.apply(snapshot, animatingDifferences: true) // TODO: false로 변경
-//        gridListDataSource.apply(snapshot, animatingDifferences: true)
+    // TODO: 다른 방법 고민
+    private func makeHashable(from products: [Product]) -> [UniqueProduct] {
+        var uniqueProducts = [UniqueProduct]()
+        products.forEach { product in
+            let product = UniqueProduct(product: product)
+            uniqueProducts.append(product)
+        }
+        return uniqueProducts
     }
     
-//    private func drawwww(observable: Observable<[Product]>) {
-//        observable
-//            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { [weak self] products in
-//            let tableListCellRegistration = TableListCellRegistration { cell, indexPath, product in // TODO: product 왜있는거지?
-//                cell.apply(data: products[indexPath.row])
-//            }
-//
-//            let gridListCellRegistration = GridListCellRegistration { cell, indexPath, product in
-//                cell.apply(data: products[indexPath.row])
-//            }
-//
-//            switch ProductListViewController.isTable {
-//            case true:
-//                guard let self = self else { return }
-//                self.tableListDataSource = ListDiffableDataSource(collectionView: self.collectionView,
-//                                                             cellProvider: { collectionView, indexPath, product in
-//                    return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
-//                                                                        for: indexPath,
-//                                                                        item: product)
-//                })
-//            case false:
-//                guard let self = self else { return }
-//                self.gridListDataSource = ListDiffableDataSource(collectionView: self.collectionView,
-//                                                            cellProvider: { collectionView, indexPath, product in
-//                    return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
-//                                                                        for: indexPath,
-//                                                                        item: product)
-//                })
-//            }
-//
-//            var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
-//            snapshot.appendSections([.list])
-//            snapshot.appendItems(products)  // TODO: fetchProducts 완료되거나 Products 변경되면 다시 그리도록 Rx 적용
-//            self?.tableListDataSource.apply(snapshot, animatingDifferences: false)
-////            self?.gridListDataSource.apply(snapshot, animatingDifferences: false)
-//        })
-//    }
-    
+    private func configureDataSourceWith(listProducts: [UniqueProduct], bannerProducts: [UniqueProduct]) {
+        let bannerCellRegistration = BannerCellRegistration { cell, _, product in
+            cell.apply(imageURL: product.product.thumbnail)
+        }
+        let tableListCellRegistration = TableListCellRegistration { cell, _, product in
+            cell.apply(data: product.product)
+        }
+        let gridListCellRegistration = GridListCellRegistration { cell, _, product in
+            cell.apply(data: product.product)
+        }
+        
+        dataSource = DiffableDataSource(collectionView: collectionView,
+                                        cellProvider: { collectionView, indexPath, product in
+            guard let sectionKind = SectionKind(rawValue: indexPath.section) else {
+                return UICollectionViewCell()
+            }
+            
+            switch sectionKind {
+            case .banner:
+                return  collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration,
+                                                                     for: indexPath,
+                                                                     item: product)
+            case .list:
+                switch ProductListViewController.isTable {
+                case true:
+                    return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
+                                                                        for: indexPath,
+                                                                        item: product)
+                case false:
+                    return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
+                                                                        for: indexPath,
+                                                                        item: product)
+                }
+            }
+        })
+        
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, UniqueProduct>()
+        snapshot.appendSections([.banner])
+        snapshot.appendItems(bannerProducts)
+        snapshot.appendSections([.list])
+        snapshot.appendItems(listProducts)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+}
+
+// MARK: - AutoScrollBannerMethods
+extension ProductListViewController {
     private func autoScrollBannerTimer(with timeInterval: TimeInterval, productCount: Int) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             self?.scrollBanner(productCount: productCount)
@@ -221,53 +215,5 @@ class ProductListViewController: UIViewController {
     private func scrollToFirstItem() {
         collectionView.scrollToItem(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .right, animated: true)
         currentBannerPage = 0
-    }
-    
-    private func configureHierarchy() {
-        configureStackView()
-        configureCollectionView()
-    }
-    
-    private func configureStackView() {
-        view.addSubview(verticalStackView)
-        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-        verticalStackView.axis = .vertical
-        verticalStackView.alignment = .fill
-        verticalStackView.distribution = .fill
-        NSLayoutConstraint.activate([
-            verticalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            verticalStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            verticalStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            verticalStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        ])
-    }
-    
-    private func configureCollectionView() {
-        verticalStackView.addArrangedSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        let layout = createLayout()
-        collectionView.collectionViewLayout = layout
-    }
-    
-    private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
-            guard let sectionKind = SectionKind(rawValue: sectionIndex) else {
-                print("알 수 없는 Section")
-                return nil
-            }
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .fractionalHeight(0.5))
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
-                                                         subitem: item,
-                                                         count: sectionKind.columnCount)
-            let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
-            
-            return section
-        }
-        return layout
     }
 }

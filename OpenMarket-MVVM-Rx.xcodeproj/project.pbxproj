@@ -47,6 +47,7 @@
 		DECD164E28166FDA00F34993 /* FlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD164D28166FDA00F34993 /* FlowCoordinator.swift */; };
 		DECD1650281672DD00F34993 /* ProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD164F281672DD00F34993 /* ProductListViewModel.swift */; };
 		DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD16572816885B00F34993 /* ProductListViewController.swift */; };
+		DEE4CEA9281BE7DA00CB7DD8 /* UniqueProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE4CEA8281BE7DA00CB7DD8 /* UniqueProduct.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,7 @@
 		DECD164D28166FDA00F34993 /* FlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinator.swift; sourceTree = "<group>"; };
 		DECD164F281672DD00F34993 /* ProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewModel.swift; sourceTree = "<group>"; };
 		DECD16572816885B00F34993 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
+		DEE4CEA8281BE7DA00CB7DD8 /* UniqueProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueProduct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				DEC3427E28100ADB0046D916 /* Product.swift */,
+				DEE4CEA8281BE7DA00CB7DD8 /* UniqueProduct.swift */,
 				DEC3428028100AEB0046D916 /* Currency.swift */,
 				DEC3428228100DE70046D916 /* ProductPage.swift */,
 				DEC3428428100E7F0046D916 /* DetailViewProduct.swift */,
@@ -447,6 +450,7 @@
 				DEC3428128100AEB0046D916 /* Currency.swift in Sources */,
 				3625D0FF2816D51000CD5043 /* UIImageView+Load+Cache.swift in Sources */,
 				36C0C08428126B0200B57492 /* NetworkProvider.swift in Sources */,
+				DEE4CEA9281BE7DA00CB7DD8 /* UniqueProduct.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
 				3625D0F72816C6F700CD5043 /* TableListCell.swift in Sources */,
 				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
