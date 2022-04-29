@@ -21,7 +21,7 @@ class ProductListViewModel {
     
     // MARK: - Initializer
     init() {
-        fetchProducts(at: 1)
+//        fetchProducts(at: 1)
     }
     
     // MARK: - Methods
@@ -30,8 +30,7 @@ class ProductListViewModel {
         let listProducts = PublishSubject<[Product]>()
         let selectedProduct = PublishSubject<Product>()
         
-//        configureViewDidLoadObserver(by: input.invokedViewDidLoad, outputObserver: bannerProducts)
-        configureViewDidLoadObserver(by: input.invokedViewDidLoad, outputObserver: listProducts)
+        configureViewDidLoadObserver(by: input.invokedViewDidLoad, bannerProductsOutput: bannerProducts, listProductsOutput: listProducts)
         
         // TODO: stream을 지속하기 위해 flatMap 사용
         let productsObservable = input.invokedViewDidLoad
@@ -48,31 +47,17 @@ class ProductListViewModel {
         return output
     }
     
-//    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, outputObserver: PublishSubject<[Product]>) {
-//        inputObserver
-//            .subscribe(onNext: { [weak self] _ in
-//                let recentBargainProducts = self?.fetchProducts(at: 1).map { productPage in
-//                    productPage.products.filter { product in
-//                        product.discountedPrice != 0
-//                    }
-//                }
-//                .take(3)
-//                outputObserver =
-//            })
-//            .disposed(by: disposeBag)
-//    }
-    
-    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, listProductsOutput: PublishSubject<[Product]>, bannerProductsOutput: PublishSubject<[Product]>) {
+    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, bannerProductsOutput: PublishSubject<[Product]>, listProductsOutput: PublishSubject<[Product]>) {
         inputObserver
             .subscribe(onNext: { [weak self] _ in
-                _ = self?.fetchProducts(at: 1).map { productPage in
+                _ = self?.fetchProducts(at: 1).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
                     listProductsOutput.onNext(productPage.products)
                     
                     let filteredProduct = productPage.products.filter { product in
                         product.discountedPrice != 0
                     }
                     bannerProductsOutput.onNext(Array(filteredProduct[0...2]))
-                }
+                }) 
             })
             .disposed(by: disposeBag)
     }
@@ -83,11 +68,6 @@ class ProductListViewModel {
                                   decodingType: ProductPage.self)
         
         return observable
-//            _ = ob.subscribe(onNext: { [weak self] productPage in
-//                self?.products = productPage.products
-//                print("!!!")
-//            })
-//            .disposed(by: disposeBag)
     }
     
     // MARK: - 테스트코드

@@ -14,7 +14,12 @@ class BannerCell: UICollectionViewCell {
         return stackView
     }()
     
-    private let imageView = UIImageView()
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,8 +34,6 @@ class BannerCell: UICollectionViewCell {
     private func configureUI() {
         addSubview(stackView)
         stackView.addArrangedSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: Design.imageViewInset),
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Design.imageViewInset),

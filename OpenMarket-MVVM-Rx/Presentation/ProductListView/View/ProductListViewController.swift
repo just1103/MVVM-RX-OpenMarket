@@ -40,9 +40,6 @@ class ProductListViewController: UIViewController {
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var verticalStackView = UIStackView()
     private var dataSource: DiffableDataSource!
-//    private var bannerDataSource: BannerDiffableDataSource!
-//    private var tableListDataSource: ListDiffableDataSource!
-//    private var gridListDataSource: ListDiffableDataSource!
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad: PublishSubject<Void> = .init()
     private let cellDidSelect: PublishSubject<IndexPath> = .init()
@@ -73,27 +70,37 @@ class ProductListViewController: UIViewController {
     }
     
     private func bind() {
-        let input = ProductListViewModel.Input(viewDidLoadObserver: invokedViewDidLoad.asObservable(),
-                                               cellPressedObserver: cellDidSelect.asObservable())
+        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                               cellDidSelect: cellDidSelect.asObservable())
         let output = viewModel.transform(input)
 
-        configureBannerObserver(output.bannerObserver)
-        configureListObserver(output.listObserver)
+        configureItemsWith(output.bannerProducts, output.listProducts)
+//        configureBannerObserver(output.bannerProducts)
+//        configureListObserver(output.listProducts)
 //        drawwww(observable: output.productsObserver)
     }
     
-    private func configureBannerObserver(_ observable: Observable<[UIImage]>) {
-        observable
+    private func configureItemsWith(_ bannerProducts: Observable<[Product]>, _ listProducts: Observable<[Product]>) {
+        bannerProducts
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] images in
-                self?.configureBannerCellDataSource()
-                
-                self?.autoScrollBannerTimer(with: 2, imageCount: images.count)
+            .subscribe(onNext: { [weak self] products in
+                self?.configureBannerCellDataSource(with: products)
+                self?.autoScrollBannerTimer(with: 2, productCount: products.count)
             })
-            .disposed(by: disposeBag)
     }
     
-    private func configureBannerCellDataSource() {
+//    private func configureBannerObserver(_ observable: Observable<[Product]>) {
+//        observable
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] images in
+//                self?.configureBannerCellDataSource()
+//
+//                self?.autoScrollBannerTimer(with: 2, productCount: images.count)
+//            })
+//            .disposed(by: disposeBag)
+//    }
+    
+    private func configureBannerCellDataSource(with bannerProducts: [Product]) {
         let bannerCellRegistration = BannerCellRegistration { cell, indexPath, product in
             cell.apply(imageURL: product.thumbnail)
         }
@@ -107,7 +114,7 @@ class ProductListViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
         snapshot.appendSections([.banner])
-//        snapshot.appendItems(images) rx를 통해 전달받아서 Product의 배열을 넣어줘야 될 것 같다. 
+        snapshot.appendItems(bannerProducts)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
@@ -121,36 +128,36 @@ class ProductListViewController: UIViewController {
     }
     
     private func configureListCellDataSource(from products: [Product]) {
-        let tableListCellRegistration = TableListCellRegistration { cell, indexPath, product in // TODO: product 왜있는거지?
-            cell.apply(data: products[indexPath.row])
-        }
-        
-        let gridListCellRegistration = GridListCellRegistration { cell, indexPath, product in
-            cell.apply(data: products[indexPath.row])
-        }
-
-        switch ProductListViewController.isTable {
-        case true:
-            tableListDataSource = ListDiffableDataSource(collectionView: collectionView,
-                                                         cellProvider: { collectionView, indexPath, product in
-                return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: product)
-            })
-        case false:
-            gridListDataSource = ListDiffableDataSource(collectionView: collectionView,
-                                                        cellProvider: { collectionView, indexPath, product in
-                return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: product)
-            })
-        }
-
-        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
-        snapshot.appendSections([.list])
-        snapshot.appendItems(products)  // fetchProducts 다되면 또는 products 변경되면 -> Rx로 연결해서 다시 그려라
-//        tableListDataSource.apply(snapshot, animatingDifferences: true) // TODO: false로 변경
-        gridListDataSource.apply(snapshot, animatingDifferences: true)
+//        let tableListCellRegistration = TableListCellRegistration { cell, indexPath, product in // TODO: product 왜있는거지?
+//            cell.apply(data: products[indexPath.row])
+//        }
+//
+//        let gridListCellRegistration = GridListCellRegistration { cell, indexPath, product in
+//            cell.apply(data: products[indexPath.row])
+//        }
+//
+//        switch ProductListViewController.isTable {
+//        case true:
+//            tableListDataSource = ListDiffableDataSource(collectionView: collectionView,
+//                                                         cellProvider: { collectionView, indexPath, product in
+//                return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
+//                                                                    for: indexPath,
+//                                                                    item: product)
+//            })
+//        case false:
+//            gridListDataSource = ListDiffableDataSource(collectionView: collectionView,
+//                                                        cellProvider: { collectionView, indexPath, product in
+//                return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
+//                                                                    for: indexPath,
+//                                                                    item: product)
+//            })
+//        }
+//
+//        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
+//        snapshot.appendSections([.list])
+//        snapshot.appendItems(products)  // fetchProducts 다되면 또는 products 변경되면 -> Rx로 연결해서 다시 그려라
+////        tableListDataSource.apply(snapshot, animatingDifferences: true) // TODO: false로 변경
+//        gridListDataSource.apply(snapshot, animatingDifferences: true)
     }
     
 //    private func drawwww(observable: Observable<[Product]>) {
@@ -192,19 +199,19 @@ class ProductListViewController: UIViewController {
 //        })
 //    }
     
-    private func autoScrollBannerTimer(with timeInterval: TimeInterval, imageCount: Int) {
+    private func autoScrollBannerTimer(with timeInterval: TimeInterval, productCount: Int) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
-            self?.scrollBanner(imageCount: imageCount)
+            self?.scrollBanner(productCount: productCount)
         }
     }
     
-    private func scrollBanner(imageCount: Int) {
+    private func scrollBanner(productCount: Int) {
         currentBannerPage += 1
         collectionView.scrollToItem(at: NSIndexPath(item: currentBannerPage, section: 0) as IndexPath,
                                     at: .bottom,
                                     animated: true)
         
-        if self.currentBannerPage == imageCount {
+        if self.currentBannerPage == productCount {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.scrollToFirstItem()
             }
@@ -252,7 +259,7 @@ class ProductListViewController: UIViewController {
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .fractionalHeight(0.2))
+                                                   heightDimension: .fractionalHeight(0.5))
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
                                                          subitem: item,
                                                          count: sectionKind.columnCount)
