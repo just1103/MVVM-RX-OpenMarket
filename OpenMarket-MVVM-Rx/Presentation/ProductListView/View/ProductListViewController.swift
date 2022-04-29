@@ -39,20 +39,22 @@ class ProductListViewController: UIViewController {
     // MARK: - Properties
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var verticalStackView = UIStackView()
-    private var bannerDataSource: BannerDiffableDataSource!
-    private var tableListDataSource: ListDiffableDataSource!
-    private var gridListDataSource: ListDiffableDataSource!
+    private var dataSource: DiffableDataSource!
+//    private var bannerDataSource: BannerDiffableDataSource!
+//    private var tableListDataSource: ListDiffableDataSource!
+//    private var gridListDataSource: ListDiffableDataSource!
     private var viewModel: ProductListViewModel!
-    private let viewDidLoadObserver: PublishSubject<Void> = .init()
-    private let cellPressedObserver: PublishSubject<IndexPath> = .init()
+    private let invokedViewDidLoad: PublishSubject<Void> = .init()
+    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
     private static var isTable: Bool = true
     private var currentBannerPage: Int = 0
     
-    typealias BannerDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UIImage>
-    typealias ListDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
-    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UIImage>
+    typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
+//    typealias BannerDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UIImage>
+//    typealias ListDiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, Product>
+    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, Product>
     typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, Product>
     typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, Product>
     
@@ -67,12 +69,12 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureHierarchy()
-        viewDidLoadObserver.onNext(())
+        invokedViewDidLoad.onNext(())
     }
     
     private func bind() {
-        let input = ProductListViewModel.Input(viewDidLoadObserver: viewDidLoadObserver.asObservable(),
-                                               cellPressedObserver: cellPressedObserver.asObservable())
+        let input = ProductListViewModel.Input(viewDidLoadObserver: invokedViewDidLoad.asObservable(),
+                                               cellPressedObserver: cellDidSelect.asObservable())
         let output = viewModel.transform(input)
 
         configureBannerObserver(output.bannerObserver)
@@ -84,28 +86,29 @@ class ProductListViewController: UIViewController {
         observable
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] images in
-                self?.configureBannerCellDataSource(from: images)
+                self?.configureBannerCellDataSource()
                 
                 self?.autoScrollBannerTimer(with: 2, imageCount: images.count)
             })
             .disposed(by: disposeBag)
     }
     
-    private func configureBannerCellDataSource(from images: [UIImage]) {
-        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, image in
-            cell.apply(image: images[indexPath.row])
+    private func configureBannerCellDataSource() {
+        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, product in
+            cell.apply(imageURL: product.thumbnail)
         }
         
-        bannerDataSource = BannerDiffableDataSource(collectionView: collectionView,
-                                                    cellProvider: { collectionView, indexPath, image in
+        dataSource = DiffableDataSource(collectionView: collectionView,
+                                                    cellProvider: { collectionView, indexPath, product in
             return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration,
                                                                 for: indexPath,
-                                                                item: image)
+                                                                item: product)
         })
-        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, UIImage>()
+        
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
         snapshot.appendSections([.banner])
-        snapshot.appendItems(images)
-        bannerDataSource.apply(snapshot, animatingDifferences: true)
+//        snapshot.appendItems(images) rx를 통해 전달받아서 Product의 배열을 넣어줘야 될 것 같다. 
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configureListObserver(_ observable: Observable<[Product]>) {
@@ -146,7 +149,7 @@ class ProductListViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Product>()
         snapshot.appendSections([.list])
         snapshot.appendItems(products)  // fetchProducts 다되면 또는 products 변경되면 -> Rx로 연결해서 다시 그려라
-        tableListDataSource.apply(snapshot, animatingDifferences: true) // TODO: false로 변경
+//        tableListDataSource.apply(snapshot, animatingDifferences: true) // TODO: false로 변경
         gridListDataSource.apply(snapshot, animatingDifferences: true)
     }
     

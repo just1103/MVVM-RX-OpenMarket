@@ -4,15 +4,14 @@ import UIKit
 
 class ProductListViewModel {
     struct Input {
-        let viewDidLoadObserver: Observable<Void>
-        let cellPressedObserver: Observable<IndexPath>
+        let invokedViewDidLoad: Observable<Void>
+        let cellDidSelect: Observable<IndexPath>
     }
     
     struct Output {
-        let bannerObserver: Observable<[UIImage]>
-        let listObserver: Observable<[Product]>
-        let presentDetailObserver: Observable<Product>
-        let productsObserver: Observable<[Product]>
+        let bannerProducts: Observable<[Product]>
+        let listProducts: Observable<[Product]>
+        let selectedProduct: Observable<Product>
     }
     
     // MARK: - Properties
@@ -27,76 +26,71 @@ class ProductListViewModel {
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let bannerObserver = PublishSubject<[UIImage]>()
-        let listObserver = PublishSubject<[Product]>()
-        let presentDetailObserver = PublishSubject<Product>()
+        let bannerProducts = PublishSubject<[Product]>()
+        let listProducts = PublishSubject<[Product]>()
+        let selectedProduct = PublishSubject<Product>()
         
-        configureViewDidLoadObserver(by: input.viewDidLoadObserver, outputObserver: bannerObserver)
-        configureViewDidLoadObserver(by: input.viewDidLoadObserver, outputObserver: listObserver)
+//        configureViewDidLoadObserver(by: input.invokedViewDidLoad, outputObserver: bannerProducts)
+        configureViewDidLoadObserver(by: input.invokedViewDidLoad, outputObserver: listProducts)
         
         // TODO: stream을 지속하기 위해 flatMap 사용
-        let productsObservable = input.viewDidLoadObserver
+        let productsObservable = input.invokedViewDidLoad
             .flatMap {
                 NetworkProvider().fetchData(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 20),
                                             decodingType: ProductPage.self)
             }
             .map { $0.products }
         
-        let output = Output(bannerObserver: bannerObserver.asObservable(),
-                            listObserver: listObserver.asObservable(),
-                            presentDetailObserver: presentDetailObserver.asObservable(),
-                            productsObserver: productsObservable)
+        let output = Output(bannerProducts: bannerProducts.asObservable(),
+                            listProducts: listProducts.asObservable(),
+                            selectedProduct: selectedProduct.asObservable())
         
         return output
     }
     
-    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, outputObserver: PublishSubject<[UIImage]>) {
+//    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, outputObserver: PublishSubject<[Product]>) {
+//        inputObserver
+//            .subscribe(onNext: { [weak self] _ in
+//                let recentBargainProducts = self?.fetchProducts(at: 1).map { productPage in
+//                    productPage.products.filter { product in
+//                        product.discountedPrice != 0
+//                    }
+//                }
+//                .take(3)
+//                outputObserver =
+//            })
+//            .disposed(by: disposeBag)
+//    }
+    
+    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, listProductsOutput: PublishSubject<[Product]>, bannerProductsOutput: PublishSubject<[Product]>) {
         inputObserver
             .subscribe(onNext: { [weak self] _ in
-                self?.fetchBundleImages()
-                guard let images = self?.images else { return }
-                outputObserver.onNext(images)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func fetchBundleImages() {
-        guard let firstImage = UIImage(named: "image1.jpeg"),
-              let secondImage = UIImage(named: "image2.jpeg"),
-              let thirdImage = UIImage(named: "image3.jpeg") else { return }
-        let bannerImages = [firstImage, secondImage, thirdImage]
-        
-        images = bannerImages
-    }
-    
-    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>, outputObserver: PublishSubject<[Product]>) {
-        inputObserver
-            .subscribe(onNext: { [weak self] _ in
-                guard let products = self?.products else { return }
-                outputObserver.onNext(products)
+                _ = self?.fetchProducts(at: 1).map { productPage in
+                    listProductsOutput.onNext(productPage.products)
+                    
+                    let filteredProduct = productPage.products.filter { product in
+                        product.discountedPrice != 0
+                    }
+                    bannerProductsOutput.onNext(Array(filteredProduct[0...2]))
+                }
             })
             .disposed(by: disposeBag)
     }
   
-    private func fetchProducts(at pageNumber: Int) { // 이게 끝나면 View를 업데이트하도록 Rx 적용!
+    private func fetchProducts(at pageNumber: Int) -> Observable<ProductPage> { // 이게 끝나면 View를 업데이트하도록 Rx 적용!
         let networkProvider = NetworkProvider()
-        let ob = networkProvider.fetchData(api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: 10),
+        let observable = networkProvider.fetchData(api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: 10),
                                   decodingType: ProductPage.self)
-            _ = ob.subscribe(onNext: { [weak self] productPage in
-                self?.products = productPage.products
-                print("!!!")
-            })
-            .disposed(by: disposeBag)
+        
+        return observable
+//            _ = ob.subscribe(onNext: { [weak self] productPage in
+//                self?.products = productPage.products
+//                print("!!!")
+//            })
+//            .disposed(by: disposeBag)
     }
     
     // MARK: - 테스트코드
-    @available(*, deprecated, message: "테스트에서만 호출할 코드입니다.")
-    func test_fetchBundleImages() -> UIImage? {
-        fetchBundleImages()
-        guard let firstBannerImage = images?[0] else { return nil }
-        return firstBannerImage
-    }
-    
     @available(*, deprecated, message: "테스트에서만 호출할 코드입니다.")
     func test_fetchProducts() -> [Product]? {
         fetchProducts(at: 1)

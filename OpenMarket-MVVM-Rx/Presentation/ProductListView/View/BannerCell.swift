@@ -39,7 +39,7 @@ class BannerCell: UICollectionViewCell {
         ])
     }
     
-    func apply(image: UIImage) {
-        self.imageView.image = image
+    func apply(imageURL: String) {
+        imageView.loadImage(of: imageURL)
     }
 }

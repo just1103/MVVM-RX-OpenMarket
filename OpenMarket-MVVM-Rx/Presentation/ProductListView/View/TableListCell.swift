@@ -20,12 +20,12 @@ class TableListCell: UICollectionViewCell {
         stackView.distribution = .fillProportionally
         stackView.spacing = 8
         
-        let sideInset: Double = 10
-        let topBottomInset: Double = 0
-        stackView.layoutMargins = UIEdgeInsets(top: topBottomInset,
-                                               left: sideInset,
-                                               bottom: topBottomInset,
-                                               right: sideInset)
+        let verticalInset: Double = 0
+        let horizontalInset: Double = 10
+        stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
+                                               left: horizontalInset,
+                                               bottom: verticalInset,
+                                               right: horizontalInset)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
