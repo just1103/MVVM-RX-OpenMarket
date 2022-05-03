@@ -1,6 +1,7 @@
 import UIKit
 
 class GridListCell: UICollectionViewCell {
+    // MARK: - Nested Type
     private enum Design {
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
@@ -12,6 +13,7 @@ class GridListCell: UICollectionViewCell {
         static let bargainRateLabelTextColor: UIColor = .systemRed
     }
     
+    // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -113,6 +115,7 @@ class GridListCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -123,6 +126,7 @@ class GridListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle Method
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -135,6 +139,18 @@ class GridListCell: UICollectionViewCell {
         priceLabel.text = nil
         priceLabel.textColor = .systemRed
         stockLabel.isHidden = true
+    }
+    
+    // MARK: - Methods
+    func apply(data: Product) {
+        imageView.loadImage(of: data.thumbnail)
+        nameLabel.text = data.name
+        changePriceAndDiscountedPriceLabel(price: data.price,
+                                           discountedPrice: data.discountedPrice,
+                                           bargainPrice: data.bargainPrice,
+                                           currency: data.currency)
+        changeStockLabel(by: data.stock)
+        calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
     }
     
     private func configureUI() {
@@ -156,17 +172,6 @@ class GridListCell: UICollectionViewCell {
         priceContainerStackView.addArrangedSubview(bargainRateLabel)
         priceAndBargainpriceStackView.addArrangedSubview(bargainPriceLabel)
         priceAndBargainpriceStackView.addArrangedSubview(priceLabel)
-    }
-    
-    func apply(data: Product) {
-        imageView.loadImage(of: data.thumbnail)
-        nameLabel.text = data.name
-        changePriceAndDiscountedPriceLabel(price: data.price,
-                                           discountedPrice: data.discountedPrice,
-                                           bargainPrice: data.bargainPrice,
-                                           currency: data.currency)
-        changeStockLabel(by: data.stock)
-        calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
     }
     
     private func changePriceAndDiscountedPriceLabel(price: Double,

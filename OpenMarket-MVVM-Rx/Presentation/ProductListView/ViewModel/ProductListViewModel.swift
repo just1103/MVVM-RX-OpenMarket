@@ -5,12 +5,14 @@ import UIKit
 class ProductListViewModel {
     struct Input {
         let invokedViewDidLoad: Observable<Void>
+        let tableButtonDidTap: Observable<Void>
         let cellDidSelect: Observable<IndexPath>
     }
     
     struct Output {
         let bannerProducts: Observable<[Product]>
         let listProducts: Observable<[Product]>
+        let selectedButton: Observable<Void>
         let selectedProduct: Observable<Product>
     }
     
@@ -28,14 +30,17 @@ class ProductListViewModel {
     func transform(_ input: Input) -> Output {
         let bannerProducts = PublishSubject<[Product]>()
         let listProducts = PublishSubject<[Product]>()
+        let selectedButton = PublishSubject<Void>()
         let selectedProduct = PublishSubject<Product>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
                                      bannerProductsOutput: bannerProducts,
                                      listProductsOutput: listProducts)
+        configureSelectedTableButtonObserver(by: input.tableButtonDidTap, output: selectedButton)
         
         let output = Output(bannerProducts: bannerProducts.asObservable(),
                             listProducts: listProducts.asObservable(),
+                            selectedButton: selectedButton.asObservable(),
                             selectedProduct: selectedProduct.asObservable())
         
         return output
@@ -54,6 +59,14 @@ class ProductListViewModel {
                     }
                     bannerProductsOutput.onNext(Array(filteredProduct[0...2]))
                 }) 
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureSelectedTableButtonObserver(by inputObserver: Observable<Void>, output: PublishSubject<Void>) {
+        inputObserver
+            .subscribe(onNext: { _ in
+                output.onNext(())
             })
             .disposed(by: disposeBag)
     }

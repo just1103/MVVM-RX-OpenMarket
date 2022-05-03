@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RxCocoa
 
 class ProductListViewController: UIViewController {
     // MARK: - Nested Types
@@ -33,12 +34,39 @@ class ProductListViewController: UIViewController {
     enum MenuButton {
         case table
         case grid
-        case bargain
     }
         
     // MARK: - Properties
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private var verticalStackView = UIStackView()
+    private var menuStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    private var buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
+    private var tableButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Table로 보기", for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        return button
+    }()
+    private lazy var underlineView: UIView = {
+        let underline = UIView()
+        underline.backgroundColor = .label
+        return underline
+    }()
     private var dataSource: DiffableDataSource!
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad: PublishSubject<Void> = .init()
@@ -62,9 +90,17 @@ class ProductListViewController: UIViewController {
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationBar()
         configureCollectionView()
         bind()
         invokedViewDidLoad.onNext(())
+    }
+    
+    private func configureNavigationBar() {
+        view.backgroundColor = .white
+        navigationItem.titleView = menuStackView
+        menuStackView.addArrangedSubview(buttonStackView)
+        buttonStackView.addArrangedSubview(tableButton)
     }
     
     private func configureCollectionView() {
@@ -106,10 +142,12 @@ class ProductListViewController: UIViewController {
     
     private func bind() {
         let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                               tableButtonDidTap: tableButton.rx.tap.asObservable(),
                                                cellDidSelect: cellDidSelect.asObservable())
         let output = viewModel.transform(input)
 
         configureItemsWith(output.bannerProducts, output.listProducts)
+        configureTableButtonWith(output.selectedButton)
     }
     
     private func configureItemsWith(_ bannerProducts: Observable<[Product]>, _ listProducts: Observable<[Product]>) {
@@ -136,6 +174,23 @@ class ProductListViewController: UIViewController {
 //                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func configureTableButtonWith(_ tapEvent: Observable<Void>) {
+        // TODO: drive를 사용한 방법 알아보기
+        tapEvent
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                self?.makeUnderline()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func makeUnderline() {
+        buttonStackView.addArrangedSubview(tableButton)
+        buttonStackView.addArrangedSubview(underlineView)
+        underlineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        underlineView.widthAnchor.constraint(equalTo: tableButton.widthAnchor).isActive = true
     }
     
     // TODO: 다른 방법 고민

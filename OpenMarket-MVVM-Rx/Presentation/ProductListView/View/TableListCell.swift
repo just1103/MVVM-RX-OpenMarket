@@ -1,6 +1,7 @@
 import UIKit
 
 class TableListCell: UICollectionViewCell {
+    // MARK: - Nested Type
     private enum Design {
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
@@ -12,6 +13,7 @@ class TableListCell: UICollectionViewCell {
         static let bargainRateLabelTextColor: UIColor = .systemRed
     }
     
+    // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -124,6 +126,7 @@ class TableListCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -132,6 +135,32 @@ class TableListCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle Method
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        nameLabel.text = nil
+        stockLabel.text = nil
+        bargainPriceLabel.text = nil
+        bargainPriceLabel.isHidden = true
+        bargainRateLabel.text = nil
+        priceLabel.attributedText = nil
+        priceLabel.text = nil
+        priceLabel.textColor = .systemRed
+        stockLabel.isHidden = true
+    }
+    
+    // MARK: - Methods
+    func apply(data: Product) {
+        imageView.loadImage(of: data.thumbnail)
+        nameLabel.text = data.name
+        changePriceAndDiscountedPriceLabel(price: data.price,
+                                           discountedPrice: data.discountedPrice,
+                                           bargainPrice: data.bargainPrice,
+                                           currency: data.currency)
+        changeStockLabel(by: data.stock)
     }
     
     private func configureUI() {
@@ -156,17 +185,7 @@ class TableListCell: UICollectionViewCell {
         priceAndBargainStackView.addArrangedSubview(priceLabel)
         priceAndBargainStackView.addArrangedSubview(bargainRateLabel)
     }
-    
-    func apply(data: Product) {
-        imageView.loadImage(of: data.thumbnail)
-        nameLabel.text = data.name
-        changePriceAndDiscountedPriceLabel(price: data.price,
-                                           discountedPrice: data.discountedPrice,
-                                           bargainPrice: data.bargainPrice,
-                                           currency: data.currency)
-        changeStockLabel(by: data.stock)
-    }
-    
+
     private func changePriceAndDiscountedPriceLabel(price: Double,
                                                     discountedPrice: Double,
                                                     bargainPrice: Double,
@@ -191,7 +210,6 @@ class TableListCell: UICollectionViewCell {
         if stock == 0 {
             stockLabel.isHidden = false
             stockLabel.text = "품절"
-//            stockLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         } else {
             stockLabel.isHidden = true
         }
