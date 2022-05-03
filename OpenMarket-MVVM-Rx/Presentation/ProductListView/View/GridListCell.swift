@@ -18,6 +18,15 @@ class GridListCell: UICollectionViewCell {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fill
+        stackView.spacing = 8
+        
+        let verticalInset: Double = 10
+        let horizontalInset: Double = 10
+        stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
+                                               left: horizontalInset,
+                                               bottom: verticalInset,
+                                               right: horizontalInset)
+        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
     
@@ -25,6 +34,7 @@ class GridListCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()
     
@@ -42,6 +52,7 @@ class GridListCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = Design.nameLabelFont
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -54,21 +65,32 @@ class GridListCell: UICollectionViewCell {
         return label
     }()
     
-    private let priceAndBargainStackView: UIStackView = {
+    private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
+        stackView.alignment = .top
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    private let priceAndBargainpriceStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fill
         return stackView
     }()
-    
+
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = Design.priceLabelFont
         label.textColor = Design.priceLabelTextColor
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -78,6 +100,7 @@ class GridListCell: UICollectionViewCell {
         label.textAlignment = .left
         label.font = Design.priceLabelFont
         label.textColor = Design.priceLabelTextColor
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -100,18 +123,39 @@ class GridListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        nameLabel.text = nil
+        stockLabel.text = nil
+        bargainPriceLabel.text = nil
+        bargainPriceLabel.isHidden = true
+        bargainRateLabel.text = nil
+        priceLabel.attributedText = nil
+        priceLabel.text = nil
+        priceLabel.textColor = .systemRed
+        stockLabel.isHidden = true
+    }
+    
     private func configureUI() {
         addSubview(containerStackView)
+        NSLayoutConstraint.activate([
+            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
         containerStackView.addArrangedSubview(imageView)
         containerStackView.addArrangedSubview(nameAndStockStackView)
-        containerStackView.addArrangedSubview(priceAndBargainStackView)
+        containerStackView.addArrangedSubview(priceContainerStackView)
         
         nameAndStockStackView.addArrangedSubview(nameLabel)
         nameAndStockStackView.addArrangedSubview(stockLabel)
         
-        priceAndBargainStackView.addArrangedSubview(bargainPriceLabel)
-        priceAndBargainStackView.addArrangedSubview(priceLabel)
-        priceAndBargainStackView.addArrangedSubview(bargainRateLabel)
+        priceContainerStackView.addArrangedSubview(priceAndBargainpriceStackView)
+        priceContainerStackView.addArrangedSubview(bargainRateLabel)
+        priceAndBargainpriceStackView.addArrangedSubview(bargainPriceLabel)
+        priceAndBargainpriceStackView.addArrangedSubview(priceLabel)
     }
     
     func apply(data: Product) {
@@ -122,6 +166,7 @@ class GridListCell: UICollectionViewCell {
                                            bargainPrice: data.bargainPrice,
                                            currency: data.currency)
         changeStockLabel(by: data.stock)
+        calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
     }
     
     private func changePriceAndDiscountedPriceLabel(price: Double,
@@ -129,16 +174,11 @@ class GridListCell: UICollectionViewCell {
                                                     bargainPrice: Double,
                                                     currency: Currency) {
         if discountedPrice == 0 {
-            priceLabel.attributedText = nil
-            priceLabel.textColor = .systemGray
             priceLabel.text = "\(currency.rawValue) \(price.formattedWithComma())"
-            
-            bargainPriceLabel.isHidden = true
         } else {
             let priceText = "\(currency.rawValue) \(price.formattedWithComma())"
             priceLabel.strikeThrough(text: priceText)
-            priceLabel.textColor = .systemRed
-            
+            priceLabel.textColor = .systemGray
             bargainPriceLabel.isHidden = false
             bargainPriceLabel.text = "\(currency.rawValue) \(bargainPrice.formattedWithComma())"
         }
@@ -148,9 +188,14 @@ class GridListCell: UICollectionViewCell {
         if stock == 0 {
             stockLabel.isHidden = false
             stockLabel.text = "품절"
-//            stockLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        } else {
-            stockLabel.isHidden = true
+        }
+    }
+    
+    private func calculateBargainRate(price: Double, discountedPrice: Double) {
+        let bargainRate = round(discountedPrice / price * 100)
+        
+        if bargainRate != .zero {
+            bargainRateLabel.text = "\(String(format: "%.0f", bargainRate))%"
         }
     }
 }

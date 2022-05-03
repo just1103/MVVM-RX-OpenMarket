@@ -16,6 +16,8 @@ class BannerCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
+        let height = UIScreen.main.bounds.height / 2
+        imageView.heightAnchor.constraint(equalToConstant: height).isActive = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         return imageView

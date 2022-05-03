@@ -50,7 +50,7 @@ class ProductListViewController: UIViewController {
     
     typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
     typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
-    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
+    typealias TableListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
     typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
     
     // MARK: - Initializer
@@ -86,13 +86,15 @@ class ProductListViewController: UIViewController {
                 print("알 수 없는 Section")
                 return nil
             }
+            let estimatedHeight = NSCollectionLayoutDimension.estimated(300)
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
+                                                  heightDimension: estimatedHeight)
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .fractionalHeight(0.5))
+                                                   heightDimension: estimatedHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                          subitem: item,
+//                                                           count: 2)
                                                          count: sectionKind.columnCount)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
@@ -131,7 +133,7 @@ class ProductListViewController: UIViewController {
                 // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
                 self.configureDataSourceWith(listProducts: self.makeHashable(from: products),
                                              bannerProducts: self.makeHashable(from: bannerProducts))
-                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount)
+//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount)
             })
             .disposed(by: disposeBag)
     }
