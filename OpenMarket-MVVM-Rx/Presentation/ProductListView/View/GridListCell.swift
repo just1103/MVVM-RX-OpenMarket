@@ -21,9 +21,9 @@ class GridListCell: UICollectionViewCell {
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = 8
-        
-        let verticalInset: Double = 10
-        let horizontalInset: Double = 10
+
+        let verticalInset: Double = 15
+        let horizontalInset: Double = 15
         stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
                                                left: horizontalInset,
                                                bottom: verticalInset,
@@ -37,6 +37,8 @@ class GridListCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+        imageView.layer.cornerRadius = 6
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -197,9 +199,9 @@ class GridListCell: UICollectionViewCell {
     }
     
     private func calculateBargainRate(price: Double, discountedPrice: Double) {
-        let bargainRate = round(discountedPrice / price * 100)
+        let bargainRate = ceil(discountedPrice / price * 100)
         
-        if bargainRate != .zero {
+        if discountedPrice != .zero {
             bargainRateLabel.text = "\(String(format: "%.0f", bargainRate))%"
         }
     }

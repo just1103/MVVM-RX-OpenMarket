@@ -19,10 +19,10 @@ class TableListCell: UICollectionViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill // fillProportionally하면 계산에 시간이 오래걸려서 Cell이 늦게 뜸
         stackView.spacing = 8
         
-        let verticalInset: Double = 0
+        let verticalInset: Double = 10 // FIXME: 이미지 늦게 뜨고, 배너에 짤림
         let horizontalInset: Double = 10
         stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
                                                left: horizontalInset,
@@ -36,8 +36,12 @@ class TableListCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 100).isActive = true
+        imageView.layer.cornerRadius = 6
+        imageView.clipsToBounds = true
         imageView.setContentHuggingPriority(.init(rawValue: 900), for: .horizontal)
+        imageView.setContentHuggingPriority(.init(rawValue: 900), for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()
@@ -76,6 +80,8 @@ class TableListCell: UICollectionViewCell {
         label.textAlignment = .right
         label.font = Design.stockLabelFont
         label.textColor = Design.stockLabelTextColor
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
 
@@ -85,6 +91,7 @@ class TableListCell: UICollectionViewCell {
         imageView.image = UIImage(systemName: Design.accessoryImageName)
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
         return imageView
     }()
     
@@ -104,6 +111,8 @@ class TableListCell: UICollectionViewCell {
         label.textAlignment = .left
         label.font = Design.priceLabelFont
         label.textColor = Design.priceLabelTextColor
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -113,7 +122,8 @@ class TableListCell: UICollectionViewCell {
         label.textAlignment = .left
         label.font = Design.priceLabelFont
         label.textColor = Design.priceLabelTextColor
-        label.setContentHuggingPriority(.init(rawValue: 900), for: .horizontal)
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
     
@@ -123,6 +133,7 @@ class TableListCell: UICollectionViewCell {
         label.textAlignment = .right
         label.font = Design.bargainRateLabelFont
         label.textColor = Design.bargainRateLabelTextColor
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal) // 주의 - default Hugging이 251이 아니라 250임
         return label
     }()
     
@@ -161,29 +172,31 @@ class TableListCell: UICollectionViewCell {
                                            bargainPrice: data.bargainPrice,
                                            currency: data.currency)
         changeStockLabel(by: data.stock)
+        calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
     }
     
     private func configureUI() {
         addSubview(containerStackView)
-        NSLayoutConstraint.activate([
-            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
-            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-        
         containerStackView.addArrangedSubview(imageView)
         containerStackView.addArrangedSubview(verticalStackView)
-
+        containerStackView.addArrangedSubview(accessoryImageView)
+        
         verticalStackView.addArrangedSubview(nameAndStockStackView)
         nameAndStockStackView.addArrangedSubview(nameLabel)
         nameAndStockStackView.addArrangedSubview(stockLabel)
-        nameAndStockStackView.addArrangedSubview(accessoryImageView)
-
+        
         verticalStackView.addArrangedSubview(priceAndBargainStackView)
         priceAndBargainStackView.addArrangedSubview(bargainPriceLabel)
         priceAndBargainStackView.addArrangedSubview(priceLabel)
         priceAndBargainStackView.addArrangedSubview(bargainRateLabel)
+        
+        NSLayoutConstraint.activate([
+            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            imageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.2),
+        ])
     }
 
     private func changePriceAndDiscountedPriceLabel(price: Double,
@@ -212,6 +225,14 @@ class TableListCell: UICollectionViewCell {
             stockLabel.text = "품절"
         } else {
             stockLabel.isHidden = true
+        }
+    }
+    
+    private func calculateBargainRate(price: Double, discountedPrice: Double) {
+        let bargainRate = ceil(discountedPrice / price * 100)
+        
+        if discountedPrice != .zero {
+            bargainRateLabel.text = "\(String(format: "%.0f", bargainRate))%"
         }
     }
 }

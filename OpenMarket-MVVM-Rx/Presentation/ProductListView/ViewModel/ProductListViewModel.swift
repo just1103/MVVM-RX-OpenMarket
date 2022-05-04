@@ -73,7 +73,7 @@ class ProductListViewModel {
   
     private func fetchProducts(at pageNumber: Int) -> Observable<ProductPage> { // 이게 끝나면 View를 업데이트하도록 Rx 적용!
         let networkProvider = NetworkProvider()
-        let observable = networkProvider.fetchData(api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: 100),
+        let observable = networkProvider.fetchData(api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: 20),
                                   decodingType: ProductPage.self)
         
         return observable

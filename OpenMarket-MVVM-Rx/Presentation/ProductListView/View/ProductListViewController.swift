@@ -30,11 +30,6 @@ class ProductListViewController: UIViewController {
             }
         }
     }
-    
-    enum MenuButton {
-        case table
-        case grid
-    }
         
     // MARK: - Properties
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -62,7 +57,7 @@ class ProductListViewController: UIViewController {
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         return button
     }()
-    private lazy var underlineView: UIView = {
+    private var underlineView: UIView = { 
         let underline = UIView()
         underline.backgroundColor = .label
         return underline
@@ -78,7 +73,7 @@ class ProductListViewController: UIViewController {
     
     typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
     typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
-    typealias TableListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
+    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
     typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
     
     // MARK: - Initializer
@@ -122,7 +117,8 @@ class ProductListViewController: UIViewController {
                 print("알 수 없는 Section")
                 return nil
             }
-            let estimatedHeight = NSCollectionLayoutDimension.estimated(300)
+            let screenWidth = UIScreen.main.bounds.width
+            let estimatedHeight = NSCollectionLayoutDimension.estimated(screenWidth) // 300으로 주면 TableList 짤림
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: estimatedHeight)
             let item = NSCollectionLayoutItem(layoutSize: itemSize)

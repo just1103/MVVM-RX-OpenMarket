@@ -25,6 +25,7 @@
 		36C0C09228127FE600B57492 /* MockProduct.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09028127FE600B57492 /* MockProduct.json */; };
 		36C0C09328127FE600B57492 /* MockProductPage.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09128127FE600B57492 /* MockProductPage.json */; };
 		36C0C095281287EE00B57492 /* NetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0C094281287EE00B57492 /* NetworkProviderTests.swift */; };
+		36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */; };
 		DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */; };
 		DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425F280FDC640046D916 /* SceneDelegate.swift */; };
 		DEC34262280FDC640046D916 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34261280FDC640046D916 /* ViewController.swift */; };
@@ -77,6 +78,7 @@
 		36C0C09028127FE600B57492 /* MockProduct.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProduct.json; sourceTree = "<group>"; };
 		36C0C09128127FE600B57492 /* MockProductPage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProductPage.json; sourceTree = "<group>"; };
 		36C0C094281287EE00B57492 /* NetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProviderTests.swift; sourceTree = "<group>"; };
+		36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSegmentedControl.swift; sourceTree = "<group>"; };
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				3625D0F42816C6EB00CD5043 /* BannerCell.swift */,
 				3625D0F62816C6F700CD5043 /* TableListCell.swift */,
 				3625D0F82816C70600CD5043 /* GridListCell.swift */,
+				36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -462,6 +465,7 @@
 				DEC3428E281034400046D916 /* BaseURLProtocol.swift in Sources */,
 				3625D0F52816C6EB00CD5043 /* BannerCell.swift in Sources */,
 				3625D0FB2816D40300CD5043 /* Double+DecimalFormat.swift in Sources */,
+				36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */,
 				3625D0FD2816D40E00CD5043 /* UILabel+Strike.swift in Sources */,
 				3625D0F92816C70600CD5043 /* GridListCell.swift in Sources */,
 			);
