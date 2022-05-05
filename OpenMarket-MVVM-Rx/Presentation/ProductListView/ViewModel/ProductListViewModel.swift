@@ -3,6 +3,20 @@ import RxSwift
 import UIKit
 
 class ProductListViewModel {
+    enum MenuButton {
+        case table
+        case grid
+        
+        var titleLabelText: String {
+            switch self {
+            case .table:
+                return "Table로 보기"
+            case .grid:
+                return "Grid로 보기"
+            }
+        }
+    }
+    
     struct Input {
         let invokedViewDidLoad: Observable<Void>
         let tableButtonDidTap: Observable<Void>

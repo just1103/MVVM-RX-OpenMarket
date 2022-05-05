@@ -22,7 +22,7 @@ class TableListCell: UICollectionViewCell {
         stackView.distribution = .fill // fillProportionally하면 계산에 시간이 오래걸려서 Cell이 늦게 뜸
         stackView.spacing = 8
         
-        let verticalInset: Double = 10 // FIXME: 이미지 늦게 뜨고, 배너에 짤림
+        let verticalInset: Double = 10
         let horizontalInset: Double = 10
         stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
                                                left: horizontalInset,
@@ -38,10 +38,6 @@ class TableListCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 6
         imageView.clipsToBounds = true
-        imageView.setContentHuggingPriority(.init(rawValue: 900), for: .horizontal)
-        imageView.setContentHuggingPriority(.init(rawValue: 900), for: .vertical)
-        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()

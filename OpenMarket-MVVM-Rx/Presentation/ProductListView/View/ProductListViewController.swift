@@ -54,10 +54,11 @@ class ProductListViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Table로 보기", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
+//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         return button
     }()
-    private var underlineView: UIView = { 
+    private var underlineView: UIView = {
         let underline = UIView()
         underline.backgroundColor = .label
         return underline
@@ -93,7 +94,7 @@ class ProductListViewController: UIViewController {
     
     private func configureNavigationBar() {
         view.backgroundColor = .white
-        navigationItem.titleView = menuStackView
+        navigationItem.titleView = MenuSegmentedControl()
         menuStackView.addArrangedSubview(buttonStackView)
         buttonStackView.addArrangedSubview(tableButton)
     }

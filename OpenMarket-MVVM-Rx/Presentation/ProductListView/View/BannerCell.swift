@@ -1,10 +1,12 @@
 import UIKit
 
 class BannerCell: UICollectionViewCell {
+    // MARK: - Nested Type
     private enum Design {
         static let imageViewInset: CGFloat = 0
     }
     
+    // MARK: - Properties
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -16,20 +18,13 @@ class BannerCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-//        let height = UIScreen.main.bounds.height / 3
-//        imageView.heightAnchor.constraint(equalToConstant: height).isActive = true // esto
-//        imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-//        imageView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        let width = UIScreen.main.bounds.width
-        imageView.widthAnchor.constraint(equalToConstant: 428).isActive = true
-//        imageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -38,6 +33,17 @@ class BannerCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle Method
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+    
+    // MARK: - Methods
+    func apply(imageURL: String) {
+        imageView.loadImage(of: imageURL)
     }
     
     private func configureUI() {
@@ -49,9 +55,5 @@ class BannerCell: UICollectionViewCell {
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-    }
-    
-    func apply(imageURL: String) {
-        imageView.loadImage(of: imageURL)
     }
 }
