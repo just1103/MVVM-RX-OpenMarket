@@ -3,31 +3,15 @@ import RxSwift
 import UIKit
 
 class ProductListViewModel {
-    enum MenuButton {
-        case table
-        case grid
-        
-        var titleLabelText: String {
-            switch self {
-            case .table:
-                return "Table로 보기"
-            case .grid:
-                return "Grid로 보기"
-            }
-        }
-    }
-    
     struct Input {
         let invokedViewDidLoad: Observable<Void>
-        let tableButtonDidTap: Observable<Void>
-        let cellDidSelect: Observable<IndexPath>
+//        let cellDidSelect: Observable<IndexPath>
     }
     
     struct Output {
         let bannerProducts: Observable<[Product]>
         let listProducts: Observable<[Product]>
-        let selectedButton: Observable<Void>
-        let selectedProduct: Observable<Product>
+//        let selectedProduct: Observable<Product>
     }
     
     // MARK: - Properties
@@ -44,18 +28,14 @@ class ProductListViewModel {
     func transform(_ input: Input) -> Output {
         let bannerProducts = PublishSubject<[Product]>()
         let listProducts = PublishSubject<[Product]>()
-        let selectedButton = PublishSubject<Void>()
-        let selectedProduct = PublishSubject<Product>()
+//        let selectedProduct = PublishSubject<Product>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
                                      bannerProductsOutput: bannerProducts,
                                      listProductsOutput: listProducts)
-        configureSelectedTableButtonObserver(by: input.tableButtonDidTap, output: selectedButton)
         
         let output = Output(bannerProducts: bannerProducts.asObservable(),
-                            listProducts: listProducts.asObservable(),
-                            selectedButton: selectedButton.asObservable(),
-                            selectedProduct: selectedProduct.asObservable())
+                            listProducts: listProducts.asObservable())
         
         return output
     }
@@ -73,14 +53,6 @@ class ProductListViewModel {
                     }
                     bannerProductsOutput.onNext(Array(filteredProduct[0...2]))
                 }) 
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func configureSelectedTableButtonObserver(by inputObserver: Observable<Void>, output: PublishSubject<Void>) {
-        inputObserver
-            .subscribe(onNext: { _ in
-                output.onNext(())
             })
             .disposed(by: disposeBag)
     }

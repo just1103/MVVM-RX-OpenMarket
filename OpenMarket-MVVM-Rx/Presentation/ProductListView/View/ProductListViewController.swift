@@ -33,43 +33,15 @@ class ProductListViewController: UIViewController {
         
     // MARK: - Properties
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private var menuStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
-    private var buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        return stackView
-    }()
-    private var tableButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Table로 보기", for: .normal)
-        button.setTitleColor(UIColor.label, for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
-//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
-        return button
-    }()
-    private var underlineView: UIView = {
-        let underline = UIView()
-        underline.backgroundColor = .label
-        return underline
-    }()
+    private let menuSegmentedControl = MenuSegmentedControl() // 위치?
     private var dataSource: DiffableDataSource!
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad: PublishSubject<Void> = .init()
-    private let cellDidSelect: PublishSubject<IndexPath> = .init()
+//    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
-    private static var isTable: Bool = true
+    // TODO: private 설정
+    static var isTable: Bool = true
     private var currentBannerPage: Int = 0
     
     typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
@@ -94,9 +66,12 @@ class ProductListViewController: UIViewController {
     
     private func configureNavigationBar() {
         view.backgroundColor = .white
-        navigationItem.titleView = MenuSegmentedControl()
-        menuStackView.addArrangedSubview(buttonStackView)
-        buttonStackView.addArrangedSubview(tableButton)
+        navigationItem.titleView = menuSegmentedControl
+
+        navigationItem.titleView?.translatesAutoresizingMaskIntoConstraints = false
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationItem.titleView?.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 30).isActive = true
+        navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor, constant: -30).isActive = true
     }
     
     private func configureCollectionView() {
@@ -138,13 +113,10 @@ class ProductListViewController: UIViewController {
     }
     
     private func bind() {
-        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
-                                               tableButtonDidTap: tableButton.rx.tap.asObservable(),
-                                               cellDidSelect: cellDidSelect.asObservable())
+        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable())
         let output = viewModel.transform(input)
 
         configureItemsWith(output.bannerProducts, output.listProducts)
-        configureTableButtonWith(output.selectedButton)
     }
     
     private func configureItemsWith(_ bannerProducts: Observable<[Product]>, _ listProducts: Observable<[Product]>) {
@@ -178,16 +150,9 @@ class ProductListViewController: UIViewController {
         tapEvent
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                self?.makeUnderline()
+//                self?.makeUnderline()
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func makeUnderline() {
-        buttonStackView.addArrangedSubview(tableButton)
-        buttonStackView.addArrangedSubview(underlineView)
-        underlineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        underlineView.widthAnchor.constraint(equalTo: tableButton.widthAnchor).isActive = true
     }
     
     // TODO: 다른 방법 고민
