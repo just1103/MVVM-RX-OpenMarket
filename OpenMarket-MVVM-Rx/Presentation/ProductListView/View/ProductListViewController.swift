@@ -62,7 +62,8 @@ class ProductListViewController: UIViewController {
     private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
     private var viewModel: ProductListViewModel!
-    private let invokedViewDidLoad: PublishSubject<Void> = .init()
+    private let invokedViewDidLoad = PublishSubject<Void>()
+    private let cellDidScroll = PublishSubject<IndexPath>()
 //    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
@@ -97,13 +98,15 @@ class ProductListViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        view.backgroundColor = Design.veryDarkGreenColor
+        view.backgroundColor = Design.darkGreenColor
         navigationItem.titleView = menuSegmentedControl
 
         navigationItem.titleView?.translatesAutoresizingMaskIntoConstraints = false
         guard let navigationBar = navigationController?.navigationBar else { return }
-        navigationItem.titleView?.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 30).isActive = true
-        navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor, constant: -30).isActive = true
+        navigationItem.titleView?.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor,
+                                                           constant: 30).isActive = true
+        navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor,
+                                                            constant: -30).isActive = true
     }
     
     private func configureStackView() {
@@ -120,6 +123,7 @@ class ProductListViewController: UIViewController {
     }
         
     private func configureCollectionView() {
+        collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = Design.bgcolor
         let layout = createLayout()
@@ -152,7 +156,8 @@ class ProductListViewController: UIViewController {
     
     private func bind() {
         let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
-                                               listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable())
+                                               listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable(),
+                                               cellDidScroll: cellDidScroll.asObservable())
         let output = viewModel.transform(input)
 
         configureItemsWith(output.listProducts)
@@ -162,6 +167,7 @@ class ProductListViewController: UIViewController {
     
     private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
         listProducts
+            .scan([], accumulator: +)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
                 self?.drawBannerAndList(with: products)
@@ -285,7 +291,6 @@ extension ProductListViewController {
     }
 }
 
-
 // MARK: - MenuSegmentedControllViewModelDelegate
 extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
@@ -301,5 +306,13 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
             collectionView.collectionViewLayout = changedLayout
             collectionView.reloadData()
         }
+    }
+}
+
+extension ProductListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        cellDidScroll.onNext(indexPath)
     }
 }

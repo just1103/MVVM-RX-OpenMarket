@@ -6,6 +6,7 @@ class ProductListViewModel {
     struct Input {
         let invokedViewDidLoad: Observable<Void>
         let listRefreshButtonDidTap: Observable<Void> // fetch 다시, 맨위로 scroll, button 숨기기
+        let cellDidScroll: Observable<IndexPath>
         //        let cellDidSelect: Observable<IndexPath>
     }
     
@@ -17,8 +18,9 @@ class ProductListViewModel {
     }
     
     // MARK: - Properties
-    var products: [Product]?
-    var latestProductID: Int!
+    private var currentProductsCount: Int = 20
+    private var currentPage: Int = 1
+    private var latestProductID: Int!
     private let disposeBag = DisposeBag()
     private var images: [UIImage]?
     
@@ -40,6 +42,8 @@ class ProductListViewModel {
                                      newProductDidPostOutput: newProductDidPost)
         configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap,
                                            outputObservable: newListProducts)
+        configureCellDidScrollObserver(by: input.cellDidScroll,
+                                       outputObservable: listProducts)
         
         let output = Output(listProducts: listProducts.asObservable(),
                             newProductDidPost: newProductDidPost.asObservable(),
@@ -104,6 +108,22 @@ class ProductListViewModel {
                     guard let firstProductID = productPage.products.first?.id else { return }
                     self?.latestProductID = firstProductID
                 })
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureCellDidScrollObserver(by inputObservable: Observable<IndexPath>,
+                                                outputObservable: PublishSubject<[Product]>) {
+        inputObservable
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                if indexPath.row == self.currentProductsCount - 4 {
+                    self.currentPage += 1
+                    _ = self.fetchProducts(at: self.currentPage, with: 20).subscribe(onNext: { productPage in
+                        self.currentProductsCount += 20
+                        outputObservable.onNext(productPage.products)
+                    })
+                }
             })
             .disposed(by: disposeBag)
     }
