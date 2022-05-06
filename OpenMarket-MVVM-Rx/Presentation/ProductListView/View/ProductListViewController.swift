@@ -4,6 +4,13 @@ import RxCocoa
 
 class ProductListViewController: UIViewController {
     // MARK: - Nested Types
+    enum Design {
+        static let bgcolor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
+        static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
+        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
+        static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
+    }
+    
     enum SectionKind: Int {
         case banner
         case list
@@ -32,6 +39,25 @@ class ProductListViewController: UIViewController {
     }
         
     // MARK: - Properties
+    private let containerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
+    
+    private let listRefreshButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.numberOfLines = 0
+        button.backgroundColor = Design.lightGreenColor
+        button.setTitle("새로 등록된 상품을 확인하려면 여기를 탭해주세요.", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        button.isHidden = true
+        return button
+    }()
+    
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
@@ -59,14 +85,19 @@ class ProductListViewController: UIViewController {
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationBar()
-        configureCollectionView()
+        configureUI()
         bind()
         invokedViewDidLoad.onNext(())
     }
     
+    private func configureUI() {
+        configureNavigationBar()
+        configureStackView()
+        configureCollectionView()
+    }
+    
     private func configureNavigationBar() {
-        view.backgroundColor = .white
+        view.backgroundColor = Design.veryDarkGreenColor
         navigationItem.titleView = menuSegmentedControl
 
         navigationItem.titleView?.translatesAutoresizingMaskIntoConstraints = false
@@ -75,15 +106,22 @@ class ProductListViewController: UIViewController {
         navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor, constant: -30).isActive = true
     }
     
-    private func configureCollectionView() {
-        self.view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+    private func configureStackView() {
+        view.addSubview(containerStackView)
+        containerStackView.addArrangedSubview(listRefreshButton)
+        containerStackView.addArrangedSubview(collectionView)
+        
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            containerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
+    }
+        
+    private func configureCollectionView() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = Design.bgcolor
         let layout = createLayout()
         collectionView.collectionViewLayout = layout
     }
@@ -113,41 +151,58 @@ class ProductListViewController: UIViewController {
     }
     
     private func bind() {
-        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable())
+        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                               listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable())
         let output = viewModel.transform(input)
 
         configureItemsWith(output.listProducts)
+        showListRefreshButton(output.newProductDidPost)
+        configureNewItemsWith(output.newListProducts)
     }
     
     private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
         listProducts
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
-                guard let self = self else { return }
-                let recentBargainProducts = products.filter { product in
-                    product.discountedPrice != 0
-                }
-                let bannerProductsCount = 5
-                let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
-                
-                // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
-                self.configureDataSourceWith(listProducts: self.makeHashable(from: products),
-                                             bannerProducts: self.makeHashable(from: bannerProducts))
-//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount)
+                self?.drawBannerAndList(with: products)
             })
             .disposed(by: disposeBag)
     }
     
-    private func configureTableButtonWith(_ tapEvent: Observable<Void>) {
-        // TODO: drive를 사용한 방법 알아보기
-        tapEvent
+    private func drawBannerAndList(with products: [Product]) {
+        let recentBargainProducts = products.filter { product in
+            product.discountedPrice != 0
+        }
+        let bannerProductsCount = 5
+        let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
+        
+        // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
+        configureDataSourceWith(listProducts: makeHashable(from: products),
+                                     bannerProducts: makeHashable(from: bannerProducts))
+//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
+    }
+    
+    private func showListRefreshButton(_ newProductDidPost: Observable<Void>) {
+        newProductDidPost
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-//                self?.makeUnderline()
+                guard let self = self else { return }
+                self.listRefreshButton.isHidden = false
             })
             .disposed(by: disposeBag)
     }
     
+    private func configureNewItemsWith(_ newListProducts: Observable<[Product]>) {
+        newListProducts
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] products in
+                self?.drawBannerAndList(with: products)
+                self?.listRefreshButton.isHidden = true
+                self?.collectionView.setContentOffset(CGPoint.zero, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+        
     // TODO: 다른 방법 고민
     private func makeHashable(from products: [Product]) -> [UniqueProduct] {
         var uniqueProducts = [UniqueProduct]()
@@ -199,7 +254,7 @@ class ProductListViewController: UIViewController {
         snapshot.appendItems(bannerProducts)
         snapshot.appendSections([.list])
         snapshot.appendItems(listProducts)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true) // TODO: Rx로 snapshot만 다시 적용하도록 메스드 분리
     }
 }
 
