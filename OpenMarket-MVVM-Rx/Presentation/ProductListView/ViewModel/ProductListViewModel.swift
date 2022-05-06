@@ -9,7 +9,6 @@ class ProductListViewModel {
     }
     
     struct Output {
-        let bannerProducts: Observable<[Product]>
         let listProducts: Observable<[Product]>
 //        let selectedProduct: Observable<Product>
     }
@@ -26,32 +25,23 @@ class ProductListViewModel {
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let bannerProducts = PublishSubject<[Product]>()
         let listProducts = PublishSubject<[Product]>()
 //        let selectedProduct = PublishSubject<Product>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
-                                     bannerProductsOutput: bannerProducts,
                                      listProductsOutput: listProducts)
         
-        let output = Output(bannerProducts: bannerProducts.asObservable(),
-                            listProducts: listProducts.asObservable())
+        let output = Output(listProducts: listProducts.asObservable())
         
         return output
     }
     
     private func configureViewDidLoadObserver(by inputObserver: Observable<Void>,
-                                              bannerProductsOutput: PublishSubject<[Product]>,
                                               listProductsOutput: PublishSubject<[Product]>) {
         inputObserver
             .subscribe(onNext: { [weak self] _ in
                 _ = self?.fetchProducts(at: 1).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
                     listProductsOutput.onNext(productPage.products)
-
-                    let filteredProduct = productPage.products.filter { product in
-                        product.discountedPrice != 0
-                    }
-                    bannerProductsOutput.onNext(Array(filteredProduct[0...2]))
                 }) 
             })
             .disposed(by: disposeBag)

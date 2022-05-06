@@ -13,10 +13,10 @@ class ProductListViewController: UIViewController {
             case .banner:
                 return 1
             case .list:
-                if ProductListViewController.isTable {
-                    return 1
-                } else {
+                if ProductListViewController.isGrid {
                     return 2
+                } else {
+                    return 1
                 }
             }
         }
@@ -33,15 +33,15 @@ class ProductListViewController: UIViewController {
         
     // MARK: - Properties
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private let menuSegmentedControl = MenuSegmentedControl() // 위치?
+    private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad: PublishSubject<Void> = .init()
 //    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
-    // TODO: private 설정
-    static var isTable: Bool = true
+    // TODO: ViewModel이 가지고 있도록 변경
+    private static var isGrid: Bool = true
     private var currentBannerPage: Int = 0
     
     typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
@@ -50,9 +50,10 @@ class ProductListViewController: UIViewController {
     typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
     
     // MARK: - Initializer
-    convenience init(viewModel: ProductListViewModel) {
+    convenience init(viewModel: ProductListViewModel, menuSegmentedControl: MenuSegmentedControl) {
         self.init()
         self.viewModel = viewModel
+        self.menuSegmentedControl = menuSegmentedControl
     }
 
     // MARK: - Methods
@@ -102,7 +103,6 @@ class ProductListViewController: UIViewController {
                                                    heightDimension: estimatedHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                          subitem: item,
-//                                                           count: 2)
                                                          count: sectionKind.columnCount)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
@@ -116,17 +116,10 @@ class ProductListViewController: UIViewController {
         let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable())
         let output = viewModel.transform(input)
 
-        configureItemsWith(output.bannerProducts, output.listProducts)
+        configureItemsWith(output.listProducts)
     }
     
-    private func configureItemsWith(_ bannerProducts: Observable<[Product]>, _ listProducts: Observable<[Product]>) {
-        bannerProducts
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] products in
-                
-            })
-            .disposed(by: disposeBag)
-        
+    private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
         listProducts
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
@@ -188,13 +181,13 @@ class ProductListViewController: UIViewController {
                                                                      for: indexPath,
                                                                      item: product)
             case .list:
-                switch ProductListViewController.isTable {
+                switch ProductListViewController.isGrid {
                 case true:
-                    return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
+                    return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
                                                                         for: indexPath,
                                                                         item: product)
                 case false:
-                    return collectionView.dequeueConfiguredReusableCell(using: gridListCellRegistration,
+                    return collectionView.dequeueConfiguredReusableCell(using: tableListCellRegistration,
                                                                         for: indexPath,
                                                                         item: product)
                 }
@@ -234,5 +227,24 @@ extension ProductListViewController {
     private func scrollToFirstItem() {
         collectionView.scrollToItem(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .right, animated: true)
         currentBannerPage = 0
+    }
+}
+
+
+// MARK: - MenuSegmentedControllViewModelDelegate
+extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
+    func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
+        switch currentSelectedButton {
+        case .grid:
+            ProductListViewController.isGrid = true
+            let changedLayout = createLayout()
+            collectionView.collectionViewLayout = changedLayout
+            collectionView.reloadData()
+        case .table:
+            ProductListViewController.isGrid = false
+            let changedLayout = createLayout()
+            collectionView.collectionViewLayout = changedLayout
+            collectionView.reloadData()
+        }
     }
 }

@@ -1,6 +1,10 @@
 import Foundation
 import RxSwift
 
+protocol MenuSegmentedControllViewModelDelegate: AnyObject {
+    func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton)
+}
+
 class MenuSegmentedControlViewModel {
     enum MenuButton {
         case table
@@ -17,6 +21,7 @@ class MenuSegmentedControlViewModel {
         let selectedTableButton: Observable<Void>
     }
     
+    weak var delegate: MenuSegmentedControllViewModelDelegate?
     private var currentSelectedButton: MenuButton = .grid
     private let disposeBag = DisposeBag()
     
@@ -39,11 +44,12 @@ class MenuSegmentedControlViewModel {
                                                      outputObservable: PublishSubject<Void>) {
         inputObservable
             .subscribe(onNext: { [weak self] _ in
-                if self?.currentSelectedButton == .table {
+                guard let self = self else { return }
+                if self.currentSelectedButton == .table {
+                    self.delegate?.segmentedControlTapped(.grid)
                     outputObservable.onNext(())
                 }
-                self?.currentSelectedButton = .grid
-                ProductListViewController.isTable = false
+                self.currentSelectedButton = .grid
                 // TODO: collectionView Layout 수정하고, CellType 바꿔줘야 함 (현재 dequeue 되는 Cell만 바뀜)
             })
             .disposed(by: disposeBag)
@@ -53,11 +59,12 @@ class MenuSegmentedControlViewModel {
                                                       outputObservable: PublishSubject<Void>) {
         inputObservable
             .subscribe(onNext: { [weak self] _ in
-                if self?.currentSelectedButton == .grid {
+                guard let self = self else { return }
+                if self.currentSelectedButton == .grid {
+                    self.delegate?.segmentedControlTapped(.table)
                     outputObservable.onNext(())
                 }
-                self?.currentSelectedButton = .table
-                ProductListViewController.isTable = true
+                self.currentSelectedButton = .table
             })
             .disposed(by: disposeBag)
     }

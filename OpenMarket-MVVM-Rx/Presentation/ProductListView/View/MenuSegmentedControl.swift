@@ -44,26 +44,30 @@ class MenuSegmentedControl: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 2).isActive = true
-//        view.tintColor = .red
         view.backgroundColor = .label
         return view
     }()
     
-    private let viewModel = MenuSegmentedControlViewModel()
+    private var viewModel: MenuSegmentedControlViewModel!
     private let disposeBag = DisposeBag()
     
     // MARK: Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(viewModel: MenuSegmentedControlViewModel) {
+        self.init()
+        self.viewModel = viewModel
         configureUI()
         bind()
-        self.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    @available(*, unavailable)
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//
+//    }
+//
+//    @available(*, unavailable)
+//    required init(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     // MARK: - Method
     private func configureUI() {
