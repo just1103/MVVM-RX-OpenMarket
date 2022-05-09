@@ -61,6 +61,7 @@ class ProductListViewController: UIViewController {
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
+    private var snapshot: NSDiffableDataSourceSnapshot<SectionKind, UniqueProduct>!
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad = PublishSubject<Void>()
     private let cellDidScroll = PublishSubject<IndexPath>()
@@ -87,6 +88,7 @@ class ProductListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureCellRegistrationAndDataSource()
         bind()
         invokedViewDidLoad.onNext(())
     }
@@ -154,72 +156,7 @@ class ProductListViewController: UIViewController {
         return layout
     }
     
-    private func bind() {
-        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
-                                               listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable(),
-                                               cellDidScroll: cellDidScroll.asObservable())
-        let output = viewModel.transform(input)
-
-        configureItemsWith(output.listProducts)
-        showListRefreshButton(output.newProductDidPost)
-        configureNewItemsWith(output.newListProducts)
-    }
-    
-    private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
-        listProducts
-            .scan([], accumulator: +)
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] products in
-                self?.drawBannerAndList(with: products)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func drawBannerAndList(with products: [Product]) {
-        let recentBargainProducts = products.filter { product in
-            product.discountedPrice != 0
-        }
-        let bannerProductsCount = 5
-        let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
-        
-        // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
-        configureDataSourceWith(listProducts: makeHashable(from: products),
-                                     bannerProducts: makeHashable(from: bannerProducts))
-//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
-    }
-    
-    private func showListRefreshButton(_ newProductDidPost: Observable<Void>) {
-        newProductDidPost
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.listRefreshButton.isHidden = false
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func configureNewItemsWith(_ newListProducts: Observable<[Product]>) {
-        newListProducts
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] products in
-                self?.drawBannerAndList(with: products)
-                self?.listRefreshButton.isHidden = true
-                self?.collectionView.setContentOffset(CGPoint.zero, animated: true)
-            })
-            .disposed(by: disposeBag)
-    }
-        
-    // TODO: 다른 방법 고민
-    private func makeHashable(from products: [Product]) -> [UniqueProduct] {
-        var uniqueProducts = [UniqueProduct]()
-        products.forEach { product in
-            let product = UniqueProduct(product: product)
-            uniqueProducts.append(product)
-        }
-        return uniqueProducts
-    }
-    
-    private func configureDataSourceWith(listProducts: [UniqueProduct], bannerProducts: [UniqueProduct]) {
+    private func configureCellRegistrationAndDataSource() {
         let bannerCellRegistration = BannerCellRegistration { cell, _, product in
             cell.apply(imageURL: product.product.thumbnail)
         }
@@ -254,13 +191,102 @@ class ProductListViewController: UIViewController {
                 }
             }
         })
+    }
+}
+    
+// MARK: - Rx Binding Methods
+extension ProductListViewController {
+    private func bind() {
+        let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                               listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable(),
+                                               cellDidScroll: cellDidScroll.asObservable())
+        let output = viewModel.transform(input)
+
+        configureItemsWith(output.products)
+        showListRefreshButton(output.newProductDidPost)
+        configureNewPostedItemsWith(output.newPostedProducts)
+        configureNextPageItemsWith(output.nextPageProducts)
+    }
+    
+    private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
+        listProducts
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] products in
+                self?.drawBannerAndList(with: products)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func drawBannerAndList(with products: [Product]) {
+        // TODO: Banner 관련 별도 메서드로 구분 (사용 중에 배너가 바뀌는 게 어색함)
+        let recentBargainProducts = products.filter { product in
+            product.discountedPrice != 0
+        }
+        let bannerProductsCount = 5
+        let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
         
-        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, UniqueProduct>()
+        if snapshot == nil {
+            // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
+            configureInitialSnapshotWith(listProducts: makeHashable(from: products),
+                                         bannerProducts: makeHashable(from: bannerProducts))
+        } else {
+            applySnapshotWith(listProducts: makeHashable(from: products))
+        }
+//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
+    }
+    
+    private func configureInitialSnapshotWith(listProducts: [UniqueProduct], bannerProducts: [UniqueProduct]) {
+        snapshot = NSDiffableDataSourceSnapshot<SectionKind, UniqueProduct>()
         snapshot.appendSections([.banner])
         snapshot.appendItems(bannerProducts)
         snapshot.appendSections([.list])
         snapshot.appendItems(listProducts)
-        dataSource.apply(snapshot, animatingDifferences: true) // TODO: Rx로 snapshot만 다시 적용하도록 메스드 분리
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func applySnapshotWith(listProducts: [UniqueProduct]) {
+        snapshot.appendItems(listProducts, toSection: .list)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    // TODO: 다른 방법 고민
+    private func makeHashable(from products: [Product]) -> [UniqueProduct] {
+        var uniqueProducts = [UniqueProduct]()
+        products.forEach { product in
+            let product = UniqueProduct(product: product)
+            uniqueProducts.append(product)
+        }
+        return uniqueProducts
+    }
+    
+    private func showListRefreshButton(_ newProductDidPost: Observable<Void>) {
+        newProductDidPost
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.listRefreshButton.isHidden = false
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureNewPostedItemsWith(_ newListProducts: Observable<[Product]>) {
+        newListProducts
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] products in
+                self?.drawBannerAndList(with: products)
+                self?.listRefreshButton.isHidden = true
+                self?.collectionView.setContentOffset(CGPoint.zero, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+        
+    private func configureNextPageItemsWith(_ nextPageProducts: Observable<[Product]>) {
+        nextPageProducts
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] products in
+                self?.drawBannerAndList(with: products)
+            })
+            .disposed(by: disposeBag)
     }
 }
 

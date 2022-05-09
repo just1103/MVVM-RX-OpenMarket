@@ -5,15 +5,16 @@ import UIKit
 class ProductListViewModel {
     struct Input {
         let invokedViewDidLoad: Observable<Void>
-        let listRefreshButtonDidTap: Observable<Void> // fetch 다시, 맨위로 scroll, button 숨기기
+        let listRefreshButtonDidTap: Observable<Void>
         let cellDidScroll: Observable<IndexPath>
         //        let cellDidSelect: Observable<IndexPath>
     }
     
     struct Output {
-        let listProducts: Observable<[Product]>
+        let products: Observable<[Product]>
         let newProductDidPost: Observable<Void>
-        let newListProducts: Observable<[Product]>
+        let newPostedProducts: Observable<[Product]>
+        let nextPageProducts: Observable<[Product]>
         //        let selectedProduct: Observable<Product>
     }
     
@@ -24,40 +25,37 @@ class ProductListViewModel {
     private let disposeBag = DisposeBag()
     private var images: [UIImage]?
     
-    // MARK: - Initializer
-    init() {
-        
-    }
-    
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let listProducts = PublishSubject<[Product]>()
+        let products = PublishSubject<[Product]>()
         let newProductDidPost = PublishSubject<Void>()
-        let newListProducts = PublishSubject<[Product]>()
+        let newPostedProducts = PublishSubject<[Product]>()
+        let nextPageProducts = PublishSubject<[Product]>()
         //        let selectedProduct = PublishSubject<Product>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
-                                     listProductsOutput: listProducts)
+                                     productsOutput: products)
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
                                      newProductDidPostOutput: newProductDidPost)
         configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap,
-                                           outputObservable: newListProducts)
+                                           outputObservable: newPostedProducts)
         configureCellDidScrollObserver(by: input.cellDidScroll,
-                                       outputObservable: listProducts)
+                                       outputObservable: nextPageProducts)
         
-        let output = Output(listProducts: listProducts.asObservable(),
+        let output = Output(products: products.asObservable(),
                             newProductDidPost: newProductDidPost.asObservable(),
-                            newListProducts: newListProducts.asObservable())
+                            newPostedProducts: newPostedProducts.asObservable(),
+                            nextPageProducts: nextPageProducts.asObservable())
         
         return output
     }
     
     private func configureViewDidLoadObserver(by inputObserver: Observable<Void>,
-                                              listProductsOutput: PublishSubject<[Product]>) {
+                                              productsOutput: PublishSubject<[Product]>) {
         inputObserver
             .subscribe(onNext: { [weak self] _ in
                 _ = self?.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
-                    listProductsOutput.onNext(productPage.products)
+                    productsOutput.onNext(productPage.products)
                     guard let firstProductID = productPage.products.first?.id else { return }
                     self?.latestProductID = firstProductID
                 })
