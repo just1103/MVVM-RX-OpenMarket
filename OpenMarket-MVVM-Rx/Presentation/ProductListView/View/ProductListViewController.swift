@@ -37,6 +37,10 @@ class ProductListViewController: UIViewController {
             }
         }
     }
+    
+    enum Content {
+        static let bannerCount = 5
+    }
         
     // MARK: - Properties
     private let containerStackView: UIStackView = {
@@ -58,6 +62,17 @@ class ProductListViewController: UIViewController {
         return button
     }()
     
+    private let bannerPageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.pageIndicatorTintColor = .systemGray6
+        pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = Content.bannerCount
+//        pageControl.tintColor = Design.darkGreenColor
+        return pageControl
+    }()
+    
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
@@ -65,6 +80,7 @@ class ProductListViewController: UIViewController {
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad = PublishSubject<Void>()
     private let cellDidScroll = PublishSubject<IndexPath>()
+    private let currentPage = PublishSubject<Int>()
 //    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
@@ -76,6 +92,8 @@ class ProductListViewController: UIViewController {
     typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
     typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
     typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
+    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<HeaderView>
+    typealias FooterRegistration = UICollectionView.SupplementaryRegistration<FooterView>
     
     // MARK: - Initializer
     convenience init(viewModel: ProductListViewModel, menuSegmentedControl: MenuSegmentedControl) {
@@ -114,6 +132,7 @@ class ProductListViewController: UIViewController {
     private func configureStackView() {
         view.addSubview(containerStackView)
         containerStackView.addArrangedSubview(listRefreshButton)
+//        containerStackView.addArrangedSubview(bannerPageControl)
         containerStackView.addArrangedSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -150,14 +169,22 @@ class ProductListViewController: UIViewController {
                                                          count: sectionKind.columnCount)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
-            
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
+                                                                            elementKind: "header-element-kind",
+                                                                            alignment: .top)
+            let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
+                                                                            elementKind: "footer-element-kind",
+                                                                            alignment: .bottom)
+//            sectionHeader.pinToVisibleBounds = true
+//            sectionHeader.zIndex = 2
+            section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
             return section
         }
         return layout
     }
     
     private func configureCellRegistrationAndDataSource() {
-        let bannerCellRegistration = BannerCellRegistration { cell, _, product in
+        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, product in
             cell.apply(imageURL: product.product.thumbnail)
         }
         let tableListCellRegistration = TableListCellRegistration { cell, _, product in
@@ -165,6 +192,13 @@ class ProductListViewController: UIViewController {
         }
         let gridListCellRegistration = GridListCellRegistration { cell, _, product in
             cell.apply(data: product.product)
+        }
+        let headerRegistration = HeaderRegistration(elementKind: "header-element-kind") { supplementaryView, elementKind, indexPath in
+            supplementaryView.apply(indexPath)
+        }
+        let footerRegistration = FooterRegistration(elementKind: "footer-element-kind") { [weak self] supplementaryView, elementKind, indexPath in
+            guard let self = self else { return }
+            supplementaryView.bind(input: self.currentPage.asObservable(), indexPath: indexPath, pageNumber: Content.bannerCount)
         }
         
         dataSource = DiffableDataSource(collectionView: collectionView,
@@ -191,6 +225,20 @@ class ProductListViewController: UIViewController {
                 }
             }
         })
+        
+        dataSource.supplementaryViewProvider = { [weak self] _, kind, index in
+            switch kind {
+            case "header-element-kind":
+                return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration,
+                                                                                  for: index)
+            case "footer-element-kind":
+                return self?.collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration,
+                                                                                  for: index)
+            default:
+                fatalError()
+            }
+            
+        }
     }
 }
     
@@ -222,7 +270,7 @@ extension ProductListViewController {
         let recentBargainProducts = products.filter { product in
             product.discountedPrice != 0
         }
-        let bannerProductsCount = 5
+        let bannerProductsCount = Content.bannerCount
         let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
         
         if snapshot == nil {
@@ -232,7 +280,7 @@ extension ProductListViewController {
         } else {
             applySnapshotWith(listProducts: makeHashable(from: products))
         }
-//                self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
+//        self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
     }
     
     private func configureInitialSnapshotWith(listProducts: [UniqueProduct], bannerProducts: [UniqueProduct]) {
@@ -301,7 +349,7 @@ extension ProductListViewController {
     private func scrollBanner(productCount: Int) {
         currentBannerPage += 1
         collectionView.scrollToItem(at: NSIndexPath(item: currentBannerPage, section: 0) as IndexPath,
-                                    at: .bottom,
+                                    at: .right,
                                     animated: true)
         
         if self.currentBannerPage == productCount {
@@ -340,5 +388,16 @@ extension ProductListViewController: UICollectionViewDelegate {
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         cellDidScroll.onNext(indexPath)
+        currentBannerPage = indexPath.row
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        if currentBannerPage > indexPath.row {
+            currentPage.onNext(indexPath.row + 1)
+        } else if currentBannerPage < indexPath.row {
+            currentPage.onNext(indexPath.row - 1)
+        }
     }
 }

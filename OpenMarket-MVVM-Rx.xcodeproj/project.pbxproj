@@ -50,6 +50,8 @@
 		DECD1650281672DD00F34993 /* ProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD164F281672DD00F34993 /* ProductListViewModel.swift */; };
 		DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD16572816885B00F34993 /* ProductListViewController.swift */; };
 		DEE4CEA9281BE7DA00CB7DD8 /* UniqueProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE4CEA8281BE7DA00CB7DD8 /* UniqueProduct.swift */; };
+		DEE6913C2828E874009BA91D /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE6913B2828E874009BA91D /* HeaderView.swift */; };
+		DEE691402829139D009BA91D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE6913F2829139D009BA91D /* FooterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,8 @@
 		DECD164F281672DD00F34993 /* ProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewModel.swift; sourceTree = "<group>"; };
 		DECD16572816885B00F34993 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
 		DEE4CEA8281BE7DA00CB7DD8 /* UniqueProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueProduct.swift; sourceTree = "<group>"; };
+		DEE6913B2828E874009BA91D /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		DEE6913F2829139D009BA91D /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +289,8 @@
 				3625D0F62816C6F700CD5043 /* TableListCell.swift */,
 				3625D0F82816C70600CD5043 /* GridListCell.swift */,
 				36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */,
+				DEE6913B2828E874009BA91D /* HeaderView.swift */,
+				DEE6913F2829139D009BA91D /* FooterView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -455,9 +461,11 @@
 				36C0A07D281000130031C83C /* AppDelegate.swift in Sources */,
 				DECD164E28166FDA00F34993 /* FlowCoordinator.swift in Sources */,
 				DEC3428128100AEB0046D916 /* Currency.swift in Sources */,
+				DEE6913C2828E874009BA91D /* HeaderView.swift in Sources */,
 				3625D0FF2816D51000CD5043 /* UIImageView+Load+Cache.swift in Sources */,
 				36C0C08428126B0200B57492 /* NetworkProvider.swift in Sources */,
 				DEE4CEA9281BE7DA00CB7DD8 /* UniqueProduct.swift in Sources */,
+				DEE691402829139D009BA91D /* FooterView.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
 				3625D0F72816C6F700CD5043 /* TableListCell.swift in Sources */,
 				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
