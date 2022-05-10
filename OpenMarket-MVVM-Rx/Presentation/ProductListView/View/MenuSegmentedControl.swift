@@ -3,7 +3,7 @@ import RxCocoa
 import RxSwift
 
 class MenuSegmentedControl: UIView {
-    // MARK: - Nested Type
+    // MARK: - Nested Types
     enum Design {
         static let bgcolor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
         static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
@@ -58,7 +58,7 @@ class MenuSegmentedControl: UIView {
     private var viewModel: MenuSegmentedControlViewModel!
     private let disposeBag = DisposeBag()
     
-    // MARK: Initializer
+    // MARK: Initializers
     convenience init(viewModel: MenuSegmentedControlViewModel) {
         self.init()
         self.viewModel = viewModel
@@ -76,7 +76,7 @@ class MenuSegmentedControl: UIView {
 //        fatalError("init(coder:) has not been implemented")
 //    }
     
-    // MARK: - Method
+    // MARK: - Methods
     private func configureUI() {
         addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(gridButton)

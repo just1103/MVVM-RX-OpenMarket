@@ -175,8 +175,6 @@ class ProductListViewController: UIViewController {
             let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
                                                                             elementKind: "footer-element-kind",
                                                                             alignment: .bottom)
-//            sectionHeader.pinToVisibleBounds = true
-//            sectionHeader.zIndex = 2
             section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
             return section
         }
@@ -184,14 +182,14 @@ class ProductListViewController: UIViewController {
     }
     
     private func configureCellRegistrationAndDataSource() {
-        let bannerCellRegistration = BannerCellRegistration { cell, indexPath, product in
-            cell.apply(imageURL: product.product.thumbnail)
+        let bannerCellRegistration = BannerCellRegistration { cell, _, uniqueProduct in
+            cell.apply(imageURL: uniqueProduct.product.thumbnail, productID: uniqueProduct.product.id)
         }
-        let tableListCellRegistration = TableListCellRegistration { cell, _, product in
-            cell.apply(data: product.product)
+        let tableListCellRegistration = TableListCellRegistration { cell, _, uniqueProduct in
+            cell.apply(data: uniqueProduct.product)
         }
-        let gridListCellRegistration = GridListCellRegistration { cell, _, product in
-            cell.apply(data: product.product)
+        let gridListCellRegistration = GridListCellRegistration { cell, _, uniqueProduct in
+            cell.apply(data: uniqueProduct.product)
         }
         let headerRegistration = HeaderRegistration(elementKind: "header-element-kind") { supplementaryView, elementKind, indexPath in
             supplementaryView.apply(indexPath)
@@ -245,9 +243,28 @@ class ProductListViewController: UIViewController {
 // MARK: - Rx Binding Methods
 extension ProductListViewController {
     private func bind() {
+        let selectedCellObservable = collectionView.rx.itemSelected.asObservable()
+            .map { [weak self] indexPath -> Int in
+                let cell = self?.collectionView.cellForItem(at: indexPath)
+                var productID = 0
+                switch cell {
+                case let bannerCell as BannerCell:
+                    productID = bannerCell.productID
+                case let tableListCell as TableListCell:
+                    productID = tableListCell.productID
+                case let gridCell as GridListCell:
+                    productID = gridCell.productID
+                default:
+                    break
+                }
+                return productID
+            }
+        
         let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
                                                listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable(),
-                                               cellDidScroll: cellDidScroll.asObservable())
+                                               cellDidScroll: cellDidScroll.asObservable(),
+                                               cellDidSelect: selectedCellObservable)
+        
         let output = viewModel.transform(input)
 
         configureItemsWith(output.products)

@@ -1,7 +1,7 @@
 import UIKit
 
 class BannerCell: UICollectionViewCell {
-    // MARK: - Nested Type
+    // MARK: - Nested Types
     private enum Design {
         static let imageViewInset: CGFloat = 0
     }
@@ -24,7 +24,9 @@ class BannerCell: UICollectionViewCell {
         return imageView
     }()
     
-    // MARK: - Initializer
+    private(set) var productID: Int = 0
+    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -35,15 +37,16 @@ class BannerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Lifecycle Method
+    // MARK: - Lifecycle Methods
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
     }
     
     // MARK: - Methods
-    func apply(imageURL: String) {
+    func apply(imageURL: String, productID: Int) {
         imageView.loadImage(of: imageURL)
+        self.productID = productID
     }
     
     private func configureUI() {

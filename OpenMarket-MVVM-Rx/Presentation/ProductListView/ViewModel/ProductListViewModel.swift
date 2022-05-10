@@ -7,7 +7,7 @@ class ProductListViewModel {
         let invokedViewDidLoad: Observable<Void>
         let listRefreshButtonDidTap: Observable<Void>
         let cellDidScroll: Observable<IndexPath>
-        //        let cellDidSelect: Observable<IndexPath>
+        let cellDidSelect: Observable<Int>
     }
     
     struct Output {
@@ -15,15 +15,20 @@ class ProductListViewModel {
         let newProductDidPost: Observable<Void>
         let newPostedProducts: Observable<[Product]>
         let nextPageProducts: Observable<[Product]>
-        //        let selectedProduct: Observable<Product>
     }
     
     // MARK: - Properties
+    private let actions: ProductListViewModelAction?
     private var currentProductsCount: Int = 20
     private var currentPage: Int = 1
     private var latestProductID: Int!
     private let disposeBag = DisposeBag()
     private var images: [UIImage]?
+    
+    // MARK: - Initializers
+    init(actions: ProductListViewModelAction) {
+        self.actions = actions
+    }
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
@@ -31,7 +36,6 @@ class ProductListViewModel {
         let newProductDidPost = PublishSubject<Void>()
         let newPostedProducts = PublishSubject<[Product]>()
         let nextPageProducts = PublishSubject<[Product]>()
-        //        let selectedProduct = PublishSubject<Product>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
                                      productsOutput: products)
@@ -41,7 +45,8 @@ class ProductListViewModel {
                                            outputObservable: newPostedProducts)
         configureCellDidScrollObserver(by: input.cellDidScroll,
                                        outputObservable: nextPageProducts)
-        
+        configureCellDidSelectObserver(by: input.cellDidSelect)
+
         let output = Output(products: products.asObservable(),
                             newProductDidPost: newProductDidPost.asObservable(),
                             newPostedProducts: newPostedProducts.asObservable(),
@@ -122,6 +127,15 @@ class ProductListViewModel {
                         outputObservable.onNext(productPage.products)
                     })
                 }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureCellDidSelectObserver(by inputObservable: Observable<Int>) {
+        inputObservable
+            .subscribe(onNext: { [weak self] productID in
+                print(productID)
+                self?.actions?.showProductDetail(productID)
             })
             .disposed(by: disposeBag)
     }

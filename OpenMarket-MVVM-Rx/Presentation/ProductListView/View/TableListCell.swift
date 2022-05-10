@@ -1,7 +1,7 @@
 import UIKit
 
 class TableListCell: UICollectionViewCell {
-    // MARK: - Nested Type
+    // MARK: - Nested Types
     private enum Design {
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
@@ -31,7 +31,6 @@ class TableListCell: UICollectionViewCell {
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
-    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +40,6 @@ class TableListCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()
-    
     private let verticalStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -133,7 +131,9 @@ class TableListCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - Initializer
+    private(set) var productID: Int = 0
+    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -144,7 +144,7 @@ class TableListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Lifecycle Method
+    // MARK: - Lifecycle Methods
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -169,6 +169,7 @@ class TableListCell: UICollectionViewCell {
                                            currency: data.currency)
         changeStockLabel(by: data.stock)
         calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
+        self.productID = data.id
     }
     
     private func configureUI() {

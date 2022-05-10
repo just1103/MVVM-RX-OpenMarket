@@ -12,12 +12,22 @@ struct FlowCoordinator {
     }
     
     mutating func start() {
-        productListViewModel = ProductListViewModel()
+        let actions = ProductListViewModelAction(showProductDetail: showProductDetail)
+        
+        productListViewModel = ProductListViewModel(actions: actions)
         menuSegmentedControlViewModel = MenuSegmentedControlViewModel()
         menuSegmentedControl = MenuSegmentedControl(viewModel: menuSegmentedControlViewModel)
         productListViewController = ProductListViewController(viewModel: productListViewModel, menuSegmentedControl: menuSegmentedControl)
         menuSegmentedControlViewModel.delegate = productListViewController
 
         navigationController?.pushViewController(productListViewController, animated: false)
+    }
+    
+    func showProductDetail(with productID: Int) {
+        let productDetailViewModel = ProductDetailViewModel()
+        let productDetailViewController = ProductDetailViewController(viewModel: productDetailViewModel)
+        productDetailViewModel.setupProductID(productID)
+        
+        navigationController?.pushViewController(productDetailViewController, animated: true)
     }
 }
