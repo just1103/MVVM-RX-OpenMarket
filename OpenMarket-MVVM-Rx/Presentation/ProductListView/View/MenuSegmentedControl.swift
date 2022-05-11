@@ -5,7 +5,7 @@ import RxSwift
 class MenuSegmentedControl: UIView {
     // MARK: - Nested Types
     enum Design {
-        static let bgcolor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
+        static let backgroundColor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
         static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
         static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
         static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
@@ -51,7 +51,7 @@ class MenuSegmentedControl: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        view.backgroundColor = Design.bgcolor
+        view.backgroundColor = Design.backgroundColor
         return view
     }()
     
@@ -117,7 +117,7 @@ class MenuSegmentedControl: UIView {
     private func changeSelectedUI(sender: MenuSegmentedControlViewModel.MenuButton) {
         switch sender {
         case .grid:
-            gridButton.setTitleColor(Design.bgcolor, for: .normal)
+            gridButton.setTitleColor(Design.backgroundColor, for: .normal)
             gridButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
             tableButton.setTitleColor(.systemGray, for: .normal)
             tableButton.titleLabel?.font = UIFont.systemFont(ofSize: 25)
@@ -137,7 +137,7 @@ class MenuSegmentedControl: UIView {
 //                selectorView.trailingAnchor.constraint(equalTo: gridButton.trailingAnchor)
 //            ])
         case .table:
-            tableButton.setTitleColor(Design.bgcolor, for: .normal)
+            tableButton.setTitleColor(Design.backgroundColor, for: .normal)
             tableButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
             gridButton.setTitleColor(.systemGray, for: .normal)
             gridButton.titleLabel?.font = UIFont.systemFont(ofSize: 25)

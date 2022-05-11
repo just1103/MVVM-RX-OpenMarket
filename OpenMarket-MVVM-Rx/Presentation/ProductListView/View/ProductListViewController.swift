@@ -5,7 +5,7 @@ import RxCocoa
 class ProductListViewController: UIViewController {
     // MARK: - Nested Types
     enum Design {
-        static let bgcolor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
+        static let backgroundColor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
         static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
         static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
         static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
@@ -146,7 +146,7 @@ class ProductListViewController: UIViewController {
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = Design.bgcolor
+        collectionView.backgroundColor = Design.backgroundColor
         let layout = createLayout()
         collectionView.collectionViewLayout = layout
     }

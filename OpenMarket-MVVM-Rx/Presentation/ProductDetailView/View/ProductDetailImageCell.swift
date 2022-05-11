@@ -2,12 +2,14 @@ import UIKit
 
 class ProductDetailImageCell: UICollectionViewCell {
     // MARK: - Properties
-    let productImageView: UIImageView = {
+    private let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         imageView.layer.cornerRadius = 6
+        imageView.backgroundColor = .black
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -29,9 +31,11 @@ class ProductDetailImageCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(productImageView)
-        productImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        productImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
-        productImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        productImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            productImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            productImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            productImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            productImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 }

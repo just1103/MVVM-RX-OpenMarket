@@ -22,7 +22,7 @@ struct JSONParser<Item: Codable> {
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .formatted(DateFormatter.shared)
+        decoder.dateDecodingStrategy = .formatted(DateFormatter.serverRequest)
         
         guard let decodedData = try? decoder.decode(Item.self, from: data) else { 
             return nil
@@ -39,7 +39,7 @@ struct JSONParser<Item: Codable> {
         
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        encoder.dateEncodingStrategy = .formatted(DateFormatter.shared)
+        encoder.dateEncodingStrategy = .formatted(DateFormatter.serverRequest)
         
         guard let encodedData = try? encoder.encode(item) else {
             return .failure(.encodingFail)
