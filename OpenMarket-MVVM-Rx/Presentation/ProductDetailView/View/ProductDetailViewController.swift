@@ -22,8 +22,14 @@ class ProductDetailViewController: UIViewController {
     }
     
     // MARK: - Properties
-    // TODO: Custom StackView 타입 생성하여 코드 분리할지 고려
-    private let invokedViewDidLoad = PublishSubject<Void>()
+    // TODO: Custom ScrollView 타입 생성하여 코드 분리할지 고려
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = Design.backgroundColor
+        return scrollView
+    }()
+    
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +56,7 @@ class ProductDetailViewController: UIViewController {
         pageControl.pageIndicatorTintColor = .systemGray
         pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
         pageControl.currentPage = 0
-        // TODO: 메서드로 pageCount 설정
+        pageControl.isUserInteractionEnabled = false
         return pageControl
     }()
     
@@ -81,7 +87,7 @@ class ProductDetailViewController: UIViewController {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
-        stackView.alignment = .fill
+        stackView.alignment = .firstBaseline
         stackView.distribution = .fill
         stackView.spacing = 8
         stackView.setContentHuggingPriority(.required, for: .vertical)
@@ -191,6 +197,10 @@ class ProductDetailViewController: UIViewController {
     }()
     
     private var viewModel: ProductDetailViewModel!
+    private let invokedViewDidLoad = PublishSubject<Void>()
+    private let cellDidScroll = PublishSubject<IndexPath>()
+    private let currentBannerPage = PublishSubject<Int>()
+    private var previousBannerPage = 0
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializers
@@ -210,13 +220,9 @@ class ProductDetailViewController: UIViewController {
     // MARK: - Methods
     private func configureUI() {
         view.backgroundColor = Design.backgroundColor
-        view.addSubview(containerStackView)
-        NSLayoutConstraint.activate([
-            containerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerStackView)
+
         containerStackView.addArrangedSubview(imageCollectionView)
         containerStackView.addArrangedSubview(imagePageControl)
         containerStackView.addArrangedSubview(productInformationStackView)
@@ -236,10 +242,23 @@ class ProductDetailViewController: UIViewController {
         
         descriptionStackView.addArrangedSubview(bottomBorderLine)
         descriptionStackView.addArrangedSubview(descriptionTextView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            containerStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ])
     }
     
     private func configureCollectionView() {
-        imageCollectionView.register(ProductDetailImageCell.self, forCellWithReuseIdentifier: String(describing: ProductDetailImageCell.self))
+        imageCollectionView.register(ProductDetailImageCell.self,
+                                     forCellWithReuseIdentifier: String(describing: ProductDetailImageCell.self))
         imageCollectionView.collectionViewLayout = createCollectionViewLayout()
     }
     
@@ -250,13 +269,15 @@ class ProductDetailViewController: UIViewController {
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: estimatedHeight)
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(CGFloat(0.85)),
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85),
                                                    heightDimension: estimatedHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .groupPagingCentered
-            
+            section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
+                self?.imagePageControl.currentPage = Int(max(0, round(contentOffset.x / environment.container.contentSize.width)))
+            }
             return section
         }
         return layout
@@ -297,14 +318,16 @@ class ProductDetailViewController: UIViewController {
 
 extension ProductDetailViewController {
     private func bind() {
-        let input = ProductDetailViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable())
+        let input = ProductDetailViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                                 cellDidScroll: cellDidScroll.asObservable())
         
         let output = viewModel.transform(input)
         
         configureProductDetail(with: output.product, images: output.productImages)
     }
     
-    private func configureProductDetail(with productDetail: Observable<DetailViewProduct>, images: Observable<[ProductImage]>) {
+    private func configureProductDetail(with productDetail: Observable<DetailViewProduct>,
+                                        images: Observable<[ProductImage]>) {
         productDetail
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] productDetail in
@@ -312,7 +335,8 @@ extension ProductDetailViewController {
             })
             .disposed(by: disposeBag)
         images
-            .bind(to: imageCollectionView.rx.items(cellIdentifier: String(describing: ProductDetailImageCell.self), cellType: ProductDetailImageCell.self)) { index, item, cell in
+            .bind(to: imageCollectionView.rx.items(cellIdentifier: String(describing: ProductDetailImageCell.self),
+                                                   cellType: ProductDetailImageCell.self)) { _, item, cell in
                 cell.apply(with: item.url)
             }
             .disposed(by: disposeBag)

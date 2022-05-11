@@ -69,7 +69,6 @@ class ProductListViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
         pageControl.currentPage = 0
         pageControl.numberOfPages = Content.bannerCount
-//        pageControl.tintColor = Design.darkGreenColor
         return pageControl
     }()
     
@@ -80,13 +79,13 @@ class ProductListViewController: UIViewController {
     private var viewModel: ProductListViewModel!
     private let invokedViewDidLoad = PublishSubject<Void>()
     private let cellDidScroll = PublishSubject<IndexPath>()
-    private let currentPage = PublishSubject<Int>()
+    private let currentBannerPage = PublishSubject<Int>()
 //    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
     // TODO: ViewModel이 가지고 있도록 변경
     private static var isGrid: Bool = true
-    private var currentBannerPage: Int = 0
+    private var previousBannerPage: Int = 0
     
     typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
     typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
@@ -132,7 +131,6 @@ class ProductListViewController: UIViewController {
     private func configureStackView() {
         view.addSubview(containerStackView)
         containerStackView.addArrangedSubview(listRefreshButton)
-//        containerStackView.addArrangedSubview(bannerPageControl)
         containerStackView.addArrangedSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -169,6 +167,10 @@ class ProductListViewController: UIViewController {
                                                          count: sectionKind.columnCount)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
+            section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
+                self?.currentBannerPage.onNext(Int(max(0, round(contentOffset.x / environment.container.contentSize.width))))
+            }
+            
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
                                                                             elementKind: "header-element-kind",
                                                                             alignment: .top)
@@ -196,7 +198,7 @@ class ProductListViewController: UIViewController {
         }
         let footerRegistration = FooterRegistration(elementKind: "footer-element-kind") { [weak self] supplementaryView, elementKind, indexPath in
             guard let self = self else { return }
-            supplementaryView.bind(input: self.currentPage.asObservable(), indexPath: indexPath, pageNumber: Content.bannerCount)
+            supplementaryView.bind(input: self.currentBannerPage.asObservable(), indexPath: indexPath, pageNumber: Content.bannerCount)
         }
         
         dataSource = DiffableDataSource(collectionView: collectionView,
@@ -364,12 +366,12 @@ extension ProductListViewController {
     }
     
     private func scrollBanner(productCount: Int) {
-        currentBannerPage += 1
-        collectionView.scrollToItem(at: NSIndexPath(item: currentBannerPage, section: 0) as IndexPath,
+        previousBannerPage += 1
+        collectionView.scrollToItem(at: NSIndexPath(item: previousBannerPage, section: 0) as IndexPath,
                                     at: .right,
                                     animated: true)
         
-        if self.currentBannerPage == productCount {
+        if self.previousBannerPage == productCount {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.scrollToFirstItem()
             }
@@ -378,7 +380,7 @@ extension ProductListViewController {
 
     private func scrollToFirstItem() {
         collectionView.scrollToItem(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .right, animated: true)
-        currentBannerPage = 0
+        previousBannerPage = 0
     }
 }
 
@@ -404,17 +406,8 @@ extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        cellDidScroll.onNext(indexPath)
-        currentBannerPage = indexPath.row
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        didEndDisplaying cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        if currentBannerPage > indexPath.row {
-            currentPage.onNext(indexPath.row + 1)
-        } else if currentBannerPage < indexPath.row {
-            currentPage.onNext(indexPath.row - 1)
+        if indexPath.section == 1 {
+            cellDidScroll.onNext(indexPath)
         }
     }
 }

@@ -5,6 +5,7 @@ import UIKit
 class ProductDetailViewModel {
     struct Input {
         let invokedViewDidLoad: Observable<Void>
+        let cellDidScroll: Observable<IndexPath>
     }
     
     struct Output {

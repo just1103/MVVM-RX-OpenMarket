@@ -5,8 +5,7 @@ class ProductDetailImageCell: UICollectionViewCell {
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
+        imageView.contentMode = .scaleAspectFill
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         imageView.layer.cornerRadius = 6
         imageView.backgroundColor = .black
