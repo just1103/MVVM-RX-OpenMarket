@@ -54,6 +54,7 @@ class MenuSegmentedControl: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 2).isActive = true
         view.backgroundColor = Design.backgroundColor
+        view.setContentHuggingPriority(.required, for: .horizontal)
         return view
     }()
     
@@ -67,19 +68,10 @@ class MenuSegmentedControl: UIView {
         configureUI()
         bind()
     }
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//    }
-//
-//    @available(*, unavailable)
-//    required init(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
+
     // MARK: - Methods
     private func configureUI() {
+        self.translatesAutoresizingMaskIntoConstraints = false
         addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(gridButton)
         buttonStackView.addArrangedSubview(tableButton)
@@ -90,7 +82,7 @@ class MenuSegmentedControl: UIView {
             buttonStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             buttonStackView.bottomAnchor.constraint(equalTo: selectorView.topAnchor),
             selectorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -7),
-            selectorView.widthAnchor.constraint(equalTo: gridButton.widthAnchor) // TODO: 각 Button Label의 Width에 맞게 변하도록 수정
+            selectorView.widthAnchor.constraint(equalTo: gridButton.widthAnchor)
         ])
         changeSelectedUI(sender: .grid)
     }
@@ -126,6 +118,7 @@ class MenuSegmentedControl: UIView {
 
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }
+                // FIXME: origin과 widthAnchor를 설정했는데, horizontal position을 못잡는 문제
                 self.selectorView.frame.origin.x = self.gridButton.frame.origin.x
             }
             

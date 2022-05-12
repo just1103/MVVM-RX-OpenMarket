@@ -259,7 +259,7 @@ class ProductDetailViewController: UIViewController {
     
     private func configureNavigationBar() {
         navigationController?.navigationBar.tintColor = Design.backgroundColor
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
     }
     
     private func configureCollectionView() {

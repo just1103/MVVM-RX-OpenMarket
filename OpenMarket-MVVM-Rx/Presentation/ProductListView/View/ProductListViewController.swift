@@ -117,24 +117,22 @@ class ProductListViewController: UIViewController {
     
     private func configureNavigationBar() {
         view.backgroundColor = Design.darkGreenColor
-        navigationItem.titleView = menuSegmentedControl
-
-        navigationItem.titleView?.translatesAutoresizingMaskIntoConstraints = false
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        navigationItem.titleView?.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor,
-                                                           constant: 30).isActive = true
-        navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor,
-                                                            constant: -30).isActive = true
+        navigationItem.title = "OPENMARKET-RX"
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
         navigationItem.backButtonTitle = "목록 보기"
     }
     
     private func configureStackView() {
+        view.addSubview(menuSegmentedControl)
         view.addSubview(containerStackView)
         containerStackView.addArrangedSubview(listRefreshButton)
         containerStackView.addArrangedSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            containerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuSegmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuSegmentedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            menuSegmentedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            menuSegmentedControl.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)

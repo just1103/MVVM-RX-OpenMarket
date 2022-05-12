@@ -66,6 +66,7 @@ class GridListCell: UICollectionViewCell {
         label.textAlignment = .right
         label.font = Design.stockLabelFont
         label.textColor = Design.stockLabelTextColor
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
