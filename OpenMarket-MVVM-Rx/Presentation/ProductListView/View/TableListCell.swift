@@ -3,6 +3,7 @@ import UIKit
 class TableListCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
+        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelTextColor: UIColor = .systemOrange
@@ -83,6 +84,7 @@ class TableListCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: Design.accessoryImageName)
+        imageView.tintColor = Design.darkGreenColor
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)

@@ -86,6 +86,7 @@ struct NetworkProvider {
                         emitter.onError(JSONParserError.decodingFail)
                         return
                     }
+                    // TODO: 여기서 Hashable하게 바꿔서 보내는 방법 고민 (UniqueProduct 타입으로 변환)
                     emitter.onNext(decodedData)
                 case .error(let error):
                     emitter.onError(error)

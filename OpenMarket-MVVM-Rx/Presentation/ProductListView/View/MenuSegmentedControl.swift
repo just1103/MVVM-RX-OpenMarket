@@ -34,6 +34,7 @@ class MenuSegmentedControl: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
         button.setTitleColor(.systemGray, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
     
@@ -44,6 +45,7 @@ class MenuSegmentedControl: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
         button.setTitleColor(.systemGray, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
     

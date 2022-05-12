@@ -11,6 +11,10 @@ class ProductListViewController: UIViewController {
         static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
     }
     
+    enum Content {
+        static let bannerCount = 5
+    }
+    
     enum SectionKind: Int {
         case banner
         case list
@@ -36,10 +40,6 @@ class ProductListViewController: UIViewController {
                 return .none
             }
         }
-    }
-    
-    enum Content {
-        static let bannerCount = 5
     }
         
     // MARK: - Properties
@@ -80,7 +80,6 @@ class ProductListViewController: UIViewController {
     private let invokedViewDidLoad = PublishSubject<Void>()
     private let cellDidScroll = PublishSubject<IndexPath>()
     private let currentBannerPage = PublishSubject<Int>()
-//    private let cellDidSelect: PublishSubject<IndexPath> = .init()
     private let disposeBag = DisposeBag()
 
     // TODO: ViewModel이 가지고 있도록 변경
@@ -126,6 +125,7 @@ class ProductListViewController: UIViewController {
                                                            constant: 30).isActive = true
         navigationItem.titleView?.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor,
                                                             constant: -30).isActive = true
+        navigationItem.backButtonTitle = "목록 보기"
     }
     
     private func configureStackView() {
@@ -275,8 +275,8 @@ extension ProductListViewController {
         configureNextPageItemsWith(output.nextPageProducts)
     }
     
-    private func configureItemsWith(_ listProducts: Observable<[Product]>) {        
-        listProducts
+    private func configureItemsWith(_ products: Observable<([UniqueProduct], [UniqueProduct])>) {
+        products
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
                 self?.drawBannerAndList(with: products)
@@ -284,20 +284,12 @@ extension ProductListViewController {
             .disposed(by: disposeBag)
     }
     
-    private func drawBannerAndList(with products: [Product]) {
-        // TODO: Banner 관련 별도 메서드로 구분 (사용 중에 배너가 바뀌는 게 어색함)
-        let recentBargainProducts = products.filter { product in
-            product.discountedPrice != 0
-        }
-        let bannerProductsCount = Content.bannerCount
-        let bannerProducts = Array(recentBargainProducts[0..<bannerProductsCount])
-        
+    private func drawBannerAndList(with products: (list: [UniqueProduct], banner: [UniqueProduct])) {
         if snapshot == nil {
-            // FIXME: 동일한 프로덕트가 다른 섹션에 들어가면 에러 발생
-            configureInitialSnapshotWith(listProducts: makeHashable(from: products),
-                                         bannerProducts: makeHashable(from: bannerProducts))
+            configureInitialSnapshotWith(listProducts: products.list,
+                                         bannerProducts: products.banner)
         } else {
-            applySnapshotWith(listProducts: makeHashable(from: products))
+            applySnapshotWith(listProducts: products.list)
         }
 //        self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
     }
@@ -316,16 +308,6 @@ extension ProductListViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    // TODO: 다른 방법 고민
-    private func makeHashable(from products: [Product]) -> [UniqueProduct] {
-        var uniqueProducts = [UniqueProduct]()
-        products.forEach { product in
-            let product = UniqueProduct(product: product)
-            uniqueProducts.append(product)
-        }
-        return uniqueProducts
-    }
-    
     private func showListRefreshButton(_ newProductDidPost: Observable<Void>) {
         newProductDidPost
             .observe(on: MainScheduler.instance)
@@ -336,22 +318,33 @@ extension ProductListViewController {
             .disposed(by: disposeBag)
     }
     
-    private func configureNewPostedItemsWith(_ newListProducts: Observable<[Product]>) {
+    private func configureNewPostedItemsWith(_ newListProducts: Observable<[UniqueProduct]>) {
         newListProducts
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
-                self?.drawBannerAndList(with: products)
+                self?.drawNewList(with: products)
                 self?.listRefreshButton.isHidden = true
                 self?.collectionView.setContentOffset(CGPoint.zero, animated: true)
             })
             .disposed(by: disposeBag)
     }
+    
+    private func drawNewList(with products: [UniqueProduct]) {
+        deleteAndApplySnapshot(listProducts: products)
+    }
+    
+    private func deleteAndApplySnapshot(listProducts: [UniqueProduct]) {
+        let previousProducts = snapshot.itemIdentifiers(inSection: .list)
+        snapshot.deleteItems(previousProducts)
+        snapshot.appendItems(listProducts, toSection: .list)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
         
-    private func configureNextPageItemsWith(_ nextPageProducts: Observable<[Product]>) {
+    private func configureNextPageItemsWith(_ nextPageProducts: Observable<[UniqueProduct]>) {
         nextPageProducts
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
-                self?.drawBannerAndList(with: products)
+                self?.drawBannerAndList(with: (products, []))
             })
             .disposed(by: disposeBag)
     }
@@ -402,6 +395,7 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     }
 }
 
+// MARK: - CollectionViewDelegate
 extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,

@@ -25,8 +25,8 @@ class ProductDetailViewController: UIViewController {
     // TODO: Custom ScrollView 타입 생성하여 코드 분리할지 고려
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = Design.backgroundColor
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
@@ -212,6 +212,7 @@ class ProductDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureNavigationBar()
         configureCollectionView()
         bind()
         invokedViewDidLoad.onNext(())
@@ -219,7 +220,7 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Methods
     private func configureUI() {
-        view.backgroundColor = Design.backgroundColor
+        view.backgroundColor = Design.darkGreenColor
         view.addSubview(scrollView)
         scrollView.addSubview(containerStackView)
 
@@ -249,11 +250,16 @@ class ProductDetailViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            containerStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
             containerStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
+    }
+    
+    private func configureNavigationBar() {
+        navigationController?.navigationBar.tintColor = Design.backgroundColor
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
     }
     
     private func configureCollectionView() {
@@ -343,6 +349,7 @@ extension ProductDetailViewController {
     }
     
     private func apply(data: DetailViewProduct) {
+        navigationItem.title = data.name
         imagePageControl.numberOfPages = data.images.count
         imagePageControl.hidesForSinglePage = true
         nameLabel.text = data.name

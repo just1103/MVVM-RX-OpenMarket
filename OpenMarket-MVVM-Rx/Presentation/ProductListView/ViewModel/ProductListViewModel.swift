@@ -3,6 +3,10 @@ import RxSwift
 import UIKit
 
 class ProductListViewModel {
+    enum Content {
+        static let bannerCount = 5
+    }
+    
     struct Input {
         let invokedViewDidLoad: Observable<Void>
         let listRefreshButtonDidTap: Observable<Void>
@@ -11,16 +15,16 @@ class ProductListViewModel {
     }
     
     struct Output {
-        let products: Observable<[Product]>
+        let products: Observable<([UniqueProduct], [UniqueProduct])>
         let newProductDidPost: Observable<Void>
-        let newPostedProducts: Observable<[Product]>
-        let nextPageProducts: Observable<[Product]>
+        let newPostedProducts: Observable<[UniqueProduct]>
+        let nextPageProducts: Observable<[UniqueProduct]>
     }
     
     // MARK: - Properties
     private let actions: ProductListViewModelAction?
     private var currentProductsCount: Int = 20
-    private var currentPage: Int = 1
+    private var currentProductPage: Int = 1
     private var latestProductID: Int!
     private let disposeBag = DisposeBag()
     private var images: [UIImage]?
@@ -32,10 +36,10 @@ class ProductListViewModel {
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let products = PublishSubject<[Product]>()
+        let products = PublishSubject<([UniqueProduct], [UniqueProduct])>()
         let newProductDidPost = PublishSubject<Void>()
-        let newPostedProducts = PublishSubject<[Product]>()
-        let nextPageProducts = PublishSubject<[Product]>()
+        let newPostedProducts = PublishSubject<[UniqueProduct]>()
+        let nextPageProducts = PublishSubject<[UniqueProduct]>()
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad,
                                      productsOutput: products)
@@ -56,16 +60,33 @@ class ProductListViewModel {
     }
     
     private func configureViewDidLoadObserver(by inputObserver: Observable<Void>,
-                                              productsOutput: PublishSubject<[Product]>) {
+                                              productsOutput: PublishSubject<([UniqueProduct], [UniqueProduct])>) {
         inputObserver
             .subscribe(onNext: { [weak self] _ in
-                _ = self?.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
-                    productsOutput.onNext(productPage.products)
+                guard let self = self else { return }
+                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
+                    let uniqueListProducts = self.makeHashable(from: productPage.products)
+                    let recentBargainProducts = productPage.products.filter { product in
+                        product.discountedPrice != 0
+                    }
+                    let bannerProducts = Array(recentBargainProducts[0..<Content.bannerCount])
+                    let uniqueBannerProducts = self.makeHashable(from: bannerProducts)
+                    
+                    productsOutput.onNext((uniqueListProducts, uniqueBannerProducts))
                     guard let firstProductID = productPage.products.first?.id else { return }
-                    self?.latestProductID = firstProductID
+                    self.latestProductID = firstProductID
                 })
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func makeHashable(from products: [Product]) -> [UniqueProduct] {
+        var uniqueProducts = [UniqueProduct]()
+        products.forEach { product in
+            let product = UniqueProduct(product: product)
+            uniqueProducts.append(product)
+        }
+        return uniqueProducts
     }
     
     private func fetchProducts(at pageNumber: Int, with itemsPerPage: Int) -> Observable<ProductPage> { // 이게 끝나면 View를 업데이트하도록 Rx 적용!
@@ -103,28 +124,33 @@ class ProductListViewModel {
     }
     
     private func configureListRefreshButtonObserver(by inputObservable: Observable<Void>,
-                                                    outputObservable: PublishSubject<[Product]>) {
+                                                    outputObservable: PublishSubject<[UniqueProduct]>) {
         inputObservable
             .subscribe(onNext: { [weak self] _ in
-                _ = self?.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
-                    outputObservable.onNext(productPage.products)
+                guard let self = self else { return }
+                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
+                    let uniqueProducts = self.makeHashable(from: productPage.products)
+                    outputObservable.onNext(uniqueProducts)
                     guard let firstProductID = productPage.products.first?.id else { return }
-                    self?.latestProductID = firstProductID
+                    self.latestProductID = firstProductID
+                    self.currentProductsCount = 20
+                    self.currentProductPage = 1
                 })
             })
             .disposed(by: disposeBag)
     }
     
     private func configureCellDidScrollObserver(by inputObservable: Observable<IndexPath>,
-                                                outputObservable: PublishSubject<[Product]>) {
+                                                outputObservable: PublishSubject<[UniqueProduct]>) {
         inputObservable
             .subscribe(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
                 if indexPath.row == self.currentProductsCount - 4 {
-                    self.currentPage += 1
-                    _ = self.fetchProducts(at: self.currentPage, with: 20).subscribe(onNext: { productPage in
+                    self.currentProductPage += 1
+                    _ = self.fetchProducts(at: self.currentProductPage, with: 20).subscribe(onNext: { productPage in
                         self.currentProductsCount += 20
-                        outputObservable.onNext(productPage.products)
+                        let uniqueProducts = self.makeHashable(from: productPage.products)
+                        outputObservable.onNext(uniqueProducts)
                     })
                 }
             })
