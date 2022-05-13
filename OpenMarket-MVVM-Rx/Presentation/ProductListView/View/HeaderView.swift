@@ -3,15 +3,18 @@ import UIKit
 class HeaderView: UICollectionReusableView {
     // MARK: - Nested Type
     enum Design {
-        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
+        static let titleLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
+    }
+    
+    enum Content {
+        static let bannerSectionTitle = "⏰ 놓치면 후회할 가격"
+        static let listSectionTitle = "🍎 전체 상품 보기"
     }
     
     // MARK: - Property
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .title3)
-        label.textColor = Design.darkGreenColor
+        label.style(textAlignment: .left, font: Design.titleLabelFont, textColor: CustomColor.darkGreenColor)
         return label
     }()
     
@@ -35,9 +38,9 @@ class HeaderView: UICollectionReusableView {
     
     func apply(_ indexPath: IndexPath) {
         if indexPath.section == 0 {
-            titleLabel.text = "⏰ 놓치면 후회할 가격"
+            titleLabel.text = Content.bannerSectionTitle
         } else {
-            titleLabel.text = "♥️ 전체 상품 보기"
+            titleLabel.text = Content.listSectionTitle
         }
     }
     

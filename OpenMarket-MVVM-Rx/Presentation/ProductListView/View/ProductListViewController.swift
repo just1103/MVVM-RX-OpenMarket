@@ -4,15 +4,19 @@ import RxCocoa
 
 class ProductListViewController: UIViewController {
     // MARK: - Nested Types
-    enum Design {
-        static let backgroundColor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
-        static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
-        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
-        static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
+    enum Content {
+        static let navigationTitle = "애호마켓"
+        static let listRefreshButtonTitle = "업데이트된 상품 목록을 확인하려면 여기를 탭해주세요."
+        static let bannerCount = 5
     }
     
-    enum Content {
-        static let bannerCount = 5
+    enum Design {
+        static let listRefreshButtonTitleFont: UIFont = .preferredFont(forTextStyle: .body)
+    }
+    
+    enum SupplementaryViewElementKind {
+        static let header = "header-element-kind"
+        static let footer = "footer-element-kind"
     }
     
     enum SectionKind: Int {
@@ -52,9 +56,9 @@ class ProductListViewController: UIViewController {
     private let listRefreshButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.numberOfLines = 0
-        button.backgroundColor = Design.lightGreenColor
-        button.setTitle("새로 등록된 상품을 확인하려면 여기를 탭해주세요.", for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        button.backgroundColor = CustomColor.lightGreenColor
+        button.setTitle(Content.listRefreshButtonTitle, for: .normal)
+        button.titleLabel?.font = Design.listRefreshButtonTitleFont
         button.isHidden = true
         return button
     }()
@@ -62,10 +66,10 @@ class ProductListViewController: UIViewController {
     private let bannerPageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.pageIndicatorTintColor = .systemGray6
-        pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
-        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
         pageControl.numberOfPages = Content.bannerCount
+        pageControl.currentPage = 0
         return pageControl
     }()
     
@@ -113,10 +117,11 @@ class ProductListViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        view.backgroundColor = Design.darkGreenColor
-        navigationItem.title = "OPENMARKET-RX"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
-        navigationItem.backButtonTitle = "목록 보기"
+        view.backgroundColor = CustomColor.darkGreenColor
+        navigationItem.title = Content.navigationTitle
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor,
+                                                                   .font: UIFont.preferredFont(forTextStyle: .title1)]
+        navigationItem.backButtonDisplayMode = .minimal
     }
     
     private func configureStackView() {
@@ -127,8 +132,10 @@ class ProductListViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             menuSegmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuSegmentedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            menuSegmentedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            menuSegmentedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                          constant: 20),
+            menuSegmentedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                                           constant: -20),
             menuSegmentedControl.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -139,7 +146,7 @@ class ProductListViewController: UIViewController {
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = Design.backgroundColor
+        collectionView.backgroundColor = CustomColor.backgroundColor
         let layout = createLayout()
         collectionView.collectionViewLayout = layout
     }
@@ -163,15 +170,21 @@ class ProductListViewController: UIViewController {
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
             section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
-                self?.currentBannerPage.onNext(Int(max(0, round(contentOffset.x / environment.container.contentSize.width))))
+                let bannerIndex = Int(max(0, round(contentOffset.x / environment.container.contentSize.width)))
+                self?.currentBannerPage.onNext(bannerIndex)
             }
             
-            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
-                                                                            elementKind: "header-element-kind",
-                                                                            alignment: .top)
-            let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
-                                                                            elementKind: "footer-element-kind",
-                                                                            alignment: .bottom)
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: estimatedHeight),
+                elementKind: SupplementaryViewElementKind.header,
+                alignment: .top
+            )
+            let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
+                elementKind: SupplementaryViewElementKind.footer,
+                alignment: .bottom
+            )
             section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
             return section
         }
@@ -188,10 +201,11 @@ class ProductListViewController: UIViewController {
         let gridListCellRegistration = GridListCellRegistration { cell, _, uniqueProduct in
             cell.apply(data: uniqueProduct.product)
         }
-        let headerRegistration = HeaderRegistration(elementKind: "header-element-kind") { supplementaryView, elementKind, indexPath in
+        let headerRegistration = HeaderRegistration(elementKind: SupplementaryViewElementKind.header) { supplementaryView, elementKind, indexPath in
             supplementaryView.apply(indexPath)
         }
-        let footerRegistration = FooterRegistration(elementKind: "footer-element-kind") { [weak self] supplementaryView, elementKind, indexPath in
+        
+        let footerRegistration = FooterRegistration(elementKind: SupplementaryViewElementKind.footer) { [weak self] supplementaryView, elementKind, indexPath in
             guard let self = self else { return }
             supplementaryView.bind(input: self.currentBannerPage.asObservable(), indexPath: indexPath, pageNumber: Content.bannerCount)
         }
@@ -223,14 +237,14 @@ class ProductListViewController: UIViewController {
         
         dataSource.supplementaryViewProvider = { [weak self] _, kind, index in
             switch kind {
-            case "header-element-kind":
+            case SupplementaryViewElementKind.header:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration,
                                                                                   for: index)
-            case "footer-element-kind":
+            case SupplementaryViewElementKind.footer:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration,
                                                                                   for: index)
             default:
-                fatalError()
+                return UICollectionReusableView()
             }
             
         }
@@ -286,7 +300,6 @@ extension ProductListViewController {
         } else {
             applySnapshotWith(listProducts: products.list)
         }
-//        self.autoScrollBannerTimer(with: 2, productCount: bannerProductsCount) // FIXME: 위로 자동 scroll됨
     }
     
     private func configureInitialSnapshotWith(listProducts: [UniqueProduct], bannerProducts: [UniqueProduct]) {
@@ -345,33 +358,6 @@ extension ProductListViewController {
     }
 }
 
-// MARK: - AutoScrollBannerMethods
-extension ProductListViewController {
-    private func autoScrollBannerTimer(with timeInterval: TimeInterval, productCount: Int) {
-        Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
-            self?.scrollBanner(productCount: productCount)
-        }
-    }
-    
-    private func scrollBanner(productCount: Int) {
-        previousBannerPage += 1
-        collectionView.scrollToItem(at: NSIndexPath(item: previousBannerPage, section: 0) as IndexPath,
-                                    at: .right,
-                                    animated: true)
-        
-        if self.previousBannerPage == productCount {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.scrollToFirstItem()
-            }
-        }
-    }
-
-    private func scrollToFirstItem() {
-        collectionView.scrollToItem(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .right, animated: true)
-        previousBannerPage = 0
-    }
-}
-
 // MARK: - MenuSegmentedControllViewModelDelegate
 extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
@@ -400,3 +386,4 @@ extension ProductListViewController: UICollectionViewDelegate {
         }
     }
 }
+

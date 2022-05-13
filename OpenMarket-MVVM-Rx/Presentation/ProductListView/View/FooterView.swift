@@ -3,22 +3,18 @@ import RxSwift
 import RxCocoa
 
 class FooterView: UICollectionReusableView {
-    // MARK: - Nested Type
-    enum Design {
-        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
-    }
-    
-    private let disposeBag = DisposeBag()
-    
+    // MARK: - Properties
     private let bannerPageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.pageIndicatorTintColor = .systemGray2
-        pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
+        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
         return pageControl
     }()
+    
+    private let disposeBag = DisposeBag()
     
     // MARK: - Initializer
     override init(frame: CGRect) {

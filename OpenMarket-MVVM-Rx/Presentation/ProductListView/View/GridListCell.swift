@@ -3,14 +3,17 @@ import UIKit
 class GridListCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
+        static let nameLabelTextColor: UIColor = .black
+        static let stockLabelTextColor: UIColor = .systemOrange
+        static let priceLabelTextColor: UIColor = .systemRed
+        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-        static let stockLabelTextColor: UIColor = .systemOrange
-        static let accessoryImageName: String = "chevron.right"
         static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
-        static let priceLabelTextColor: UIColor = .systemRed
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
+        static let accessoryImageName: String = "chevron.right"
     }
     
     // MARK: - Properties
@@ -19,9 +22,8 @@ class GridListCell: UICollectionViewCell {
         stackView.style(axis: .vertical,
                         alignment: .fill,
                         distribution: .fill,
-                        spacing: 8,
-                        verticalInset: 15,
-                        horizontalInset: 15)
+                        spacing: 8)
+        stackView.setupMargins(verticalInset: 15, horizontalInset: 15)
         return stackView
     }()
     
@@ -43,19 +45,14 @@ class GridListCell: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.nameLabelFont
+        label.style(textAlignment: .left, font: Design.nameLabelFont, textColor: Design.nameLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
     private let stockLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        label.font = Design.stockLabelFont
-        label.textColor = Design.stockLabelTextColor
+        label.style(textAlignment: .right, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
@@ -74,30 +71,23 @@ class GridListCell: UICollectionViewCell {
 
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        label.font = Design.bargainRateLabelFont
-        label.textColor = Design.bargainRateLabelTextColor
+        label.style(textAlignment: .right,
+                    font: Design.bargainRateLabelFont,
+                    textColor: Design.bargainRateLabelTextColor)
         return label
     }()
     

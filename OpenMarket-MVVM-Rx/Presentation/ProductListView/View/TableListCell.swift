@@ -25,9 +25,8 @@ class TableListCell: UICollectionViewCell {
         stackView.style(axis: .horizontal,
                         alignment: .fill,
                         distribution: .fill,
-                        spacing: 8,
-                        verticalInset: 10,
-                        horizontalInset: 10)
+                        spacing: 8)
+        stackView.setupMargins(verticalInset: 10, horizontalInset: 10)
         return stackView
     }()
     private let imageView: UIImageView = {
@@ -53,18 +52,13 @@ class TableListCell: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.nameLabelFont
+        label.style(textAlignment: .left, font: Design.nameLabelFont, textColor: Design.nameLabelTextColor)
         return label
     }()
     
     private let stockLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        label.font = Design.stockLabelFont
-        label.textColor = Design.stockLabelTextColor
+        label.style(textAlignment: .right, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
@@ -89,10 +83,7 @@ class TableListCell: UICollectionViewCell {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
@@ -100,10 +91,9 @@ class TableListCell: UICollectionViewCell {
     
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.bargainPriceLabelFont
-        label.textColor = Design.bargainPriceLabelTextColor
+        label.style(textAlignment: .left,
+                    font: Design.bargainPriceLabelFont,
+                    textColor: Design.bargainPriceLabelTextColor)
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
@@ -111,11 +101,8 @@ class TableListCell: UICollectionViewCell {
     
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        label.font = Design.bargainRateLabelFont
-        label.textColor = Design.bargainRateLabelTextColor
-        label.setContentHuggingPriority(.defaultHigh, for: .horizontal) // 주의 - default Hugging이 251이 아니라 250임
+        label.style(textAlignment: .right, font: Design.bargainRateLabelFont, textColor: Design.bargainRateLabelTextColor)
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     

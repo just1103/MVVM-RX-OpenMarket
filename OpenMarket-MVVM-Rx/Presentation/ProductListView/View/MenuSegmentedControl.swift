@@ -31,7 +31,7 @@ class MenuSegmentedControl: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Content.gridButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 23)
         button.setTitleColor(.systemGray, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -42,7 +42,7 @@ class MenuSegmentedControl: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Content.tableButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 23)
         button.setTitleColor(.systemGray, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -112,9 +112,9 @@ class MenuSegmentedControl: UIView {
         switch sender {
         case .grid:
             gridButton.setTitleColor(Design.backgroundColor, for: .normal)
-            gridButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+            gridButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 23)
             tableButton.setTitleColor(.systemGray, for: .normal)
-            tableButton.titleLabel?.font = UIFont.systemFont(ofSize: 25)
+            tableButton.titleLabel?.font = UIFont.systemFont(ofSize: 23)
 
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }
@@ -133,9 +133,9 @@ class MenuSegmentedControl: UIView {
 //            ])
         case .table:
             tableButton.setTitleColor(Design.backgroundColor, for: .normal)
-            tableButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+            tableButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 23)
             gridButton.setTitleColor(.systemGray, for: .normal)
-            gridButton.titleLabel?.font = UIFont.systemFont(ofSize: 25)
+            gridButton.titleLabel?.font = UIFont.systemFont(ofSize: 23)
             
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }

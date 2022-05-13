@@ -5,27 +5,26 @@ import RxCocoa
 class ProductDetailViewController: UIViewController {
     // MARK: - Nested Types
     enum Design {
-        static let backgroundColor = #colorLiteral(red: 0.9524367452, green: 0.9455882907, blue: 0.9387311935, alpha: 1)
-        static let lightGreenColor = #colorLiteral(red: 0.5567998886, green: 0.7133290172, blue: 0.6062341332, alpha: 1)
-        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
-        static let veryDarkGreenColor = #colorLiteral(red: 0.04371468723, green: 0.1676974297, blue: 0.1483464539, alpha: 1)
+        static let nameLabelTextColor: UIColor = .black
+        static let stockLabelTextColor: UIColor = .black
+        static let priceLabelTextColor: UIColor = .systemRed
+        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .largeTitle)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let stockLabelTextColor: UIColor = .label
-        static let accessoryImageName: String = "chevron.right"
         static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let originalPriceLabelFont: UIFont = .preferredFont(forTextStyle: .callout)
-        static let priceLabelTextColor: UIColor = .systemRed
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let bargainRateLabelTextColor: UIColor = .systemRed
         static let descriptionTextViewFont: UIFont = .preferredFont(forTextStyle: .body)
+        
+        static let accessoryImageName: String = "chevron.right"
     }
     
     // MARK: - Properties
     // TODO: Custom ScrollView 타입 생성하여 코드 분리할지 고려
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = Design.backgroundColor
+        scrollView.backgroundColor = CustomColor.backgroundColor
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
@@ -41,7 +40,7 @@ class ProductDetailViewController: UIViewController {
                                               collectionViewLayout: UICollectionViewLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 0.85).isActive = true
-        collectionView.backgroundColor = Design.backgroundColor
+        collectionView.backgroundColor = CustomColor.backgroundColor
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -50,7 +49,7 @@ class ProductDetailViewController: UIViewController {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.pageIndicatorTintColor = .systemGray
-        pageControl.currentPageIndicatorTintColor = Design.darkGreenColor
+        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
         return pageControl
@@ -61,19 +60,18 @@ class ProductDetailViewController: UIViewController {
         stackView.style(axis: .vertical,
                         alignment: .fill,
                         distribution: .fill,
-                        spacing: 10,
-                        verticalInset: 20,
-                        horizontalInset: 20)
+                        spacing: 10)
+        stackView.setupMargins(verticalInset: 0, horizontalInset: 20)
         return stackView
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.nameLabelFont
+        label.style(textAlignment: .left,
+                    font: Design.nameLabelFont,
+                    textColor: Design.nameLabelTextColor,
+                    numberOfLines: 0)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        label.numberOfLines = 0
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
@@ -92,30 +90,23 @@ class ProductDetailViewController: UIViewController {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
     
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
     
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .right
-        label.font = Design.bargainRateLabelFont
-        label.textColor = Design.bargainRateLabelTextColor
+        label.style(textAlignment: .right,
+                    font: Design.bargainRateLabelFont,
+                    textColor: Design.bargainRateLabelTextColor)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
@@ -132,27 +123,22 @@ class ProductDetailViewController: UIViewController {
     
     private let stockLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.stockLabelFont
-        label.textColor = Design.stockLabelTextColor
+        label.style(textAlignment: .left, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
     
     private let registrationDateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = Design.stockLabelFont
-        label.textColor = Design.stockLabelTextColor
+        label.style(textAlignment: .left, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
     
     private let descriptionStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, verticalInset: 20, horizontalInset: 20)
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
+        stackView.setupMargins(horizontalInset: 20)
         return stackView
     }()
     
@@ -169,12 +155,13 @@ class ProductDetailViewController: UIViewController {
     private let descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = Design.backgroundColor
+        textView.backgroundColor = CustomColor.backgroundColor
         textView.font = Design.descriptionTextViewFont
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.textAlignment = .left
         textView.textContainer.lineFragmentPadding = .zero
+        textView.dataDetectorTypes = .all
         return textView
     }()
     
@@ -202,7 +189,7 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Methods
     private func configureUI() {
-        view.backgroundColor = Design.darkGreenColor
+        view.backgroundColor = CustomColor.darkGreenColor
         view.addSubview(scrollView)
         scrollView.addSubview(containerStackView)
 
@@ -240,8 +227,8 @@ class ProductDetailViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        navigationController?.navigationBar.tintColor = Design.backgroundColor
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Design.backgroundColor]
+        navigationController?.navigationBar.tintColor = CustomColor.backgroundColor
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor]
     }
     
     private func configureCollectionView() {
@@ -331,7 +318,12 @@ extension ProductDetailViewController {
     }
     
     private func apply(data: DetailViewProduct) {
+        self.navigationItem.leftBarButtonItem = nil
         navigationItem.title = data.name
+        navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+//        navigationItem.titleView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        navigationItem.titleView?.setContentHuggingPriority(.required, for: .horizontal)
         imagePageControl.numberOfPages = data.images.count
         imagePageControl.hidesForSinglePage = true
         nameLabel.text = data.name
