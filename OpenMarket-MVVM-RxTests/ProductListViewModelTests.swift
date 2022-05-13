@@ -6,7 +6,8 @@ class ProductListViewModelTests: XCTestCase {
     var sut: ProductListViewModel!
     
     override func setUpWithError() throws {
-        sut = ProductListViewModel()
+        func mockAction(_ input: Int) { }
+        sut = ProductListViewModel(actions: ProductListViewModelAction(showProductDetail: mockAction))
     }
 
     override func tearDownWithError() throws {

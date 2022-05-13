@@ -1,6 +1,6 @@
 import UIKit
 
-class GridListCell: UICollectionViewCell {
+final class GridListCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
         static let nameLabelTextColor: UIColor = .black
@@ -14,6 +14,10 @@ class GridListCell: UICollectionViewCell {
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
         
         static let accessoryImageName: String = "chevron.right"
+    }
+    
+    private enum Content {
+        static let outOfStockLabelText = "품절"
     }
     
     // MARK: - Properties
@@ -171,7 +175,7 @@ class GridListCell: UICollectionViewCell {
     private func changeStockLabel(by stock: Int) {
         if stock == 0 {
             stockLabel.isHidden = false
-            stockLabel.text = "품절"
+            stockLabel.text = Content.outOfStockLabelText
         }
     }
     

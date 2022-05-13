@@ -18,7 +18,6 @@ class NetworkProviderTests: XCTestCase {
         disposeBag = nil
     }
     
-    // TODO : 이것도 비동기테스트가 필요없는지 체크
     func test_getHealthChecker가_정상작동_하는지() {
         let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
         
@@ -36,23 +35,15 @@ class NetworkProviderTests: XCTestCase {
     
     func test_getHealthChecker가_정상실패_하는지() {
         let expectation = XCTestExpectation(description: "getHealthChecker 비동기 테스트")
+        
         sut = NetworkProvider(session: MockURLSession(isRequestSuccess: false))
         
         let observableData = sut.request(api: HealthCheckerAPI())
         _ = observableData.subscribe(onError: { error in
-            print(error)
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
             expectation.fulfill()
-            
         })
         .disposed(by: disposeBag)
-        
-        //        _ = observableData.subscribe(onError: { error in
-//            XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
-//            expectation.fulfill()
-//
-//        })
-//        .disposed(by: disposeBag)
         
         wait(for: [expectation], timeout: 10)
     }
@@ -147,6 +138,7 @@ class NetworkProviderTests: XCTestCase {
         wait(for: [expectation], timeout: 10.0)
     }
     
+    // 첫번째 프로덕트가 갱신될 수 있어 테스트 Fail 발생 가능
     func test_fetchData가_정상작동_하는지() {
         let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
 
@@ -155,7 +147,7 @@ class NetworkProviderTests: XCTestCase {
         _ = observableData.subscribe(onNext: { productPage in
             XCTAssertEqual(productPage.pageNumber, 1)
             XCTAssertEqual(productPage.itemsPerPage, 10)
-            XCTAssertEqual(productPage.products[0].id, 2018)
+            XCTAssertEqual(productPage.products[0].id, 2093)
             expectation.fulfill()
         })
         .disposed(by: disposeBag)

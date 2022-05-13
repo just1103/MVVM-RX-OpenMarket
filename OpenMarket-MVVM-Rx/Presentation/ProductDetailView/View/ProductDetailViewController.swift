@@ -2,9 +2,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ProductDetailViewController: UIViewController {
+final class ProductDetailViewController: UIViewController {
     // MARK: - Nested Types
-    enum Design {
+    private enum Design {
         static let nameLabelTextColor: UIColor = .black
         static let stockLabelTextColor: UIColor = .black
         static let priceLabelTextColor: UIColor = .systemRed
@@ -20,21 +20,31 @@ class ProductDetailViewController: UIViewController {
         static let accessoryImageName: String = "chevron.right"
     }
     
+    private enum Content {
+        static let outOfStockLabelText = "재고 수량: 품절"
+        static func stockLabelText(with stock: Int) -> String {
+            return "재고 수량: \(stock)개"
+        }
+        static func registrationDateLabelText(with date: Date) -> String {
+            "상품 등록일: \(DateFormatter.common.string(from: date))"
+        }
+        static func bargainRateLabelText(with bargainRate: Double) -> String {
+            return "\(String(format: "%.0f", bargainRate))%"
+        }
+    }
+    
     // MARK: - Properties
-    // TODO: Custom ScrollView 타입 생성하여 코드 분리할지 고려
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = CustomColor.backgroundColor
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
-    
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, spacing: 10)
         return stackView
     }()
-    
     private let imageCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
                                               collectionViewLayout: UICollectionViewLayout())
@@ -44,7 +54,6 @@ class ProductDetailViewController: UIViewController {
         collectionView.isScrollEnabled = false
         return collectionView
     }()
-    
     private let imagePageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +63,6 @@ class ProductDetailViewController: UIViewController {
         pageControl.isUserInteractionEnabled = false
         return pageControl
     }()
-    
     private let productInformationStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical,
@@ -64,7 +72,6 @@ class ProductDetailViewController: UIViewController {
         stackView.setupMargins(verticalInset: 0, horizontalInset: 20)
         return stackView
     }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left,
@@ -75,33 +82,28 @@ class ProductDetailViewController: UIViewController {
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
-    
     private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .horizontal, alignment: .firstBaseline, distribution: .fill, spacing: 8)
         return stackView
     }()
-    
     private let priceAndBargainpriceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
-    
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
-    
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
-    
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .right,
@@ -110,7 +112,6 @@ class ProductDetailViewController: UIViewController {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
-    
     private let topBorderLine: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -120,28 +121,24 @@ class ProductDetailViewController: UIViewController {
         view.backgroundColor = .gray
         return view
     }()
-    
     private let stockLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
-    
     private let registrationDateLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }()
-    
     private let descriptionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         stackView.setupMargins(horizontalInset: 20)
         return stackView
     }()
-    
     private let bottomBorderLine: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -151,7 +148,6 @@ class ProductDetailViewController: UIViewController {
         view.backgroundColor = .gray
         return view
     }()
-    
     private let descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -251,7 +247,8 @@ class ProductDetailViewController: UIViewController {
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .groupPagingCentered
             section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
-                self?.imagePageControl.currentPage = Int(max(0, round(contentOffset.x / environment.container.contentSize.width)))
+                let bannerIndex = Int(max(0, round(contentOffset.x / environment.container.contentSize.width)))
+                self?.imagePageControl.currentPage = bannerIndex
             }
             return section
         }
@@ -276,9 +273,9 @@ class ProductDetailViewController: UIViewController {
     
     private func changeStockLabel(by stock: Int) {
         if stock == 0 {
-            stockLabel.text = "재고 수량: 품절"
+            stockLabel.text = Content.outOfStockLabelText
         } else {
-            stockLabel.text = "재고 수량: \(stock)개"
+            stockLabel.text = Content.stockLabelText(with: stock)
         }
     }
     
@@ -286,7 +283,7 @@ class ProductDetailViewController: UIViewController {
         let bargainRate = ceil(discountedPrice / price * 100)
         
         if discountedPrice != .zero {
-            bargainRateLabel.text = "\(String(format: "%.0f", bargainRate))%"
+            bargainRateLabel.text = Content.bargainRateLabelText(with: bargainRate)
         }
     }
 }
@@ -320,10 +317,9 @@ extension ProductDetailViewController {
     private func apply(data: DetailViewProduct) {
         self.navigationItem.leftBarButtonItem = nil
         navigationItem.title = data.name
-        navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow,
+                                                                                              for: .horizontal)
         
-//        navigationItem.titleView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        navigationItem.titleView?.setContentHuggingPriority(.required, for: .horizontal)
         imagePageControl.numberOfPages = data.images.count
         imagePageControl.hidesForSinglePage = true
         nameLabel.text = data.name
@@ -333,7 +329,7 @@ extension ProductDetailViewController {
                                            currency: data.currency)
         calculateBargainRate(price: data.price, discountedPrice: data.discountedPrice)
         changeStockLabel(by: data.stock)
-        registrationDateLabel.text = "상품 등록일: \(DateFormatter.common.string(from: data.createdAt))"
+        registrationDateLabel.text = Content.registrationDateLabelText(with: data.createdAt)
         descriptionTextView.text = data.description
     }
 }

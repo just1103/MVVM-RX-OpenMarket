@@ -31,7 +31,6 @@ struct JSONParser<Item: Codable> {
         return decodedData
     }
     
-    // TODO: - encode 메서드 반환 타입 고려 (Result, 옵셔널)
     func encode(from item: Item?) -> Result<Data, JSONParserError> {
         guard let item = item else {
             return .failure(.encodingFail)

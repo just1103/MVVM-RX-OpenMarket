@@ -1,6 +1,6 @@
 import UIKit
 
-class BannerCell: UICollectionViewCell {
+final class BannerCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
         static let imageViewInset: CGFloat = 0

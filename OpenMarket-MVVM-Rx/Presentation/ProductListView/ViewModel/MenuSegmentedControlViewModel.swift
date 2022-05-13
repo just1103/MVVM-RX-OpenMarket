@@ -5,7 +5,7 @@ protocol MenuSegmentedControllViewModelDelegate: AnyObject {
     func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton)
 }
 
-class MenuSegmentedControlViewModel {
+final class MenuSegmentedControlViewModel {
     enum MenuButton {
         case table
         case grid
@@ -22,7 +22,7 @@ class MenuSegmentedControlViewModel {
     }
     
     weak var delegate: MenuSegmentedControllViewModelDelegate?
-    private var currentSelectedButton: MenuButton = .grid
+    private(set) var currentSelectedButton: MenuButton = .grid
     private let disposeBag = DisposeBag()
     
     func transform(_ input: Input) -> Output {
@@ -50,7 +50,6 @@ class MenuSegmentedControlViewModel {
                     outputObservable.onNext(())
                 }
                 self.currentSelectedButton = .grid
-                // TODO: collectionView Layout 수정하고, CellType 바꿔줘야 함 (현재 dequeue 되는 Cell만 바뀜)
             })
             .disposed(by: disposeBag)
     }

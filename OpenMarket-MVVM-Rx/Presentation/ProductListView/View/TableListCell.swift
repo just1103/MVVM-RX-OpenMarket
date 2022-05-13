@@ -1,6 +1,6 @@
 import UIKit
 
-class TableListCell: UICollectionViewCell {
+final class TableListCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
         static let nameLabelTextColor: UIColor = .black
@@ -17,6 +17,10 @@ class TableListCell: UICollectionViewCell {
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
         
         static let accessoryImageName: String = "chevron.right"
+    }
+    
+    private enum Content {
+        static let outOfStockLabelText = "품절"
     }
     
     // MARK: - Properties
@@ -101,7 +105,9 @@ class TableListCell: UICollectionViewCell {
     
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
-        label.style(textAlignment: .right, font: Design.bargainRateLabelFont, textColor: Design.bargainRateLabelTextColor)
+        label.style(textAlignment: .right,
+                    font: Design.bargainRateLabelFont,
+                    textColor: Design.bargainRateLabelTextColor)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
@@ -167,7 +173,7 @@ class TableListCell: UICollectionViewCell {
             containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.2),
+            imageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.2)
         ])
     }
 
@@ -194,7 +200,7 @@ class TableListCell: UICollectionViewCell {
     private func changeStockLabel(by stock: Int) {
         if stock == .zero {
             stockLabel.isHidden = false
-            stockLabel.text = "품절"
+            stockLabel.text = Content.outOfStockLabelText
         } else {
             stockLabel.isHidden = true
         }

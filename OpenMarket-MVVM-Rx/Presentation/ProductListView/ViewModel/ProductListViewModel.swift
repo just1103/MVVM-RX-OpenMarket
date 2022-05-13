@@ -2,8 +2,8 @@ import Foundation
 import RxSwift
 import UIKit
 
-class ProductListViewModel {
-    enum Content {
+final class ProductListViewModel {
+    private enum Content {
         static let bannerCount = 5
     }
     
@@ -89,10 +89,12 @@ class ProductListViewModel {
         return uniqueProducts
     }
     
-    private func fetchProducts(at pageNumber: Int, with itemsPerPage: Int) -> Observable<ProductPage> { // 이게 끝나면 View를 업데이트하도록 Rx 적용!
+    private func fetchProducts(at pageNumber: Int, with itemsPerPage: Int) -> Observable<ProductPage> {
         let networkProvider = NetworkProvider()
-        let observable = networkProvider.fetchData(api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: itemsPerPage),
-                                                   decodingType: ProductPage.self)
+        let observable = networkProvider.fetchData(
+            api: ProductPageAPI(pageNumber: pageNumber, itemsPerPage: itemsPerPage),
+            decodingType: ProductPage.self
+        )
         return observable
     }
     

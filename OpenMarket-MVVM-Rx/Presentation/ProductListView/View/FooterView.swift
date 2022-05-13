@@ -2,7 +2,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FooterView: UICollectionReusableView {
+final class FooterView: UICollectionReusableView {
     // MARK: - Properties
     private let bannerPageControl: UIPageControl = {
         let pageControl = UIPageControl()
@@ -16,7 +16,7 @@ class FooterView: UICollectionReusableView {
     
     private let disposeBag = DisposeBag()
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -27,6 +27,7 @@ class FooterView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     func bind(input: Observable<Int>, indexPath: IndexPath, pageNumber: Int) {
         bannerPageControl.numberOfPages = pageNumber
         if indexPath.section == 1 {

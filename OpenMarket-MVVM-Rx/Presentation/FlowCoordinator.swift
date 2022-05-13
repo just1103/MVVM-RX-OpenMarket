@@ -17,7 +17,8 @@ struct FlowCoordinator {
         productListViewModel = ProductListViewModel(actions: actions)
         menuSegmentedControlViewModel = MenuSegmentedControlViewModel()
         menuSegmentedControl = MenuSegmentedControl(viewModel: menuSegmentedControlViewModel)
-        productListViewController = ProductListViewController(viewModel: productListViewModel, menuSegmentedControl: menuSegmentedControl)
+        productListViewController = ProductListViewController(viewModel: productListViewModel,
+                                                              menuSegmentedControl: menuSegmentedControl)
         menuSegmentedControlViewModel.delegate = productListViewController
 
         navigationController?.pushViewController(productListViewController, animated: false)

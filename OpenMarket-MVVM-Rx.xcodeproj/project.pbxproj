@@ -32,10 +32,10 @@
 		36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */; };
 		36F5422D2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422C2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift */; };
 		DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */; };
+		DE84B4A5282E43990098E2B8 /* AlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE84B4A4282E43990098E2B8 /* AlertFactory.swift */; };
 		DEB9B4B4282DEB3300A0953B /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9B4B3282DEB3300A0953B /* CustomColor.swift */; };
 		DEB9B4B6282DECF400A0953B /* UIStackView+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */; };
 		DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425F280FDC640046D916 /* SceneDelegate.swift */; };
-		DEC34262280FDC640046D916 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34261280FDC640046D916 /* ViewController.swift */; };
 		DEC34267280FDC650046D916 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEC34266280FDC650046D916 /* Assets.xcassets */; };
 		DEC3426A280FDC650046D916 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEC34268280FDC650046D916 /* LaunchScreen.storyboard */; };
 		DEC34273280FDD460046D916 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DEC34272280FDD460046D916 /* .swiftlint.yml */; };
@@ -96,12 +96,12 @@
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
+		DE84B4A4282E43990098E2B8 /* AlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFactory.swift; sourceTree = "<group>"; };
 		DEB9B4B3282DEB3300A0953B /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Style.swift"; sourceTree = "<group>"; };
 		DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMarket-MVVM-Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC3425D280FDC640046D916 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEC3425F280FDC640046D916 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DEC34261280FDC640046D916 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DEC34266280FDC650046D916 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEC34269280FDC650046D916 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DEC3426B280FDC650046D916 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -186,6 +186,7 @@
 			children = (
 				36C0A0852810292A0031C83C /* JSONParser.swift */,
 				3625D1002816D54600CD5043 /* ImageCacheManager.swift */,
+				DE84B4A4282E43990098E2B8 /* AlertFactory.swift */,
 				DEB9B4B3282DEB3300A0953B /* CustomColor.swift */,
 			);
 			path = Utility;
@@ -256,7 +257,6 @@
 				DEC3428A28102FEC0046D916 /* Protocol */,
 				36C0A082281027580031C83C /* Extensions */,
 				DEC3427C2810085B0046D916 /* Resources */,
-				DEC34261280FDC640046D916 /* ViewController.swift */,
 				DEC3426B280FDC650046D916 /* Info.plist */,
 			);
 			path = "OpenMarket-MVVM-Rx";
@@ -516,10 +516,10 @@
 				36B1D576282A0A1F00999EC7 /* ProductDetailImageCell.swift in Sources */,
 				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
 				DEC34290281034440046D916 /* APIProtocol.swift in Sources */,
-				DEC34262280FDC640046D916 /* ViewController.swift in Sources */,
 				DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */,
 				36C0A084281028040031C83C /* DateFormatter+DateFormat.swift in Sources */,
 				DECD1650281672DD00F34993 /* ProductListViewModel.swift in Sources */,
+				DE84B4A5282E43990098E2B8 /* AlertFactory.swift in Sources */,
 				36B1D578282A16EA00999EC7 /* ProductListViewModelAction.swift in Sources */,
 				36B1D574282A079200999EC7 /* ProductDetailViewController.swift in Sources */,
 				DEC3428E281034400046D916 /* BaseURLProtocol.swift in Sources */,
@@ -712,7 +712,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XD7KFVM4LP;
+				DEVELOPMENT_TEAM = FA464JRW3F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -724,7 +724,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.OpenMarket-MVVM-Rx";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hojoon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -739,7 +739,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XD7KFVM4LP;
+				DEVELOPMENT_TEAM = FA464JRW3F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -751,7 +751,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.OpenMarket-MVVM-Rx";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hojoon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

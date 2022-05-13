@@ -1,18 +1,18 @@
 import UIKit
 
-class HeaderView: UICollectionReusableView {
+final class HeaderView: UICollectionReusableView {
     // MARK: - Nested Type
-    enum Design {
+    private enum Design {
         static let titleLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
     }
     
-    enum Content {
+    private enum Content {
         static let bannerSectionTitle = "⏰ 놓치면 후회할 가격"
         static let listSectionTitle = "🍎 전체 상품 보기"
     }
     
     // MARK: - Property
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.titleLabelFont, textColor: CustomColor.darkGreenColor)
         return label

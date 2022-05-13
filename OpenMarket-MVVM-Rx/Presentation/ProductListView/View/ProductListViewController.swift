@@ -2,24 +2,28 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ProductListViewController: UIViewController {
+final class ProductListViewController: UIViewController {
     // MARK: - Nested Types
-    enum Content {
+    private enum Content {
         static let navigationTitle = "애호마켓"
         static let listRefreshButtonTitle = "업데이트된 상품 목록을 확인하려면 여기를 탭해주세요."
         static let bannerCount = 5
+        static let unknownSectionErrorTitle = "알 수 없는 Section입니다"
+        static let versionErrorTitle = "기기를 iOS 15.4 이상으로 업데이트 해주세요"
+        static let versionErrorMessage = "애플이 잘못했어요"
+        static let okAlertActionTitle = "OK"
     }
     
-    enum Design {
+    private enum Design {
         static let listRefreshButtonTitleFont: UIFont = .preferredFont(forTextStyle: .body)
     }
     
-    enum SupplementaryViewElementKind {
+    private enum SupplementaryKind {
         static let header = "header-element-kind"
         static let footer = "footer-element-kind"
     }
     
-    enum SectionKind: Int {
+    private enum SectionKind: Int {
         case banner
         case list
         
@@ -83,16 +87,15 @@ class ProductListViewController: UIViewController {
     private let currentBannerPage = PublishSubject<Int>()
     private let disposeBag = DisposeBag()
 
-    // TODO: ViewModel이 가지고 있도록 변경
     private static var isGrid: Bool = true
     private var previousBannerPage: Int = 0
     
-    typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
-    typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
-    typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
-    typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
-    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<HeaderView>
-    typealias FooterRegistration = UICollectionView.SupplementaryRegistration<FooterView>
+    private typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
+    private typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
+    private typealias TableListCellRegistration = UICollectionView.CellRegistration<TableListCell, UniqueProduct>
+    private typealias GridListCellRegistration = UICollectionView.CellRegistration<GridListCell, UniqueProduct>
+    private typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<HeaderView>
+    private typealias FooterRegistration = UICollectionView.SupplementaryRegistration<FooterView>
     
     // MARK: - Initializer
     convenience init(viewModel: ProductListViewModel, menuSegmentedControl: MenuSegmentedControl) {
@@ -104,10 +107,40 @@ class ProductListViewController: UIViewController {
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkIOSVersion()
         configureUI()
         configureCellRegistrationAndDataSource()
+        configureSupplementaryViewRegistrationAndDataSource()
         bind()
         invokedViewDidLoad.onNext(())
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor,
+                                                                   .font: UIFont.preferredFont(forTextStyle: .title1)]
+    }
+    
+    private func checkIOSVersion() {
+        let versionNumbers = UIDevice.current.systemVersion.components(separatedBy: ".")
+        let major = versionNumbers[0]
+        let minor = versionNumbers[1]
+        let version = major + "." + minor
+        
+        guard let systemVersion = Double(version) else { return }
+        let errorVersion = 15.0..<15.4
+        // 해당 버전만 is stuck in its update/layout loop. 에러가 발생하여 Alert로 업데이트 권고
+        if  errorVersion ~= systemVersion {
+            showErrorVersionAlert()
+        }
+    }
+    
+    private func showErrorVersionAlert() {
+        let okAlertAction = UIAlertAction(title: Content.okAlertActionTitle, style: .default)
+        let alert = AlertFactory().createAlert(title: Content.versionErrorTitle,
+                                               message: Content.versionErrorMessage ,
+                                               actions: okAlertAction)
+        present(alert, animated: true)
     }
     
     private func configureUI() {
@@ -152,9 +185,9 @@ class ProductListViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ -> NSCollectionLayoutSection? in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else {
-                print("알 수 없는 Section")
+                self?.showUnknownSectionErrorAlert()
                 return nil
             }
             let screenWidth = UIScreen.main.bounds.width
@@ -177,18 +210,25 @@ class ProductListViewController: UIViewController {
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: estimatedHeight),
-                elementKind: SupplementaryViewElementKind.header,
+                elementKind: SupplementaryKind.header,
                 alignment: .top
             )
             let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
-                elementKind: SupplementaryViewElementKind.footer,
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: estimatedHeight),
+                elementKind: SupplementaryKind.footer,
                 alignment: .bottom
             )
             section.boundarySupplementaryItems = [sectionHeader, sectionFooter]
             return section
         }
         return layout
+    }
+    
+    private func showUnknownSectionErrorAlert() {
+        let okAlertAction = UIAlertAction(title: Content.okAlertActionTitle, style: .default)
+        let alert = AlertFactory().createAlert(title: Content.unknownSectionErrorTitle, actions: okAlertAction)
+        present(alert, animated: true)
     }
     
     private func configureCellRegistrationAndDataSource() {
@@ -200,14 +240,6 @@ class ProductListViewController: UIViewController {
         }
         let gridListCellRegistration = GridListCellRegistration { cell, _, uniqueProduct in
             cell.apply(data: uniqueProduct.product)
-        }
-        let headerRegistration = HeaderRegistration(elementKind: SupplementaryViewElementKind.header) { supplementaryView, elementKind, indexPath in
-            supplementaryView.apply(indexPath)
-        }
-        
-        let footerRegistration = FooterRegistration(elementKind: SupplementaryViewElementKind.footer) { [weak self] supplementaryView, elementKind, indexPath in
-            guard let self = self else { return }
-            supplementaryView.bind(input: self.currentBannerPage.asObservable(), indexPath: indexPath, pageNumber: Content.bannerCount)
         }
         
         dataSource = DiffableDataSource(collectionView: collectionView,
@@ -235,12 +267,26 @@ class ProductListViewController: UIViewController {
             }
         })
         
+    }
+    
+    private func configureSupplementaryViewRegistrationAndDataSource() {
+        let headerRegistration = HeaderRegistration(elementKind: SupplementaryKind.header) { view, _, indexPath in
+            view.apply(indexPath)
+        }
+        
+        let footerRegistration = FooterRegistration(elementKind: SupplementaryKind.footer) { [weak self] view, _, indexPath in
+            guard let self = self else { return }
+            view.bind(input: self.currentBannerPage.asObservable(),
+                                   indexPath: indexPath,
+                                   pageNumber: Content.bannerCount)
+        }
+        
         dataSource.supplementaryViewProvider = { [weak self] _, kind, index in
             switch kind {
-            case SupplementaryViewElementKind.header:
+            case SupplementaryKind.header:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration,
                                                                                   for: index)
-            case SupplementaryViewElementKind.footer:
+            case SupplementaryKind.footer:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration,
                                                                                   for: index)
             default:
@@ -363,12 +409,12 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
         switch currentSelectedButton {
         case .grid:
-            ProductListViewController.isGrid = true
+//            ProductListViewController.isGrid = true
             let changedLayout = createLayout()
             collectionView.collectionViewLayout = changedLayout
             collectionView.reloadData()
         case .table:
-            ProductListViewController.isGrid = false
+//            ProductListViewController.isGrid = false
             let changedLayout = createLayout()
             collectionView.collectionViewLayout = changedLayout
             collectionView.reloadData()
@@ -386,4 +432,3 @@ extension ProductListViewController: UICollectionViewDelegate {
         }
     }
 }
-
