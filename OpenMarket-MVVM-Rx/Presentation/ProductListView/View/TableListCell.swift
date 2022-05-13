@@ -3,33 +3,31 @@ import UIKit
 class TableListCell: UICollectionViewCell {
     // MARK: - Nested Types
     private enum Design {
-        static let darkGreenColor = #colorLiteral(red: 0.137904644, green: 0.3246459067, blue: 0.2771841288, alpha: 1)
+        static let nameLabelTextColor: UIColor = .black
+        static let stockLabelTextColor: UIColor = .systemOrange
+        static let accessoryImageViewColor: UIColor = CustomColor.darkGreenColor
+        static let priceLabelTextColor: UIColor = .systemRed
+        static let bargainPriceLabelTextColor: UIColor = .systemRed
+        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-        static let stockLabelTextColor: UIColor = .systemOrange
-        static let accessoryImageName: String = "chevron.right"
         static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
-        static let priceLabelTextColor: UIColor = .systemRed
+        static let bargainPriceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
+        static let accessoryImageName: String = "chevron.right"
     }
     
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill // fillProportionally하면 계산에 시간이 오래걸려서 Cell이 늦게 뜸
-        stackView.spacing = 8
-        
-        let verticalInset: Double = 10
-        let horizontalInset: Double = 10
-        stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
-                                               left: horizontalInset,
-                                               bottom: verticalInset,
-                                               right: horizontalInset)
-        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.style(axis: .horizontal,
+                        alignment: .fill,
+                        distribution: .fill,
+                        spacing: 8,
+                        verticalInset: 10,
+                        horizontalInset: 10)
         return stackView
     }()
     private let imageView: UIImageView = {
@@ -43,21 +41,13 @@ class TableListCell: UICollectionViewCell {
     }()
     private let verticalStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fillEqually)
         return stackView
     }()
     
     private let nameAndStockStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        stackView.spacing = 10
+        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill, spacing: 10)
         return stackView
     }()
     
@@ -84,7 +74,7 @@ class TableListCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: Design.accessoryImageName)
-        imageView.tintColor = Design.darkGreenColor
+        imageView.tintColor = Design.accessoryImageViewColor
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -93,11 +83,7 @@ class TableListCell: UICollectionViewCell {
     
     private let priceAndBargainStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 8
+        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill, spacing: 8)
         return stackView
     }()
     
@@ -116,8 +102,8 @@ class TableListCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = Design.priceLabelFont
-        label.textColor = Design.priceLabelTextColor
+        label.font = Design.bargainPriceLabelFont
+        label.textColor = Design.bargainPriceLabelTextColor
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
@@ -157,7 +143,7 @@ class TableListCell: UICollectionViewCell {
         bargainRateLabel.text = nil
         priceLabel.attributedText = nil
         priceLabel.text = nil
-        priceLabel.textColor = .systemRed
+        priceLabel.textColor = Design.priceLabelTextColor
         stockLabel.isHidden = true
     }
     
@@ -202,7 +188,7 @@ class TableListCell: UICollectionViewCell {
                                                     discountedPrice: Double,
                                                     bargainPrice: Double,
                                                     currency: Currency) {
-        if discountedPrice == 0 {
+        if discountedPrice == .zero {
             priceLabel.attributedText = nil
             priceLabel.textColor = .systemRed
             priceLabel.text = "\(currency.rawValue) \(price.formattedWithComma())"
@@ -219,7 +205,7 @@ class TableListCell: UICollectionViewCell {
     }
     
     private func changeStockLabel(by stock: Int) {
-        if stock == 0 {
+        if stock == .zero {
             stockLabel.isHidden = false
             stockLabel.text = "품절"
         } else {

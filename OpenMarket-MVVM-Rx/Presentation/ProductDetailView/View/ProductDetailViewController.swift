@@ -32,11 +32,7 @@ class ProductDetailViewController: UIViewController {
     
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 10
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, spacing: 10)
         return stackView
     }()
     
@@ -62,13 +58,12 @@ class ProductDetailViewController: UIViewController {
     
     private let productInformationStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-        stackView.spacing = 10
+        stackView.style(axis: .vertical,
+                        alignment: .fill,
+                        distribution: .fill,
+                        spacing: 10,
+                        verticalInset: 20,
+                        horizontalInset: 20)
         return stackView
     }()
     
@@ -85,21 +80,13 @@ class ProductDetailViewController: UIViewController {
     
     private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .firstBaseline
-        stackView.distribution = .fill
-        stackView.spacing = 8
-        stackView.setContentHuggingPriority(.required, for: .vertical)
+        stackView.style(axis: .horizontal, alignment: .firstBaseline, distribution: .fill, spacing: 8)
         return stackView
     }()
     
     private let priceAndBargainpriceStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
     
@@ -165,12 +152,7 @@ class ProductDetailViewController: UIViewController {
     
     private let descriptionStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, verticalInset: 20, horizontalInset: 20)
         return stackView
     }()
     

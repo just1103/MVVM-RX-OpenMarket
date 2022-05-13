@@ -45,10 +45,7 @@ class ProductListViewController: UIViewController {
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
     

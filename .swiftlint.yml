@@ -1,3 +1,4 @@
 disabled_rules:
 - trailing_whitespace
 - xctfail_message
+- function_parameter_count

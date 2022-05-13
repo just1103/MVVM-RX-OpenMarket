@@ -32,6 +32,8 @@
 		36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */; };
 		36F5422D2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422C2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift */; };
 		DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */; };
+		DEB9B4B4282DEB3300A0953B /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9B4B3282DEB3300A0953B /* CustomColor.swift */; };
+		DEB9B4B6282DECF400A0953B /* UIStackView+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */; };
 		DEC34260280FDC640046D916 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3425F280FDC640046D916 /* SceneDelegate.swift */; };
 		DEC34262280FDC640046D916 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC34261280FDC640046D916 /* ViewController.swift */; };
 		DEC34267280FDC650046D916 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEC34266280FDC650046D916 /* Assets.xcassets */; };
@@ -94,6 +96,8 @@
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
+		DEB9B4B3282DEB3300A0953B /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
+		DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Style.swift"; sourceTree = "<group>"; };
 		DEC3425A280FDC640046D916 /* OpenMarket-MVVM-Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMarket-MVVM-Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC3425D280FDC640046D916 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEC3425F280FDC640046D916 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 			children = (
 				36C0A0852810292A0031C83C /* JSONParser.swift */,
 				3625D1002816D54600CD5043 /* ImageCacheManager.swift */,
+				DEB9B4B3282DEB3300A0953B /* CustomColor.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -194,6 +199,7 @@
 				3625D0FA2816D40300CD5043 /* Double+DecimalFormat.swift */,
 				3625D0FC2816D40E00CD5043 /* UILabel+Strike.swift */,
 				3625D0FE2816D51000CD5043 /* UIImageView+Load+Cache.swift */,
+				DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36F5422D2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift in Sources */,
+				DEB9B4B6282DECF400A0953B /* UIStackView+Style.swift in Sources */,
 				DEC3428C281030330046D916 /* URLSessionProtocol.swift in Sources */,
 				DEC3428528100E7F0046D916 /* DetailViewProduct.swift in Sources */,
 				DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */,
@@ -505,6 +512,7 @@
 				DEE691402829139D009BA91D /* FooterView.swift in Sources */,
 				DEC3427F28100ADB0046D916 /* Product.swift in Sources */,
 				3625D0F72816C6F700CD5043 /* TableListCell.swift in Sources */,
+				DEB9B4B4282DEB3300A0953B /* CustomColor.swift in Sources */,
 				36B1D576282A0A1F00999EC7 /* ProductDetailImageCell.swift in Sources */,
 				36C0A0862810292B0031C83C /* JSONParser.swift in Sources */,
 				DEC34290281034440046D916 /* APIProtocol.swift in Sources */,

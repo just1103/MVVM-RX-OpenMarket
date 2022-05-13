@@ -9,10 +9,7 @@ class BannerCell: UICollectionViewCell {
     // MARK: - Properties
     private let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.alignment = .fill
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
     

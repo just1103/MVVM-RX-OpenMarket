@@ -16,19 +16,12 @@ class GridListCell: UICollectionViewCell {
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 8
-
-        let verticalInset: Double = 15
-        let horizontalInset: Double = 15
-        stackView.layoutMargins = UIEdgeInsets(top: verticalInset,
-                                               left: horizontalInset,
-                                               bottom: verticalInset,
-                                               right: horizontalInset)
-        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.style(axis: .vertical,
+                        alignment: .fill,
+                        distribution: .fill,
+                        spacing: 8,
+                        verticalInset: 15,
+                        horizontalInset: 15)
         return stackView
     }()
     
@@ -44,10 +37,7 @@ class GridListCell: UICollectionViewCell {
     
     private let nameAndStockStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill)
         return stackView
     }()
     
@@ -72,20 +62,13 @@ class GridListCell: UICollectionViewCell {
     
     private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .top
-        stackView.distribution = .fill
-        stackView.spacing = 8
+        stackView.style(axis: .horizontal, alignment: .top, distribution: .fill, spacing: 8)
         return stackView
     }()
     
     private let priceAndBargainpriceStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
 
