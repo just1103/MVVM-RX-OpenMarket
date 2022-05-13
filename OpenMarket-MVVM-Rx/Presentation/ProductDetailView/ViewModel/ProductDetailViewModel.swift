@@ -3,6 +3,7 @@ import RxSwift
 import UIKit
 
 class ProductDetailViewModel {
+    // MARK: - Nested Types
     struct Input {
         let invokedViewDidLoad: Observable<Void>
         let cellDidScroll: Observable<IndexPath>
@@ -13,9 +14,11 @@ class ProductDetailViewModel {
         let productImages: Observable<[ProductImage]>
     }
     
+    // MARK: - Properties
     private var productID: Int!
     private let disposeBag = DisposeBag()
     
+    // MARK: - Methods
     func setupProductID(_ productID: Int) {
         self.productID = productID
     }
@@ -24,9 +27,7 @@ class ProductDetailViewModel {
         let product = PublishSubject<DetailViewProduct>()
         let productImages = PublishSubject<[ProductImage]>()
         
-        configureViewDidLoadObserver(by: input.invokedViewDidLoad,
-                                     productOutput: product,
-                                     productImages: productImages)
+        configureViewDidLoadObserver(by: input.invokedViewDidLoad, productOutput: product, productImages: productImages)
         
         let output = Output(product: product.asObservable(), productImages: productImages.asObservable())
         

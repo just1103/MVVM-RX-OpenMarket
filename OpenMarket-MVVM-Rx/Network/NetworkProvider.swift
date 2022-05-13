@@ -26,7 +26,7 @@ struct NetworkProvider {
         self.session = session
     }
     
-    func loadData(request: URLRequest) -> Observable<Data> {
+    private func loadData(request: URLRequest) -> Observable<Data> {
         return Observable.create { emitter in
             let task = session.dataTask(with: request) { data, response, _ in
                 let successStatusCode = 200..<300

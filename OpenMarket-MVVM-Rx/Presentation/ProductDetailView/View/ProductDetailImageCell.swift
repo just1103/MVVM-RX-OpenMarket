@@ -23,6 +23,12 @@ class ProductDetailImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle Methods
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        productImageView.image = nil
+    }
+    
     // MARK: - Methods
     func apply(with imageURL: String) {
         productImageView.loadImage(of: imageURL)

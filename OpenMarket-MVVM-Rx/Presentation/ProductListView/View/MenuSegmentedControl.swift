@@ -9,6 +9,14 @@ final class MenuSegmentedControl: UIView {
         static let tableButtonTitle = "Table로 보기"
     }
     
+    private enum Design {
+        static let defaultButtonTitleFont: UIFont = .systemFont(ofSize: 23)
+        static let highlightedButtonTitleFont: UIFont = .boldSystemFont(ofSize: 23)
+        
+        static let defaultButtonTitleColor: UIColor = .systemGray
+        static let highlightedButtonTitleColor: UIColor = CustomColor.backgroundColor
+    }
+    
     // MARK: Properties
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -19,29 +27,26 @@ final class MenuSegmentedControl: UIView {
         stackView.spacing = 50
         return stackView
     }()
-    
     private let gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Content.gridButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 23)
-        button.setTitleColor(.systemGray, for: .normal)
+        button.titleLabel?.font = Design.defaultButtonTitleFont
+        button.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
-    
     private let tableButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Content.tableButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 23)
-        button.setTitleColor(.systemGray, for: .normal)
+        button.titleLabel?.font = Design.defaultButtonTitleFont
+        button.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         return button
     }()
-    
     private let selectorView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -104,10 +109,10 @@ final class MenuSegmentedControl: UIView {
     private func changeSelectedUI(sender: MenuSegmentedControlViewModel.MenuButton) {
         switch sender {
         case .grid:
-            gridButton.setTitleColor(CustomColor.backgroundColor, for: .normal)
-            gridButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 23)
-            tableButton.setTitleColor(.systemGray, for: .normal)
-            tableButton.titleLabel?.font = UIFont.systemFont(ofSize: 23)
+            gridButton.setTitleColor(Design.highlightedButtonTitleColor, for: .normal)
+            gridButton.titleLabel?.font = Design.highlightedButtonTitleFont
+            tableButton.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
+            tableButton.titleLabel?.font = Design.defaultButtonTitleFont
 
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }
@@ -125,10 +130,10 @@ final class MenuSegmentedControl: UIView {
 //                selectorView.trailingAnchor.constraint(equalTo: gridButton.trailingAnchor)
 //            ])
         case .table:
-            tableButton.setTitleColor(CustomColor.backgroundColor, for: .normal)
-            tableButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 23)
-            gridButton.setTitleColor(.systemGray, for: .normal)
-            gridButton.titleLabel?.font = UIFont.systemFont(ofSize: 23)
+            tableButton.setTitleColor(Design.highlightedButtonTitleColor, for: .normal)
+            tableButton.titleLabel?.font = Design.highlightedButtonTitleFont
+            gridButton.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
+            gridButton.titleLabel?.font = Design.defaultButtonTitleFont
             
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }

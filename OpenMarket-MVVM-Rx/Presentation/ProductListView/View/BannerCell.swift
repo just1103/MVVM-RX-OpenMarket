@@ -1,18 +1,12 @@
 import UIKit
 
 final class BannerCell: UICollectionViewCell {
-    // MARK: - Nested Types
-    private enum Design {
-        static let imageViewInset: CGFloat = 0
-    }
-    
     // MARK: - Properties
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
-    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true

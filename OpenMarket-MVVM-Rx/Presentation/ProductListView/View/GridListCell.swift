@@ -6,6 +6,7 @@ final class GridListCell: UICollectionViewCell {
         static let nameLabelTextColor: UIColor = .black
         static let stockLabelTextColor: UIColor = .systemOrange
         static let priceLabelTextColor: UIColor = .systemRed
+        static let discountedPriceLabelTextColor: UIColor = .systemGray
         static let bargainRateLabelTextColor: UIColor = .systemRed
         
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
@@ -23,14 +24,10 @@ final class GridListCell: UICollectionViewCell {
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.style(axis: .vertical,
-                        alignment: .fill,
-                        distribution: .fill,
-                        spacing: 8)
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, spacing: 8)
         stackView.setupMargins(verticalInset: 15, horizontalInset: 15)
         return stackView
     }()
-    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,58 +37,48 @@ final class GridListCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         return imageView
     }()
-    
     private let nameAndStockStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill)
         return stackView
     }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.nameLabelFont, textColor: Design.nameLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
-    
     private let stockLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .right, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
-    
     private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .horizontal, alignment: .top, distribution: .fill, spacing: 8)
         return stackView
     }()
-    
     private let priceAndBargainpriceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
-
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
-    
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
-    
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
-        label.style(textAlignment: .right,
-                    font: Design.bargainRateLabelFont,
-                    textColor: Design.bargainRateLabelTextColor)
+        label.style(textAlignment: .right, font: Design.bargainRateLabelFont, textColor: Design.bargainRateLabelTextColor)
         return label
     }()
     
@@ -119,7 +106,7 @@ final class GridListCell: UICollectionViewCell {
         bargainRateLabel.text = nil
         priceLabel.attributedText = nil
         priceLabel.text = nil
-        priceLabel.textColor = .systemRed
+        priceLabel.textColor = Design.priceLabelTextColor
         stockLabel.isHidden = true
     }
     
@@ -166,7 +153,7 @@ final class GridListCell: UICollectionViewCell {
         } else {
             let priceText = "\(currency.rawValue) \(price.formattedWithComma())"
             priceLabel.strikeThrough(text: priceText)
-            priceLabel.textColor = .systemGray
+            priceLabel.textColor = Design.discountedPriceLabelTextColor
             bargainPriceLabel.isHidden = false
             bargainPriceLabel.text = "\(currency.rawValue) \(bargainPrice.formattedWithComma())"
         }

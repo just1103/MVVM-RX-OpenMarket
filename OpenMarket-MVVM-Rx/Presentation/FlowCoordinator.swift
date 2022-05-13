@@ -1,16 +1,19 @@
 import UIKit
 
 struct FlowCoordinator {
+    // MARK: - Properties
     weak private var navigationController: UINavigationController?
     private var productListViewController: ProductListViewController!
     private var productListViewModel: ProductListViewModel!
     private var menuSegmentedControl: MenuSegmentedControl!
     private var menuSegmentedControlViewModel: MenuSegmentedControlViewModel!
     
+    // MARK: - Initializers
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
+    // MARK: - Methods
     mutating func start() {
         let actions = ProductListViewModelAction(showProductDetail: showProductDetail)
         

@@ -41,14 +41,10 @@ final class ProductListViewModel {
         let newPostedProducts = PublishSubject<[UniqueProduct]>()
         let nextPageProducts = PublishSubject<[UniqueProduct]>()
         
-        configureViewDidLoadObserver(by: input.invokedViewDidLoad,
-                                     productsOutput: products)
-        configureViewDidLoadObserver(by: input.invokedViewDidLoad,
-                                     newProductDidPostOutput: newProductDidPost)
-        configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap,
-                                           outputObservable: newPostedProducts)
-        configureCellDidScrollObserver(by: input.cellDidScroll,
-                                       outputObservable: nextPageProducts)
+        configureViewDidLoadObserver(by: input.invokedViewDidLoad, productsOutput: products)
+        configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
+        configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap, outputObservable: newPostedProducts)
+        configureCellDidScrollObserver(by: input.cellDidScroll, outputObservable: nextPageProducts)
         configureCellDidSelectObserver(by: input.cellDidSelect)
 
         let output = Output(products: products.asObservable(),

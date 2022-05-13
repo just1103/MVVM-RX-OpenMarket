@@ -1,7 +1,7 @@
 import UIKit
 
 final class HeaderView: UICollectionReusableView {
-    // MARK: - Nested Type
+    // MARK: - Nested Types
     private enum Design {
         static let titleLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
     }
@@ -11,14 +11,14 @@ final class HeaderView: UICollectionReusableView {
         static let listSectionTitle = "🍎 전체 상품 보기"
     }
     
-    // MARK: - Property
+    // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.titleLabelFont, textColor: CustomColor.darkGreenColor)
         return label
     }()
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -29,7 +29,7 @@ final class HeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Method
+    // MARK: - Methods
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil

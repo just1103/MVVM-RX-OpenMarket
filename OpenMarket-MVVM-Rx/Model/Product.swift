@@ -1,7 +1,7 @@
 import Foundation
 
 struct Product: Codable, Hashable {
-    let id: Int // ServerAPI 특성상 id가 unique한 값으로 인식
+    let id: Int 
     let vendorId: Int
     let name: String
     let thumbnail: String

@@ -56,7 +56,6 @@ final class ProductListViewController: UIViewController {
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
-    
     private let listRefreshButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.numberOfLines = 0
@@ -66,7 +65,6 @@ final class ProductListViewController: UIViewController {
         button.isHidden = true
         return button
     }()
-    
     private let bannerPageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -77,6 +75,8 @@ final class ProductListViewController: UIViewController {
         return pageControl
     }()
     
+    private static var isGrid: Bool = true
+    private var previousBannerPage: Int = 0
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var menuSegmentedControl: MenuSegmentedControl!
     private var dataSource: DiffableDataSource!
@@ -86,9 +86,6 @@ final class ProductListViewController: UIViewController {
     private let cellDidScroll = PublishSubject<IndexPath>()
     private let currentBannerPage = PublishSubject<Int>()
     private let disposeBag = DisposeBag()
-
-    private static var isGrid: Bool = true
-    private var previousBannerPage: Int = 0
     
     private typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionKind, UniqueProduct>
     private typealias BannerCellRegistration = UICollectionView.CellRegistration<BannerCell, UniqueProduct>
@@ -104,7 +101,7 @@ final class ProductListViewController: UIViewController {
         self.menuSegmentedControl = menuSegmentedControl
     }
 
-    // MARK: - Methods
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIOSVersion()
@@ -121,6 +118,7 @@ final class ProductListViewController: UIViewController {
                                                                    .font: UIFont.preferredFont(forTextStyle: .title1)]
     }
     
+    // MARK: - Methods
     private func checkIOSVersion() {
         let versionNumbers = UIDevice.current.systemVersion.components(separatedBy: ".")
         let major = versionNumbers[0]
@@ -191,12 +189,10 @@ final class ProductListViewController: UIViewController {
                 return nil
             }
             let screenWidth = UIScreen.main.bounds.width
-            let estimatedHeight = NSCollectionLayoutDimension.estimated(screenWidth) // 300으로 주면 TableList 짤림
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: estimatedHeight)
+            let estimatedHeight = NSCollectionLayoutDimension.estimated(screenWidth)
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight)
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: estimatedHeight)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                          subitem: item,
                                                          count: sectionKind.columnCount)
@@ -208,14 +204,12 @@ final class ProductListViewController: UIViewController {
             }
             
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: estimatedHeight),
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
                 elementKind: SupplementaryKind.header,
                 alignment: .top
             )
             let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: estimatedHeight),
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight),
                 elementKind: SupplementaryKind.footer,
                 alignment: .bottom
             )
@@ -266,14 +260,12 @@ final class ProductListViewController: UIViewController {
                 }
             }
         })
-        
     }
     
     private func configureSupplementaryViewRegistrationAndDataSource() {
         let headerRegistration = HeaderRegistration(elementKind: SupplementaryKind.header) { view, _, indexPath in
             view.apply(indexPath)
         }
-        
         let footerRegistration = FooterRegistration(elementKind: SupplementaryKind.footer) { [weak self] view, _, indexPath in
             guard let self = self else { return }
             view.bind(input: self.currentBannerPage.asObservable(),
@@ -292,7 +284,6 @@ final class ProductListViewController: UIViewController {
             default:
                 return UICollectionReusableView()
             }
-            
         }
     }
 }
@@ -341,8 +332,7 @@ extension ProductListViewController {
     
     private func drawBannerAndList(with products: (list: [UniqueProduct], banner: [UniqueProduct])) {
         if snapshot == nil {
-            configureInitialSnapshotWith(listProducts: products.list,
-                                         bannerProducts: products.banner)
+            configureInitialSnapshotWith(listProducts: products.list, bannerProducts: products.banner)
         } else {
             applySnapshotWith(listProducts: products.list)
         }
@@ -409,12 +399,12 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
         switch currentSelectedButton {
         case .grid:
-//            ProductListViewController.isGrid = true
+            ProductListViewController.isGrid = true
             let changedLayout = createLayout()
             collectionView.collectionViewLayout = changedLayout
             collectionView.reloadData()
         case .table:
-//            ProductListViewController.isGrid = false
+            ProductListViewController.isGrid = false
             let changedLayout = createLayout()
             collectionView.collectionViewLayout = changedLayout
             collectionView.reloadData()
@@ -424,9 +414,7 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
 
 // MARK: - CollectionViewDelegate
 extension ProductListViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             cellDidScroll.onNext(indexPath)
         }

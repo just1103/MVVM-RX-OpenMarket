@@ -9,6 +9,7 @@ final class ProductDetailViewController: UIViewController {
         static let stockLabelTextColor: UIColor = .black
         static let priceLabelTextColor: UIColor = .systemRed
         static let bargainRateLabelTextColor: UIColor = .systemRed
+        static let descriptionTextViewTextColor: UIColor = .black
         
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .largeTitle)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .body)
@@ -18,6 +19,7 @@ final class ProductDetailViewController: UIViewController {
         static let descriptionTextViewFont: UIFont = .preferredFont(forTextStyle: .body)
         
         static let accessoryImageName: String = "chevron.right"
+        static let containerHorizontalInset: CGFloat = 20
     }
     
     private enum Content {
@@ -69,7 +71,7 @@ final class ProductDetailViewController: UIViewController {
                         alignment: .fill,
                         distribution: .fill,
                         spacing: 10)
-        stackView.setupMargins(verticalInset: 0, horizontalInset: 20)
+        stackView.setupMargins(horizontalInset: Design.containerHorizontalInset)
         return stackView
     }()
     private let nameLabel: UILabel = {
@@ -116,7 +118,7 @@ final class ProductDetailViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
+        view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - Design.containerHorizontalInset * 2).isActive = true
         view.setContentHuggingPriority(.required, for: .vertical)
         view.backgroundColor = .gray
         return view
@@ -136,14 +138,14 @@ final class ProductDetailViewController: UIViewController {
     private let descriptionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
-        stackView.setupMargins(horizontalInset: 20)
+        stackView.setupMargins(horizontalInset: Design.containerHorizontalInset)
         return stackView
     }()
     private let bottomBorderLine: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
+        view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - Design.containerHorizontalInset * 2).isActive = true
         view.setContentHuggingPriority(.required, for: .vertical)
         view.backgroundColor = .gray
         return view
@@ -153,6 +155,7 @@ final class ProductDetailViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = CustomColor.backgroundColor
         textView.font = Design.descriptionTextViewFont
+        textView.textColor = Design.descriptionTextViewTextColor
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.textAlignment = .left
@@ -174,6 +177,7 @@ final class ProductDetailViewController: UIViewController {
         self.viewModel = viewModel
     }
     
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -317,8 +321,7 @@ extension ProductDetailViewController {
     private func apply(data: DetailViewProduct) {
         self.navigationItem.leftBarButtonItem = nil
         navigationItem.title = data.name
-        navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow,
-                                                                                              for: .horizontal)
+        navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         imagePageControl.numberOfPages = data.images.count
         imagePageControl.hidesForSinglePage = true
