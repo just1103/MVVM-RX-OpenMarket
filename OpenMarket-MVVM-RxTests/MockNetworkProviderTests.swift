@@ -18,25 +18,18 @@ class MockNetworkProviderTests: XCTestCase {
         sut = nil
         disposeBag = nil
     }
-
-    func test_getHealthChecker가_정상작동_하는지() {
-        let observableData = sut.request(api: HealthCheckerAPI())
-        _ = observableData.subscribe(onNext: { data in
-                let resultString = String(data: data, encoding: .utf8)
-                let successString = #""OK""#
-                XCTAssertEqual(resultString, successString)
-        })
-        .disposed(by: disposeBag)
-    }
     
-    func test_getHealthChecker가_정상실패_하는지() {
-        sut = NetworkProvider(session: MockURLSession(isRequestSuccess: false))
+    func test_getProductDetail가_정상작동_하는지() {
+        let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
 
-        let observableData = sut.request(api: HealthCheckerAPI())
-        _ = observableData.subscribe(onError: { error in
-            let statusCodeError = NetworkError.statusCodeError
-            XCTAssertEqual(error as? NetworkError, statusCodeError)
+        let observable = sut.fetchData(api: ProductDetailAPI(id: 15), decodingType: Product.self)
+        _ = observable.subscribe(onNext: { product in
+            XCTAssertEqual(product.id, 15)
+            XCTAssertEqual(product.name, "pizza")
+            expectation.fulfill()
         })
         .disposed(by: disposeBag)
+
+        wait(for: [expectation], timeout: 10.0)
     }
 }

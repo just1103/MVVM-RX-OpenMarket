@@ -3,6 +3,7 @@ disabled_rules:
 - xctfail_message
 - function_parameter_count
 - legacy_constructor
+- force_cast
 
 file_length: 500
 type_body_length: 250

@@ -32,8 +32,11 @@ class MockURLSession: URLSessionProtocol {
 
         let sessionDataTask = MockURLSessionDataTask()
 
-        let dataString = #""OK""#
-        let data = dataString.data(using: .utf8)
+        guard let path = Bundle(for: type(of: self)).path(forResource: "MockProduct", ofType: "json"),
+              let jsonString = try? String(contentsOfFile: path) else {
+                  fatalError()
+              }
+        let data = jsonString.data(using: .utf8)
 
         if isRequestSuccess {
             sessionDataTask.resumeDidCall = {

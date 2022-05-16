@@ -4,15 +4,6 @@ struct OpenMarketBaseURL: BaseURLProtocol {
     let baseURL = "https://market-training.yagom-academy.kr/"
 }
 
-struct HealthCheckerAPI: Gettable {
-    let url: URL?
-    let method: HttpMethod = .get
-    
-    init(baseURL: BaseURLProtocol = OpenMarketBaseURL()) {
-        self.url = URL(string: "\(baseURL.baseURL)healthChecker")
-    }
-}
-
 struct ProductDetailAPI: Gettable {
     let url: URL?
     let method: HttpMethod = .get

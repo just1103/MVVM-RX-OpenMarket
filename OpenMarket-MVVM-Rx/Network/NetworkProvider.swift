@@ -25,22 +25,11 @@ struct NetworkProvider {
     init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
-    
-    private func loadData(request: URLRequest) -> Observable<Data> {
+ 
+    func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
         return Observable.create { emitter in
-            let task = session.dataTask(with: request) { data, response, _ in
-                let successStatusCode = 200..<300
-                guard let httpResponse = response as? HTTPURLResponse,
-                      successStatusCode.contains(httpResponse.statusCode) else {
-                          emitter.onError(NetworkError.statusCodeError)
-                          return
-                      }
-                
-                if let data = data {
-                    emitter.onNext(data)
-                }
-                
-                emitter.onCompleted()
+            guard let task = dataTask(api: api, emitter: emitter) else {
+                return Disposables.create()
             }
             task.resume()
             
@@ -50,53 +39,54 @@ struct NetworkProvider {
         }
     }
     
-    func request(api: APIProtocol) -> Observable<Data> {
+    func request(api: Postable) -> Observable<Data> {
         return Observable.create { emitter in
-            guard let urlRequest = URLRequest(api: api) else {
-                emitter.onError(NetworkError.urlIsNil)
+            guard let task = dataTask(api: api, emitter: emitter) else {
                 return Disposables.create()
             }
-            
-            _ = loadData(request: urlRequest)
-                .subscribe { event in
-                    switch event {
-                    case .next(let data):
-                        emitter.onNext(data)
-                    case .error(let error):
-                        emitter.onError(error)
-                    case .completed:
-                        emitter.onCompleted()
-                    }
-                    emitter.onCompleted()
-                }
-                .disposed(by: disposeBag)
-            
-            return Disposables.create()
+            task.resume()
+
+            return Disposables.create {
+                task.cancel()
+            }
         }
     }
     
-    func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
-        return Observable.create { emitter in
-            _ = request(api: api)
-                .debug()  // FIXME: 없으면 products가 nil이 됨
-                .subscribe { event in
-                switch event {
-                case .next(let data):
+    private func dataTask<T: Codable>(api: APIProtocol, emitter: AnyObserver<T>) -> URLSessionDataTask? {
+        guard let urlRequest = URLRequest(api: api) else {
+            emitter.onError(NetworkError.urlIsNil)
+            return nil
+        }
+        
+        let task = session.dataTask(with: urlRequest) { data, response, _ in
+            let successStatusCode = 200..<300
+            guard let httpResponse = response as? HTTPURLResponse,
+                  successStatusCode.contains(httpResponse.statusCode) else {
+                emitter.onError(NetworkError.statusCodeError)
+                return
+            }
+            
+            switch api {
+            case is Gettable:
+                if let data = data {
                     guard let decodedData = JSONParser<T>().decode(from: data) else {
                         emitter.onError(JSONParserError.decodingFail)
                         return
                     }
+                    
                     emitter.onNext(decodedData)
-                case .error(let error):
-                    emitter.onError(error)
-                case .completed:
-                    emitter.onCompleted()
                 }
-                emitter.onCompleted()
+            case is Postable:
+                if let data = data as? T {
+                    emitter.onNext(data)
+                }
+            default:
+                return
             }
-            .disposed(by: disposeBag)
             
-            return Disposables.create()
+            emitter.onCompleted()
         }
+        
+        return task
     }
 }
