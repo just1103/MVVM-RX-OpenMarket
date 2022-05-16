@@ -14,12 +14,12 @@ struct MultipartFormData {
         self.body.append(data)
     }
     
-    func createFormData<Item: Codable>(params: String, item: Item) -> Data {
+    func create<Item: Codable>(params: String, product: Item) -> Data {
         var data = Data()
         data.append(BoundaryGenerator.boundaryData(forBoundaryType: .startSymbol, boundary: boundary))
-        data.append(ContentDisposition.formData(params: params).bodyComponent)
+        data.append(ContentDisposition.formData(params).bodyComponent)
         
-        let encodedResult = JSONParser<Item>().encode(from: item)
+        let encodedResult = JSONParser<Item>().encode(from: product)
         switch encodedResult {
         case .success(let encodedData):
             data.append(encodedData)
@@ -31,7 +31,7 @@ struct MultipartFormData {
         return data
     }
     
-    func createImageFormData(name: String, fileName: String, contentType: ImageContentType, image: UIImage) -> Data {
+    func create(name: String, fileName: String, contentType: ImageContentType, image: UIImage) -> Data {
         var data = Data()
         data.append(BoundaryGenerator.boundaryData(forBoundaryType: .startSymbol, boundary: boundary))
         data.append(ContentDisposition.imageFormData(name: name, filename: fileName).bodyComponent)
@@ -67,7 +67,7 @@ enum ImageContentType: String, CustomStringConvertible {
 }
 
 enum ContentDisposition {
-    case formData(params: String)
+    case formData(_ params: String)
     case imageFormData(name: String, filename: String)
     case imageContentType(type: ImageContentType)
     

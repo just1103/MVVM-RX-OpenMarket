@@ -36,7 +36,7 @@ final class BannerCell: UICollectionViewCell {
     
     // MARK: - Methods
     func apply(imageURL: String, productID: Int) {
-        imageView.loadImage(of: imageURL)
+        imageView.loadCachedImage(of: imageURL)
         self.productID = productID
     }
     

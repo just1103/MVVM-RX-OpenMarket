@@ -31,7 +31,7 @@ class ProductDetailImageCell: UICollectionViewCell {
     
     // MARK: - Methods
     func apply(with imageURL: String) {
-        productImageView.loadImage(of: imageURL)
+        productImageView.loadCachedImage(of: imageURL)
     }
     
     private func configureUI() {

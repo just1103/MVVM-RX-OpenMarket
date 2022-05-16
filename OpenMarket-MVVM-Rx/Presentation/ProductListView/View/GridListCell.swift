@@ -112,7 +112,7 @@ final class GridListCell: UICollectionViewCell {
     
     // MARK: - Methods
     func apply(data: Product) {
-        imageView.loadImage(of: data.thumbnail)
+        imageView.loadCachedImage(of: data.thumbnail)
         nameLabel.text = data.name
         changePriceAndDiscountedPriceLabel(price: data.price,
                                            discountedPrice: data.discountedPrice,

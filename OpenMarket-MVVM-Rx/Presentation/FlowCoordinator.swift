@@ -1,6 +1,6 @@
 import UIKit
 
-struct FlowCoordinator {
+class FlowCoordinator {
     // MARK: - Properties
     weak private var navigationController: UINavigationController?
     private var productListViewController: ProductListViewController!
@@ -14,7 +14,7 @@ struct FlowCoordinator {
     }
     
     // MARK: - Methods
-    mutating func start() {
+    func start() {
         let actions = ProductListViewModelAction(showProductDetail: showProductDetail)
         
         productListViewModel = ProductListViewModel(actions: actions)

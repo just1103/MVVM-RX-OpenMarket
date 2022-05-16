@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIImageView {
-    func loadImage(of key: String) {
+    func loadCachedImage(of key: String) {
         let cacheKey = NSString(string: key)
         if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
             self.image = cachedImage
