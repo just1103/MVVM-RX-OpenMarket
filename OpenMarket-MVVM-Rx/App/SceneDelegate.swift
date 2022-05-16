@@ -13,7 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         window?.rootViewController = navigationController
         
-        var flowCoordinator = FlowCoordinator(navigationController: navigationController)
+        let flowCoordinator = FlowCoordinator(navigationController: navigationController)
         flowCoordinator.start()
         
         window?.makeKeyAndVisible()

@@ -1,16 +1,6 @@
 import UIKit
 
 final class HeaderView: UICollectionReusableView {
-    // MARK: - Nested Types
-    private enum Design {
-        static let titleLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-    }
-    
-    private enum Content {
-        static let bannerSectionTitle = "⏰ 놓치면 후회할 가격"
-        static let listSectionTitle = "🍎 전체 상품 보기"
-    }
-    
     // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -52,5 +42,17 @@ final class HeaderView: UICollectionReusableView {
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
         ])
+    }
+}
+
+extension HeaderView {
+    // MARK: - NameSpaces
+    private enum Design {
+        static let titleLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
+    }
+    
+    private enum Content {
+        static let bannerSectionTitle = "⏰ 놓치면 후회할 가격"
+        static let listSectionTitle = "🍎 전체 상품 보기"
     }
 }

@@ -1,26 +1,6 @@
 import UIKit
 
 final class GridListCell: UICollectionViewCell {
-    // MARK: - Nested Types
-    private enum Design {
-        static let nameLabelTextColor: UIColor = .black
-        static let stockLabelTextColor: UIColor = .systemOrange
-        static let priceLabelTextColor: UIColor = .systemRed
-        static let discountedPriceLabelTextColor: UIColor = .systemGray
-        static let bargainRateLabelTextColor: UIColor = .systemRed
-        
-        static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-        static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-        static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
-        static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        
-        static let accessoryImageName: String = "chevron.right"
-    }
-    
-    private enum Content {
-        static let outOfStockLabelText = "품절"
-    }
-    
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
@@ -172,5 +152,27 @@ final class GridListCell: UICollectionViewCell {
         if discountedPrice != .zero {
             bargainRateLabel.text = "\(String(format: "%.0f", bargainRate))%"
         }
+    }
+}
+
+// MARK: - NameSpaces
+extension GridListCell {
+    private enum Design {
+        static let nameLabelTextColor: UIColor = .black
+        static let stockLabelTextColor: UIColor = .systemOrange
+        static let priceLabelTextColor: UIColor = .systemRed
+        static let discountedPriceLabelTextColor: UIColor = .systemGray
+        static let bargainRateLabelTextColor: UIColor = .systemRed
+        
+        static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
+        static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
+        static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
+        static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
+        
+        static let accessoryImageName: String = "chevron.right"
+    }
+    
+    private enum Content {
+        static let outOfStockLabelText = "품절"
     }
 }

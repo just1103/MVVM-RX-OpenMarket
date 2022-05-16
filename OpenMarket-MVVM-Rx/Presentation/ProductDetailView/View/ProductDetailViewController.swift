@@ -3,38 +3,6 @@ import RxSwift
 import RxCocoa
 
 final class ProductDetailViewController: UIViewController {
-    // MARK: - Nested Types
-    private enum Design {
-        static let nameLabelTextColor: UIColor = .black
-        static let stockLabelTextColor: UIColor = .black
-        static let priceLabelTextColor: UIColor = .systemRed
-        static let bargainRateLabelTextColor: UIColor = .systemRed
-        static let descriptionTextViewTextColor: UIColor = .black
-        
-        static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .largeTitle)
-        static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-        static let originalPriceLabelFont: UIFont = .preferredFont(forTextStyle: .callout)
-        static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
-        static let descriptionTextViewFont: UIFont = .preferredFont(forTextStyle: .body)
-        
-        static let accessoryImageName: String = "chevron.right"
-        static let containerHorizontalInset: CGFloat = 20
-    }
-    
-    private enum Content {
-        static let outOfStockLabelText = "재고 수량: 품절"
-        static func stockLabelText(with stock: Int) -> String {
-            return "재고 수량: \(stock)개"
-        }
-        static func registrationDateLabelText(with date: Date) -> String {
-            "상품 등록일: \(DateFormatter.common.string(from: date))"
-        }
-        static func bargainRateLabelText(with bargainRate: Double) -> String {
-            return "\(String(format: "%.0f", bargainRate))%"
-        }
-    }
-    
     // MARK: - Properties
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -334,5 +302,39 @@ extension ProductDetailViewController {
         changeStockLabel(by: data.stock)
         registrationDateLabel.text = Content.registrationDateLabelText(with: data.createdAt)
         descriptionTextView.text = data.description
+    }
+}
+
+// MARK: - NameSpaces
+extension ProductDetailViewController {
+    private enum Design {
+        static let nameLabelTextColor: UIColor = .black
+        static let stockLabelTextColor: UIColor = .black
+        static let priceLabelTextColor: UIColor = .systemRed
+        static let bargainRateLabelTextColor: UIColor = .systemRed
+        static let descriptionTextViewTextColor: UIColor = .black
+        
+        static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .largeTitle)
+        static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .body)
+        static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
+        static let originalPriceLabelFont: UIFont = .preferredFont(forTextStyle: .callout)
+        static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
+        static let descriptionTextViewFont: UIFont = .preferredFont(forTextStyle: .body)
+        
+        static let accessoryImageName: String = "chevron.right"
+        static let containerHorizontalInset: CGFloat = 20
+    }
+    
+    private enum Content {
+        static let outOfStockLabelText = "재고 수량: 품절"
+        static func stockLabelText(with stock: Int) -> String {
+            return "재고 수량: \(stock)개"
+        }
+        static func registrationDateLabelText(with date: Date) -> String {
+            "상품 등록일: \(DateFormatter.common.string(from: date))"
+        }
+        static func bargainRateLabelText(with bargainRate: Double) -> String {
+            return "\(String(format: "%.0f", bargainRate))%"
+        }
     }
 }

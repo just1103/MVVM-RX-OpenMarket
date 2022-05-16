@@ -3,28 +3,10 @@ import RxCocoa
 import RxSwift
 
 final class MenuSegmentedControl: UIView {
-    // MARK: - Nested Types
-    private enum Content {
-        static let gridButtonTitle = "Grid로 보기"
-        static let tableButtonTitle = "Table로 보기"
-    }
-    
-    private enum Design {
-        static let defaultButtonTitleFont: UIFont = .systemFont(ofSize: 23)
-        static let highlightedButtonTitleFont: UIFont = .boldSystemFont(ofSize: 23)
-        
-        static let defaultButtonTitleColor: UIColor = .systemGray
-        static let highlightedButtonTitleColor: UIColor = CustomColor.backgroundColor
-    }
-    
-    // MARK: Properties
+    // MARK: - Properties
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 50
+        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fillEqually, spacing: 50)
         return stackView
     }()
     private let gridButton: UIButton = {
@@ -67,7 +49,7 @@ final class MenuSegmentedControl: UIView {
         self.selectorView.trailingAnchor.constraint(equalTo: self.gridButton.trailingAnchor)
     ]
     
-    // MARK: Initializers
+    // MARK: - Initializers
     convenience init(viewModel: MenuSegmentedControlViewModel) {
         self.init()
         self.viewModel = viewModel
@@ -141,5 +123,21 @@ final class MenuSegmentedControl: UIView {
                 self.selectorView.frame.origin.x = self.tableButton.frame.origin.x
             }
         }
+    }
+}
+
+// MARK: - NameSpaces
+extension MenuSegmentedControl {
+    private enum Content {
+        static let gridButtonTitle = "Grid로 보기"
+        static let tableButtonTitle = "Table로 보기"
+    }
+    
+    private enum Design {
+        static let defaultButtonTitleFont: UIFont = .systemFont(ofSize: 23)
+        static let highlightedButtonTitleFont: UIFont = .boldSystemFont(ofSize: 23)
+        
+        static let defaultButtonTitleColor: UIColor = .systemGray
+        static let highlightedButtonTitleColor: UIColor = CustomColor.backgroundColor
     }
 }

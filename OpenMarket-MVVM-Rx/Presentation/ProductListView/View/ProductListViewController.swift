@@ -4,20 +4,6 @@ import RxCocoa
 
 final class ProductListViewController: UIViewController {
     // MARK: - Nested Types
-    private enum Content {
-        static let navigationTitle = "애호마켓"
-        static let listRefreshButtonTitle = "업데이트된 상품 목록을 확인하려면 여기를 탭해주세요."
-        static let bannerCount = 5
-        static let unknownSectionErrorTitle = "알 수 없는 Section입니다"
-        static let versionErrorTitle = "기기를 iOS 15.4 이상으로 업데이트 해주세요"
-        static let versionErrorMessage = "애플이 잘못했어요"
-        static let okAlertActionTitle = "OK"
-    }
-    
-    private enum Design {
-        static let listRefreshButtonTitleFont: UIFont = .preferredFont(forTextStyle: .body)
-    }
-    
     private enum SupplementaryKind {
         static let header = "header-element-kind"
         static let footer = "footer-element-kind"
@@ -200,7 +186,9 @@ final class ProductListViewController: UIViewController {
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
             section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
                 let bannerIndex = Int(max(0, round(contentOffset.x / environment.container.contentSize.width)))
-                self?.currentBannerPage.onNext(bannerIndex)
+                if environment.container.contentSize.height == environment.container.contentSize.width {
+                    self?.currentBannerPage.onNext(bannerIndex)
+                }
             }
             
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
@@ -418,5 +406,22 @@ extension ProductListViewController: UICollectionViewDelegate {
         if indexPath.section == 1 {
             cellDidScroll.onNext(indexPath)
         }
+    }
+}
+
+// MARK: - NameSpaces
+extension ProductListViewController {
+    private enum Content {
+        static let navigationTitle = "애호마켓"
+        static let listRefreshButtonTitle = "업데이트된 상품 목록을 확인하려면 여기를 탭해주세요."
+        static let bannerCount = 5
+        static let unknownSectionErrorTitle = "알 수 없는 Section입니다"
+        static let versionErrorTitle = "기기를 iOS 15.4 이상으로 업데이트 해주세요"
+        static let versionErrorMessage = "애플이 잘못했어요"
+        static let okAlertActionTitle = "OK"
+    }
+    
+    private enum Design {
+        static let listRefreshButtonTitleFont: UIFont = .preferredFont(forTextStyle: .body)
     }
 }

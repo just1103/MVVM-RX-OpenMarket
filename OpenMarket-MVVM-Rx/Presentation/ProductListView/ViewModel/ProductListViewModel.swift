@@ -3,10 +3,7 @@ import RxSwift
 import UIKit
 
 final class ProductListViewModel {
-    private enum Content {
-        static let bannerCount = 5
-    }
-    
+    // MARK: - Nested Types
     struct Input {
         let invokedViewDidLoad: Observable<Void>
         let listRefreshButtonDidTap: Observable<Void>
@@ -168,5 +165,12 @@ final class ProductListViewModel {
     @available(*, deprecated, message: "테스트에서만 호출할 코드입니다.")
     func test_fetchProducts() -> Observable<ProductPage> {
         return fetchProducts(at: 1, with: 20)
+    }
+}
+
+// MARK: - NameSpaces
+extension ProductListViewModel {
+    private enum Content {
+        static let bannerCount = 5
     }
 }
