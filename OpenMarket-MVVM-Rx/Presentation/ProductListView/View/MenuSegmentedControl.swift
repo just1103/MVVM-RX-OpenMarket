@@ -58,6 +58,14 @@ final class MenuSegmentedControl: UIView {
     
     private(set) var viewModel: MenuSegmentedControlViewModel!
     private let disposeBag = DisposeBag()
+    private lazy var selectorViewTableButtonConstraints = [
+        self.selectorView.leadingAnchor.constraint(equalTo: self.tableButton.leadingAnchor),
+        self.selectorView.trailingAnchor.constraint(equalTo: self.tableButton.trailingAnchor)
+    ]
+    private lazy var selectorViewGridButtonConstraints = [
+        self.selectorView.leadingAnchor.constraint(equalTo: self.gridButton.leadingAnchor),
+        self.selectorView.trailingAnchor.constraint(equalTo: self.gridButton.trailingAnchor)
+    ]
     
     // MARK: Initializers
     convenience init(viewModel: MenuSegmentedControlViewModel) {
@@ -113,41 +121,25 @@ final class MenuSegmentedControl: UIView {
             gridButton.titleLabel?.font = Design.highlightedButtonTitleFont
             tableButton.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
             tableButton.titleLabel?.font = Design.defaultButtonTitleFont
-
+            NSLayoutConstraint.deactivate(self.selectorViewTableButtonConstraints)
+            NSLayoutConstraint.activate(self.selectorViewGridButtonConstraints)
+            
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }
-                // FIXME: origin과 widthAnchor를 설정했는데, horizontal position을 못잡는 문제
                 self.selectorView.frame.origin.x = self.gridButton.frame.origin.x
             }
-            
-            // TODO: deactivate 안됨
-//            NSLayoutConstraint.deactivate([
-//                selectorView.leadingAnchor.constraint(equalTo: tableButton.leadingAnchor),
-//                selectorView.trailingAnchor.constraint(equalTo: tableButton.trailingAnchor)
-//            ])
-//            NSLayoutConstraint.activate([
-//                selectorView.leadingAnchor.constraint(equalTo: gridButton.leadingAnchor),
-//                selectorView.trailingAnchor.constraint(equalTo: gridButton.trailingAnchor)
-//            ])
         case .table:
             tableButton.setTitleColor(Design.highlightedButtonTitleColor, for: .normal)
             tableButton.titleLabel?.font = Design.highlightedButtonTitleFont
             gridButton.setTitleColor(Design.defaultButtonTitleColor, for: .normal)
             gridButton.titleLabel?.font = Design.defaultButtonTitleFont
+            NSLayoutConstraint.deactivate(self.selectorViewGridButtonConstraints)
+            NSLayoutConstraint.activate(self.selectorViewTableButtonConstraints)
             
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self = self else { return }
                 self.selectorView.frame.origin.x = self.tableButton.frame.origin.x
             }
-            
-//            NSLayoutConstraint.deactivate([
-//                selectorView.leadingAnchor.constraint(equalTo: gridButton.leadingAnchor),
-//                selectorView.trailingAnchor.constraint(equalTo: gridButton.trailingAnchor)
-//            ])
-//            NSLayoutConstraint.activate([
-//                selectorView.leadingAnchor.constraint(equalTo: tableButton.leadingAnchor),
-//                selectorView.trailingAnchor.constraint(equalTo: tableButton.trailingAnchor)
-//            ])
         }
     }
 }
