@@ -260,6 +260,7 @@ final class ProductDetailViewController: UIViewController {
     }
 }
 
+// MARK: - Rx Binding Methods
 extension ProductDetailViewController {
     private func bind() {
         let input = ProductDetailViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
@@ -267,22 +268,22 @@ extension ProductDetailViewController {
         
         let output = viewModel.transform(input)
         
-        configureProductDetail(with: output.product, images: output.productImages)
+        configureProductDetail(with: output.product)
     }
     
-    private func configureProductDetail(with productDetail: Observable<DetailViewProduct>,
-                                        images: Observable<[ProductImage]>) {
+    private func configureProductDetail(with productDetail: Observable<DetailViewProduct>) {
         productDetail
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] productDetail in
-                self?.apply(data: productDetail)
+                guard let self = self else { return }
+                self.apply(data: productDetail)
+                let imagesObservable = Observable.just(productDetail.images)
+                _ = imagesObservable
+                    .bind(to: self.imageCollectionView.rx.items(cellIdentifier: String(describing: ProductDetailImageCell.self),
+                                                           cellType: ProductDetailImageCell.self)) { _, item, cell in
+                        cell.apply(with: item.url)
+                    }
             })
-            .disposed(by: disposeBag)
-        images
-            .bind(to: imageCollectionView.rx.items(cellIdentifier: String(describing: ProductDetailImageCell.self),
-                                                   cellType: ProductDetailImageCell.self)) { _, item, cell in
-                cell.apply(with: item.url)
-            }
             .disposed(by: disposeBag)
     }
     

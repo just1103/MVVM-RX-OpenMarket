@@ -26,3 +26,22 @@ struct DetailViewProduct: Codable {
         case vendor = "vendors"
     }
 }
+
+extension DetailViewProduct {
+    init() {
+        self.id = .zero
+        self.vendorId = .zero
+        self.name = ""
+        self.description = ""
+        self.thumbnail = ""
+        self.currency = .krw
+        self.price = .zero
+        self.bargainPrice = .zero
+        self.discountedPrice = .zero
+        self.stock = .zero
+        self.images = []
+        self.vendor = nil
+        self.createdAt = Date()
+        self.issuedAt = Date()
+    }
+}

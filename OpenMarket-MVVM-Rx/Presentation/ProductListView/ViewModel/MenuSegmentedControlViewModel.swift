@@ -29,41 +29,32 @@ final class MenuSegmentedControlViewModel {
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let selectedGridButton = PublishSubject<Void>()
-        let selectedTableButton = PublishSubject<Void>()
+        let selectedGridButton = configureSelectedGridButtonObserver(inputObservable: input.gridButtonDidTap)
+        let selectedTableButton = configureSelectedTableButtonObserver(inputObservable: input.tableButtonDidTap)
         
-        configureSelectedGridButtonObserver(inputObservable: input.gridButtonDidTap, outputObservable: selectedGridButton)
-        configureSelectedTableButtonObserver(inputObservable: input.tableButtonDidTap, outputObservable: selectedTableButton)
-        
-        let output = Output(selectedGridButton: selectedGridButton.asObservable(),
-                            selectedTableButton: selectedTableButton.asObservable())
+        let output = Output(selectedGridButton: selectedGridButton,
+                            selectedTableButton: selectedTableButton)
         
         return output
     }
     
-    private func configureSelectedGridButtonObserver(inputObservable: Observable<Void>, outputObservable: PublishSubject<Void>) {
-        inputObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                if self.currentSelectedButton == .table {
-                    self.delegate?.segmentedControlTapped(.grid)
-                    outputObservable.onNext(())
+    private func configureSelectedGridButtonObserver(inputObservable: Observable<Void>) -> Observable<Void> {
+        return inputObservable
+            .map { [weak self] _ in
+                if self?.currentSelectedButton == .table {
+                    self?.delegate?.segmentedControlTapped(.grid)
                 }
-                self.currentSelectedButton = .grid
-            })
-            .disposed(by: disposeBag)
+                self?.currentSelectedButton = .grid
+            }
     }
     
-    private func configureSelectedTableButtonObserver(inputObservable: Observable<Void>, outputObservable: PublishSubject<Void>) {
+    private func configureSelectedTableButtonObserver(inputObservable: Observable<Void>) -> Observable<Void> {
         inputObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                if self.currentSelectedButton == .grid {
-                    self.delegate?.segmentedControlTapped(.table)
-                    outputObservable.onNext(())
+            .map { [weak self] _ in
+                if self?.currentSelectedButton == .grid {
+                    self?.delegate?.segmentedControlTapped(.table)
                 }
-                self.currentSelectedButton = .table
-            })
-            .disposed(by: disposeBag)
+                self?.currentSelectedButton = .table
+            }
     }
 }
