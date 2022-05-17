@@ -33,18 +33,17 @@ final class ProductListViewModel {
     
     // MARK: - Methods
     func transform(_ input: Input) -> Output {
-        let products = PublishSubject<([UniqueProduct], [UniqueProduct])>()
+        let products = configureViewDidLoadObserver(by: input.invokedViewDidLoad)
         let newProductDidPost = PublishSubject<Void>()
         let newPostedProducts = PublishSubject<[UniqueProduct]>()
         let nextPageProducts = PublishSubject<[UniqueProduct]>()
         
-        configureViewDidLoadObserver(by: input.invokedViewDidLoad, productsOutput: products)
         configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
         configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap, outputObservable: newPostedProducts)
         configureCellDidScrollObserver(by: input.cellDidScroll, outputObservable: nextPageProducts)
         configureCellDidSelectObserver(by: input.cellDidSelect)
 
-        let output = Output(products: products.asObservable(),
+        let output = Output(products: products,
                             newProductDidPost: newProductDidPost.asObservable(),
                             newPostedProducts: newPostedProducts.asObservable(),
                             nextPageProducts: nextPageProducts.asObservable())
@@ -52,25 +51,22 @@ final class ProductListViewModel {
         return output
     }
     
-    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>,
-                                              productsOutput: PublishSubject<([UniqueProduct], [UniqueProduct])>) {
-        inputObserver
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
+    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>) -> Observable<([UniqueProduct], [UniqueProduct])> {
+        return inputObserver
+            .flatMap { [weak self] _ -> Observable<([UniqueProduct], [UniqueProduct])> in
+                guard let self = self else { return Observable.just(([], [])) }
+                return self.fetchProducts(at: 1, with: 20).map { productPage -> ([UniqueProduct], [UniqueProduct]) in
                     let uniqueListProducts = self.makeHashable(from: productPage.products)
                     let recentBargainProducts = productPage.products.filter { product in
                         product.discountedPrice != 0
                     }
                     let bannerProducts = Array(recentBargainProducts[0..<Content.bannerCount])
                     let uniqueBannerProducts = self.makeHashable(from: bannerProducts)
-                    
-                    productsOutput.onNext((uniqueListProducts, uniqueBannerProducts))
-                    guard let firstProductID = productPage.products.first?.id else { return }
+                    guard let firstProductID = productPage.products.first?.id else { return ([], []) }
                     self.latestProductID = firstProductID
-                })
-            })
-            .disposed(by: disposeBag)
+                    return (uniqueListProducts, uniqueBannerProducts)
+                }
+            }
     }
     
     private func makeHashable(from products: [Product]) -> [UniqueProduct] {
@@ -123,14 +119,26 @@ final class ProductListViewModel {
         inputObservable
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
-                    let uniqueProducts = self.makeHashable(from: productPage.products)
+                let uniqueObservable = self.fetchProducts(at: 1, with: 20).map({ productPage in
+                    self.makeHashable(from: productPage.products)
+                })
+                _ = uniqueObservable.subscribe(onNext: { uniqueProducts in
                     outputObservable.onNext(uniqueProducts)
-                    guard let firstProductID = productPage.products.first?.id else { return }
+                    guard let firstProductID = uniqueProducts.first?.product.id else { return }
                     self.latestProductID = firstProductID
                     self.currentProductsCount = 20
                     self.currentProductPage = 1
                 })
+                
+                
+//                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
+//                    let uniqueProducts = self.makeHashable(from: productPage.products)
+//                    outputObservable.onNext(uniqueProducts)
+//                    guard let firstProductID = productPage.products.first?.id else { return }
+//                    self.latestProductID = firstProductID
+//                    self.currentProductsCount = 20
+//                    self.currentProductPage = 1
+//                })
             })
             .disposed(by: disposeBag)
     }
