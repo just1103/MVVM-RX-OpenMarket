@@ -35,18 +35,16 @@ final class ProductListViewModel {
     func transform(_ input: Input) -> Output {
         let products = configureViewDidLoadObserver(by: input.invokedViewDidLoad)
         let newProductDidPost = PublishSubject<Void>()
-        let newPostedProducts = PublishSubject<[UniqueProduct]>()
-        let nextPageProducts = PublishSubject<[UniqueProduct]>()
+        let newPostedProducts = configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap)
+        let nextPageProducts = configureCellDidScrollObserver(by: input.cellDidScroll)
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
-        configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap, outputObservable: newPostedProducts)
-        configureCellDidScrollObserver(by: input.cellDidScroll, outputObservable: nextPageProducts)
         configureCellDidSelectObserver(by: input.cellDidSelect)
 
         let output = Output(products: products,
                             newProductDidPost: newProductDidPost.asObservable(),
-                            newPostedProducts: newPostedProducts.asObservable(),
-                            nextPageProducts: nextPageProducts.asObservable())
+                            newPostedProducts: newPostedProducts,
+                            nextPageProducts: nextPageProducts)
         
         return output
     }
@@ -114,56 +112,39 @@ final class ProductListViewModel {
             .disposed(by: disposeBag)
     }
     
-    private func configureListRefreshButtonObserver(by inputObservable: Observable<Void>,
-                                                    outputObservable: PublishSubject<[UniqueProduct]>) {
+    private func configureListRefreshButtonObserver(by inputObservable: Observable<Void>) -> Observable<[UniqueProduct]> {
         inputObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                let uniqueObservable = self.fetchProducts(at: 1, with: 20).map({ productPage in
-                    self.makeHashable(from: productPage.products)
-                })
-                _ = uniqueObservable.subscribe(onNext: { uniqueProducts in
-                    outputObservable.onNext(uniqueProducts)
-                    guard let firstProductID = uniqueProducts.first?.product.id else { return }
+            .flatMap { [weak self] _ -> Observable<[UniqueProduct]> in
+                guard let self = self else { return Observable.just([]) }
+                return self.fetchProducts(at: 1, with: 20).map { productPage -> [UniqueProduct] in
+                    guard let firstProductID = productPage.products.first?.id else { return [] }
                     self.latestProductID = firstProductID
                     self.currentProductsCount = 20
                     self.currentProductPage = 1
-                })
-                
-                
-//                _ = self.fetchProducts(at: 1, with: 20).subscribe(onNext: { productPage in  // FIXME: map은 안되고, subscribe은 됨(?)
-//                    let uniqueProducts = self.makeHashable(from: productPage.products)
-//                    outputObservable.onNext(uniqueProducts)
-//                    guard let firstProductID = productPage.products.first?.id else { return }
-//                    self.latestProductID = firstProductID
-//                    self.currentProductsCount = 20
-//                    self.currentProductPage = 1
-//                })
-            })
-            .disposed(by: disposeBag)
+                    
+                    return self.makeHashable(from: productPage.products)
+                }
+            }
     }
     
-    private func configureCellDidScrollObserver(by inputObservable: Observable<IndexPath>,
-                                                outputObservable: PublishSubject<[UniqueProduct]>) {
-        inputObservable
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                if indexPath.row == self.currentProductsCount - 4 {
-                    self.currentProductPage += 1
-                    _ = self.fetchProducts(at: self.currentProductPage, with: 20).subscribe(onNext: { productPage in
-                        self.currentProductsCount += 20
-                        let uniqueProducts = self.makeHashable(from: productPage.products)
-                        outputObservable.onNext(uniqueProducts)
-                    })
+    private func configureCellDidScrollObserver(by inputObservable: Observable<IndexPath>) -> Observable<[UniqueProduct]> {
+        return inputObservable
+            .filter { [weak self] indexPath in
+                return indexPath.row + 4 == self?.currentProductsCount
+            }
+            .flatMap { [weak self] _ -> Observable<[UniqueProduct]> in
+                guard let self = self else { return Observable.just([]) }
+                self.currentProductPage += 1
+                self.currentProductsCount += 20
+                return self.fetchProducts(at: self.currentProductPage, with: 20).map { productPage -> [UniqueProduct] in
+                    return self.makeHashable(from: productPage.products)
                 }
-            })
-            .disposed(by: disposeBag)
+            }
     }
     
     private func configureCellDidSelectObserver(by inputObservable: Observable<Int>) {
         inputObservable
             .subscribe(onNext: { [weak self] productID in
-                print(productID)
                 self?.actions?.showProductDetail(productID)
             })
             .disposed(by: disposeBag)
