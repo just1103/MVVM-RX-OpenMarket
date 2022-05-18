@@ -1,36 +1,30 @@
 # MVVM/Rx를 적용한 오픈마켓 프로젝트
 
 ## 목차
-- [🛒 프로젝트 소개](#프로젝트-소개)
-    - [참여자](#참여자)
-    - [프로젝트 기간](#프로젝트-기간)
-- [🛒 구현 화면](#-구현-화면)
+- [🛒 프로젝트 소개](#-프로젝트-소개)
 - [🛒 Architecture](#-architecture)
-- [🛒 파일 디렉토리 구조](#-파일-디렉토리-구조)
+- [🛒 Foldering](#-foldering)
 - [🛒 Feature-1. 네트워크 구현](#-feature-1-네트워크-구현)
     + [고민한 점](#1-1-고민한-점) 
     + [Trouble Shooting](#1-2-trouble-shooting)
     + [키워드](#1-3-키워드)
-
 - [🛒 Feature-2. 상품 목록 화면 구현](#-feature-2-상품-목록화면-구현)
     + [고민한 점](#2-1-고민한-점)
     + [Trouble Shooting](#2-2-trouble-shooting)
     + [키워드](#2-3-키워드)
-
 - [🛒 Feature-3. 상품 상세화면 구현](#-feature-3-상품-상세화면-구현)
     + [고민한 점](#3-1-고민한-점) 
     + [Trouble Shooting](#3-2-trouble-shooting)
     + [키워드](#3-3-키워드)
 
-
-## 프로젝트 소개
-Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상품의 목록화면 및 상세화면을 보여줍니다.
-`RxSwift` 및 `MVVM-C`를 적용했습니다.
-
-- 참여자 : 호댕 @yanghojoon, 애플사이다 @just1103
-- 프로젝트 기간 : 2022.04.20 - 2022.05.17 (총 4주)
-
-## 🛒 구현 화면
+## 🛒 프로젝트 소개
+`Network` 통신으로 서버에서 데이터를 받아 `CollectionView`로 상품의 목록화면 및 상세화면을 보여줍니다.   
+`MVVM-C` 및 `RxSwift`를 적용했습니다.
+   
+- 참여자 : 호댕 @yanghojoon, 애플사이다 @just1103 (2명)
+- 진행 기간 : 2022.04.20 - 2022.05.17 (총 4주)   
+<br/>
+   
 |1. MenuBar|2. 목록 스크롤|3. 다음 목록 업데이트|4. 신상품 추가 알림|5. 상품 상세|
 |-|-|-|-|-|
 |<img width="200" src="https://user-images.githubusercontent.com/90880660/168954925-72b87ded-3bde-48f9-b8ca-d1912f77cdc1.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954948-93e03109-6721-42dc-b6ca-2fb40548795c.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954930-64d8a698-a983-496b-85b7-3803b60d1869.gif">|<img width="200" src="https://i.imgur.com/ej6Iw9R.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954936-fdc34d74-6d4f-4d40-86f0-5b20861f2c75.gif">|
@@ -38,9 +32,9 @@ Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상�
 ## 🛒 Architecture
 ![image](https://user-images.githubusercontent.com/70856586/168956710-3186bbf6-7521-433b-a184-fb83dd3e25bb.png)
 
-## 🛒 파일 디렉토리 구조
+## 🛒 Foldering
 ```
-├── OpenMarket-MVVM-Rx
+├── OpenMarket
 │   ├── App
 │   ├── Presentation
 │   │   ├── ProductListView
@@ -55,7 +49,7 @@ Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상�
 │   ├── Protocol
 │   ├── Extension
 │   └── Resource
-└── OpenMarket-MVVM-RxTests
+└── OpenMarket-Tests
     └──Mock
 ```
 
@@ -75,17 +69,13 @@ API를 열거형으로 관리하는 경우, API를 추가할 때마다 새로운
 
 ### 1-2 Trouble Shooting
 #### 1️⃣ Mock 데이터 접근 시 Bundle에 접근하지 못하는 문제
-`JSON Decoding` 테스트를 할 때, `Bundle.main.path`를 통해 Mock 데이터에 접근하도록 했는데, path에 nil이 반환되는 문제가 발생했습니다. LLDB 확인 결과 Mock 데이터 파일이 포함된 Bundle은 `OpenMarketTests.xctest`이며, 테스트 코드를 실행하는 주체는 `OpenMarket App Bundle`임을 파악했습니다. 
-- LLDB 내용: OpenMarket.app/PlugIns/OpenMarketTests.xctest
-
-따라서 현재 executable의 Bundle 개체를 반환하는 `Bundle.main (즉, App Bundle)`이 아니라, 테스트 코드를 실행하는 주체를 가르키는 `Bundle(for: type(of: self))` (즉, XCTests Bundle)로 path를 수정하여 문제를 해결했습니다.
-
+- 문제점 : `JSON Decoding` 테스트를 할 때, `Bundle.main.path`를 통해 Mock 데이터에 접근하도록 했는데, path에 nil이 반환되는 문제가 발생했습니다. LLDB 확인 결과 Mock 데이터 파일이 포함된 Bundle은 `OpenMarketTests.xctest`이며, 테스트 코드를 실행하는 주체는 `OpenMarket App Bundle`임을 파악했습니다. 
+- 해결방법 : 현재 executable의 Bundle 개체를 반환하는 `Bundle.main` (즉, App Bundle)이 아니라, 테스트 코드를 실행하는 주체를 가르키는 `Bundle(for: type(of: self))` (즉, XCTests Bundle)로 path를 수정하여 문제를 해결했습니다.
 이외에도 테스트 코드 내부에서 옵셔널 바인딩을 하는 경우 else문에 `XCTFail()`을 추가하여 예상 결과값이 반환되지 않았음에도 테스트를 Pass하는 오류를 방지했습니다.
 
 #### 2️⃣ Rx를 사용한 네트워크 처리 시 불필요한 Subscribe 삭제
-기존에는 `loadData()`, `request(api:)`, `fetchData<T: Codable>(api:decodingType:)`으로 나누어 해당 메서드에서 전부 Observable을 create하고 순차적으로 `subscribe`를 하여 네트워크를 처리하는 방법을 사용했습니다. 이때 `subscribe`를 최소화하는 방향으로 개선하려 했으나, 단순히 `map`을 사용해 데이터를 가공하고 넘겨주는 경우 `onError`를 통해 발생하는 에러를 처리하지 못하는 문제가 존재했습니다.
-
-이에 따라 데이터를 받아오는 `fetchData<T: Codable>(api:decodingType:)`와 데이터를 요청하는 `request(api:)`메서드로 분리하고, `dataTask<T:Codable>(api:emitter:)`메서드에서 `URLSession`의 `dataTask` 메서드를 실행시켜 에러를 던지도록 개선했습니다.
+- 문제점 : 기존에는 `loadData()`, `request(api:)`, `fetchData(api:decodingType:)`으로 나누어 해당 메서드에서 전부 Observable을 create하고 순차적으로 `subscribe`를 하여 네트워크를 처리하는 방법을 사용했습니다. 이때 `subscribe`를 최소화하는 방향으로 개선하려 했으나, 단순히 `map`을 사용해 데이터를 가공하고 넘겨주는 경우 `onError`를 통해 발생하는 에러를 처리하지 못하는 문제가 존재했습니다.
+- 해결방법 : 서버에서 데이터를 받아오는 `fetchData(api:decodingType:)`와 데이터를 요청하는 `request(api:)`메서드로 분리하고, `dataTask(api:emitter:)`메서드에서 `URLSession`의 `dataTask` 메서드를 실행시켜 에러를 던지도록 개선했습니다.
 
 ### 1-3 키워드
 - Network : 비동기 처리, URLSession, MultipartFormData, REST-ful API
@@ -93,7 +83,6 @@ API를 열거형으로 관리하는 경우, API를 추가할 때마다 새로운
 - SPM : RxSwift/RxCocoa, SwiftLint
 - JSON Parsing, Generics
 - Cache, Notification, Alert
-- Build UI Programmatically
 
 ## 🛒 Feature-2. 상품 목록화면 구현
 ### 2-1 고민한 점 
@@ -121,34 +110,28 @@ UnderlinedMenuBar 위치는 기존에는 NavigationBar의 `titleView`로 배치�
 
 ### 2-2 Trouble Shooting
 #### 1️⃣ UniqueProduct 타입을 추가하여 Hashable Item 생성
-`Banner`에 `List`의 전체 상품 중에서 할인이 적용된 최근 5개 상품이 나타나도록 구현했습니다. 그 과정에서 `Banner` 및`List`에 동일한 ID의 상품을 적용해야 했는데, DiffableDataSource의 Item이 Unique하지 않아서 문제가 발생했습니다.
-따라서 기존 `Product` 타입에 UUID 타입의 프로퍼티를 추가한 `UniqueProduct` 타입을 추가하고, 서버에서 받은 상품 정보를 `Banner`와 `List`에 전달하기 전에 UniqueProduct 타입으로 변환시켜서 Item이 충돌하지 않도록 개선했습니다.
+- 문제점 : `Banner`에 `List`의 전체 상품 중에서 할인이 적용된 최근 5개 상품이 나타나도록 구현했습니다. 그 과정에서 `Banner` 및`List`에 동일한 ID의 상품을 적용해야 했는데, DiffableDataSource의 Item이 Unique하지 않아서 일부 상품이 화면에 그려지지 않았습니다.
+- 해결방법 : 기존 `Product` 타입에 UUID 타입의 프로퍼티를 추가한 `UniqueProduct` 타입을 추가하고, 서버에서 받은 상품 정보를 `Banner`와 `List`에 전달하기 전에 UniqueProduct 타입으로 변환시켜서 Item이 충돌하지 않도록 개선했습니다.
 
 #### 2️⃣ CollectionView Layout을 Table 및 Grid 스타일로 변경
-`UnderlinedMenuBar`를 탭해서 CollectionView의 Layout을 변경할 때, 기존에 화면에 보이던 Cell은 스타일이 변하지 않고 그대로 남아있는 문제가 있었습니다. 따라서 버튼을 탭할 경우 이에 맞는 Layout을 생성하여 변경하고, `reloadData` 메서드를 호출하여 문제를 해결했습니다.
+- 문제점 : `UnderlinedMenuBar`를 탭해서 CollectionView의 Layout을 변경할 때, 기존에 화면에 보이던 Cell은 스타일이 변하지 않고 유지되는 문제가 있었습니다. 
+- 해결방법 : MenuBar를 탭할 경우 각 스타일에 해당하는 Layout을 생성 및 적용하고, `reloadData` 메서드를 호출했습니다.
 
 ### 2-3 키워드
 - CollectionView : DiffableDataSource, CompositionalLayout/estimatedHeight, Header/Footer
-- MVVM-C, FlowCoordinator
-- Custom MenuBar
-- Deactivate Layout
-
+- Architecture : MVVM-C, FlowCoordinator
+- UI : Build UI Programmatically, Deactivate Layout, Custom MenuBar
 
 ## 🛒 Feature-3. 상품 상세화면 구현
 ### 3-1 고민한 점 
 #### 1️⃣ orthogonalScrollingBehavior를 활용한 Pagination
-Section 마다 Scroll Direction을 다르게 지정하기 위해 고민했습니다. CollectionView의 main layout axis와 반대 방향으로 Scroll 되도록 설정할 수 있는 orthogonalScrollingBehavior을 활용했습니다.
-또한 Pagination을 구현하여 여러 개의 이미지가 있을 경우 화면 양 끝에 다른 이미지 일부가 보이도록 구현했습니다. 
+Section 마다 Scroll Direction을 다르게 지정하기 위해 고민했습니다. CollectionView의 main layout axis와 반대 방향으로 Scroll 되도록 설정할 수 있는 `orthogonalScrollingBehavior`을 활용했습니다.
+또한 상품 이미지를 나타낼 때, Pagination을 구현하여 화면 양 끝에 다른 이미지들의 일부가 보이도록 했습니다. 
 
 ### 3-2 Trouble Shooting
-#### 1️⃣ Sequence를 준수하는 Observable 타입을 Cell에 적용
-CollectionView의 Cell은 하나 이상 존재하기 때문에 Observable의 타입이 `Sequence` 프로토콜을 준수하는 Collection 타입이어야 했습니다. 따라서 `DetailViewProduct`를 받아 image의 배열을 타입으로 갖는 Observable을 새롭게 생성하여 이를 bind하는 방법으로 해결했습니다.
-
-#### 2️⃣ PageControl에 현재 페이지를 반영하는 기능
-CollectionView를 Horizontal Scroll할 때마다 현재 페이지를 파악하여 PageControl에 반영되도록 구현했습니다.
-기존에는 `collectionView(:willDisplay:forItemAt:)`와 `collectionView(:didEndDisplaying:forItemAt:`의 indexPath.row를 비교하여 둘이 다른 경우에 스크롤이 되었다고 판단하여 현재 페이지를 계산하는 로직을 사용했습니다. 
-
-하지만 이 경우 스크롤을 했을 때 제대로 인식이 되지 않는 문제가 있었습니다. 따라서 section의 `visibleItemsInvalidationHandler` 클로저를 활용해 현재 페이지를 알 수 있는 로직으로 변경했습니다.
+#### 1️⃣ Horizontal Scroll 시 현재 페이지를 PageControl에 반영
+- 문제점 : 상품 이미지를 CollectionView Pagination으로 나타내고, Horizontal Scroll을 할 때마다 현재 페이지가 PageControl에 반영되도록 구현했습니다. 기존에는 `collectionView(:willDisplay:forItemAt:)`와 `collectionView(:didEndDisplaying:forItemAt:`의 indexPath.row를 비교하여 둘이 다른 경우에 스크롤이 되었다고 판단하여 현재 페이지를 계산하는 로직을 사용했습니다. 하지만 이 경우 Horizontal Scroll을 부정확하게 인식하는 문제가 있었습니다. 
+- 해결방법 : section의 `visibleItemsInvalidationHandler` 클로저를 활용해 현재 페이지를 파악하도록 개선했습니다.
 
 ```swift
 section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
@@ -158,6 +141,6 @@ section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, enviro
 ```
 
 ### 3-3 키워드
-- Pagination, OrthogonalScrollingBehavior
+- CollectionView : Pagination, OrthogonalScrollingBehavior
 - PageControl
 - AttributedString
