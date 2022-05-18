@@ -1,48 +1,44 @@
-# RX/MVVM을 적용한 오픈마켓 프로젝트
+# MVVM/Rx를 적용한 오픈마켓 프로젝트
 
 ## 목차
-- [프로젝트 소개](#프로젝트-소개)
+- [🛒 프로젝트 소개](#프로젝트-소개)
     - [참여자](#참여자)
     - [프로젝트 기간](#프로젝트-기간)
-- [📱 구현 화면](#-구현-화면)
-- [🗺 Architecture](#-architecture)
-- [🗂 파일 디렉토리 구조](#-파일-디렉토리-구조)
-- [🌐 Feature-1. 네트워크 구현](#-Feature-1-네트워크-구현)
+- [🛒 구현 화면](#-구현-화면)
+- [🛒 Architecture](#-architecture)
+- [🛒 파일 디렉토리 구조](#-파일-디렉토리-구조)
+- [🛒 Feature-1. 네트워크 구현](#-feature-1-네트워크-구현)
     + [고민한 점](#1-1-고민한-점) 
-    + [Trouble Shooting](#1-2-Trouble-Shooting)
+    + [Trouble Shooting](#1-2-trouble-shooting)
     + [키워드](#1-3-키워드)
 
-- [🛍 Feature-2. 상품 목록 화면 구현](#-feature-2-상품-목록화면-구현)
+- [🛒 Feature-2. 상품 목록 화면 구현](#-feature-2-상품-목록화면-구현)
     + [고민한 점](#2-1-고민한-점)
-    + [Trouble Shooting](#2-2-Trouble-Shooting)
+    + [Trouble Shooting](#2-2-trouble-shooting)
     + [키워드](#2-3-키워드)
 
-- [🎁 Feature-3. 상품 상세화면 구현](#-Feature-3-상품-상세화면-구현)
+- [🛒 Feature-3. 상품 상세화면 구현](#-feature-3-상품-상세화면-구현)
     + [고민한 점](#3-1-고민한-점) 
-    + [Trouble Shooting](#3-2-Trouble-Shooting)
+    + [Trouble Shooting](#3-2-trouble-shooting)
     + [키워드](#3-3-키워드)
 
 
 ## 프로젝트 소개
 Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상품의 목록화면 및 상세화면을 보여줍니다.
-`RxSwift + MVVM-C`를 적용했습니다.
+`RxSwift` 및 `MVVM-C`를 적용했습니다.
 
-### 참여자
-- 호댕 @yanghojoon, 애플사이다 @just1103
+- 참여자 : 호댕 @yanghojoon, 애플사이다 @just1103
+- 프로젝트 기간 : 2022.04.20 - 2022.05.17 (총 4주)
 
-### 프로젝트 기간 
-- 2022.04.20 - 2022.05.17 (총 4주)
-
-## 📱 구현 화면
+## 🛒 구현 화면
 |1. MenuBar|2. 목록 스크롤|3. 다음 목록 업데이트|4. 신상품 추가 알림|5. 상품 상세|
 |-|-|-|-|-|
 |<img width="200" src="https://user-images.githubusercontent.com/90880660/168954925-72b87ded-3bde-48f9-b8ca-d1912f77cdc1.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954948-93e03109-6721-42dc-b6ca-2fb40548795c.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954930-64d8a698-a983-496b-85b7-3803b60d1869.gif">|<img width="200" src="https://i.imgur.com/ej6Iw9R.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954936-fdc34d74-6d4f-4d40-86f0-5b20861f2c75.gif">|
 
-
-## 🗺 Architecture
+## 🛒 Architecture
 ![image](https://user-images.githubusercontent.com/70856586/168956710-3186bbf6-7521-433b-a184-fb83dd3e25bb.png)
 
-## 🗂 파일 디렉토리 구조
+## 🛒 파일 디렉토리 구조
 ```
 ├── OpenMarket-MVVM-Rx
 │   ├── App
@@ -63,7 +59,7 @@ Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상�
     └──Mock
 ```
 
-## 🌐 Feature-1. 네트워크 구현
+## 🛒 Feature-1. 네트워크 구현
 ### 1-1 고민한 점
 #### 1️⃣ MockURLSession을 통한 테스트
 아래의 목적을 위해 `MockURLSession`을 구현했습니다.
@@ -99,7 +95,7 @@ API를 열거형으로 관리하는 경우, API를 추가할 때마다 새로운
 - Cache, Notification, Alert
 - Build UI Programmatically
 
-## 🛍 Feature-2. 상품 목록화면 구현
+## 🛒 Feature-2. 상품 목록화면 구현
 ### 2-1 고민한 점 
 #### 1️⃣ DiffableDataSource 및 Snapshot 활용
 상품 목록은 크게 `Banner Section` 및 `List Section`으로 구분했습니다. `DiffableDataSource`를 활용하여 `CollectionView`에 나타낼 데이터 타입 (UniqueProduct)은 `Hashable`을 채택하도록 했습니다. 또한 `HeaderView`를 통해 각 Section의 타이틀을 나타냈고, `Banner Section`의 `FooterView`를 통해 배너 이미지의 `PageControl`을 보여주도록 했습니다.
@@ -138,7 +134,7 @@ UnderlinedMenuBar 위치는 기존에는 NavigationBar의 `titleView`로 배치�
 - Deactivate Layout
 
 
-## 🎁 Feature-3. 상품 상세화면 구현
+## 🛒 Feature-3. 상품 상세화면 구현
 ### 3-1 고민한 점 
 #### 1️⃣ orthogonalScrollingBehavior를 활용한 Pagination
 Section 마다 Scroll Direction을 다르게 지정하기 위해 고민했습니다. CollectionView의 main layout axis와 반대 방향으로 Scroll 되도록 설정할 수 있는 orthogonalScrollingBehavior을 활용했습니다.
@@ -162,6 +158,6 @@ section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, enviro
 ```
 
 ### 3-3 키워드
-- orthogonalScrollingBehavior, Pagination
+- Pagination, OrthogonalScrollingBehavior
 - PageControl
 - AttributedString
