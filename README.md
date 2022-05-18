@@ -39,7 +39,7 @@ Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상�
 |<img width="200" src="https://user-images.githubusercontent.com/90880660/168954925-72b87ded-3bde-48f9-b8ca-d1912f77cdc1.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954948-93e03109-6721-42dc-b6ca-2fb40548795c.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954930-64d8a698-a983-496b-85b7-3803b60d1869.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954940-473857bd-f813-4e70-bc73-62d6296085b7.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954936-fdc34d74-6d4f-4d40-86f0-5b20861f2c75.gif">|
 
 ## 🗺 Architecture
-![](https://i.imgur.com/f2fUz1e.png)
+![image](https://user-images.githubusercontent.com/70856586/168956710-3186bbf6-7521-433b-a184-fb83dd3e25bb.png)
 
 ## 🗂 파일 디렉토리 구조
 ```
