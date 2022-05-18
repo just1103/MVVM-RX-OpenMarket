@@ -86,7 +86,7 @@ API를 열거형으로 관리하는 경우, API를 추가할 때마다 새로운
 
 이외에도 테스트 코드 내부에서 옵셔널 바인딩을 하는 경우 else문에 `XCTFail()`을 추가하여 예상 결과값이 반환되지 않았음에도 테스트를 Pass하는 오류를 방지했습니다.
 
-#### 2️⃣ Rx를 사용한 네트워크 처리 시 Subscribe 최소화
+#### 2️⃣ Rx를 사용한 네트워크 처리 시 불필요한 Subscribe 삭제
 기존에는 `loadData()`, `request(api:)`, `fetchData<T: Codable>(api:decodingType:)`으로 나누어 해당 메서드에서 전부 Observable을 create하고 순차적으로 `subscribe`를 하여 네트워크를 처리하는 방법을 사용했습니다. 이때 `subscribe`를 최소화하는 방향으로 개선하려 했으나, 단순히 `map`을 사용해 데이터를 가공하고 넘겨주는 경우 `onError`를 통해 발생하는 에러를 처리하지 못하는 문제가 존재했습니다.
 
 이에 따라 데이터를 받아오는 `fetchData<T: Codable>(api:decodingType:)`와 데이터를 요청하는 `request(api:)`메서드로 분리하고, `dataTask<T:Codable>(api:emitter:)`메서드에서 `URLSession`의 `dataTask` 메서드를 실행시켜 에러를 던지도록 개선했습니다.
