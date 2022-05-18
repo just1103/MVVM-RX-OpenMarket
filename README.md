@@ -36,7 +36,8 @@ Network 통신을 통해 서버에서 데이터를 받아 CollectionView로 상�
 ## 📱 구현 화면
 |1. MenuBar|2. 목록 스크롤|3. 다음 목록 업데이트|4. 신상품 추가 알림|5. 상품 상세|
 |-|-|-|-|-|
-|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954925-72b87ded-3bde-48f9-b8ca-d1912f77cdc1.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954948-93e03109-6721-42dc-b6ca-2fb40548795c.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954930-64d8a698-a983-496b-85b7-3803b60d1869.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954940-473857bd-f813-4e70-bc73-62d6296085b7.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954936-fdc34d74-6d4f-4d40-86f0-5b20861f2c75.gif">|
+|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954925-72b87ded-3bde-48f9-b8ca-d1912f77cdc1.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954948-93e03109-6721-42dc-b6ca-2fb40548795c.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954930-64d8a698-a983-496b-85b7-3803b60d1869.gif">|<img width="200" src="https://i.imgur.com/ej6Iw9R.gif">|<img width="200" src="https://user-images.githubusercontent.com/90880660/168954936-fdc34d74-6d4f-4d40-86f0-5b20861f2c75.gif">|
+
 
 ## 🗺 Architecture
 ![image](https://user-images.githubusercontent.com/70856586/168956710-3186bbf6-7521-433b-a184-fb83dd3e25bb.png)
