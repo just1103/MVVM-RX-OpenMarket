@@ -2,7 +2,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-final class MenuSegmentedControl: UIView {
+final class UnderlinedMenuBar: UIView {
     // MARK: - Properties
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -38,7 +38,7 @@ final class MenuSegmentedControl: UIView {
         return view
     }()
     
-    private(set) var viewModel: MenuSegmentedControlViewModel!
+    private(set) var viewModel: UnderlinedMenuBarViewModel!
     private let disposeBag = DisposeBag()
     private lazy var selectorViewTableButtonConstraints = [
         self.selectorView.leadingAnchor.constraint(equalTo: self.tableButton.leadingAnchor),
@@ -50,7 +50,7 @@ final class MenuSegmentedControl: UIView {
     ]
     
     // MARK: - Initializers
-    convenience init(viewModel: MenuSegmentedControlViewModel) {
+    convenience init(viewModel: UnderlinedMenuBarViewModel) {
         self.init()
         self.viewModel = viewModel
         configureUI()
@@ -76,7 +76,7 @@ final class MenuSegmentedControl: UIView {
     }
     
     func bind() {
-        let input = MenuSegmentedControlViewModel.Input(gridButtonDidTap: gridButton.rx.tap.asObservable(), 
+        let input = UnderlinedMenuBarViewModel.Input(gridButtonDidTap: gridButton.rx.tap.asObservable(), 
                                                         tableButtonDidTap: tableButton.rx.tap.asObservable())
         
         let output = viewModel.transform(input)
@@ -96,7 +96,7 @@ final class MenuSegmentedControl: UIView {
             .disposed(by: disposeBag)
     }
     
-    private func changeSelectedUI(sender: MenuSegmentedControlViewModel.MenuButton) {
+    private func changeSelectedUI(sender: UnderlinedMenuBarViewModel.MenuButton) {
         switch sender {
         case .grid:
             gridButton.setTitleColor(Design.highlightedButtonTitleColor, for: .normal)
@@ -127,7 +127,7 @@ final class MenuSegmentedControl: UIView {
 }
 
 // MARK: - NameSpaces
-extension MenuSegmentedControl {
+extension UnderlinedMenuBar {
     private enum Content {
         static let gridButtonTitle = "Grid로 보기"
         static let tableButtonTitle = "Table로 보기"

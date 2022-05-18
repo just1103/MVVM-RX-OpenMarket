@@ -29,8 +29,8 @@
 		36C0C09228127FE600B57492 /* MockProduct.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09028127FE600B57492 /* MockProduct.json */; };
 		36C0C09328127FE600B57492 /* MockProductPage.json in Resources */ = {isa = PBXBuildFile; fileRef = 36C0C09128127FE600B57492 /* MockProductPage.json */; };
 		36C0C095281287EE00B57492 /* NetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C0C094281287EE00B57492 /* NetworkProviderTests.swift */; };
-		36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */; };
-		36F5422D2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422C2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift */; };
+		36F5422B28221A94008EB7F8 /* UnderlinedMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422A28221A94008EB7F8 /* UnderlinedMenuBar.swift */; };
+		36F5422D2823CADA008EB7F8 /* UnderlinedMenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5422C2823CADA008EB7F8 /* UnderlinedMenuBarViewModel.swift */; };
 		DE23D43F281149690097A8C3 /* MockNetworkProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */; };
 		DE84B4A5282E43990098E2B8 /* AlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE84B4A4282E43990098E2B8 /* AlertFactory.swift */; };
 		DEB9B4B4282DEB3300A0953B /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9B4B3282DEB3300A0953B /* CustomColor.swift */; };
@@ -91,8 +91,8 @@
 		36C0C09028127FE600B57492 /* MockProduct.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProduct.json; sourceTree = "<group>"; };
 		36C0C09128127FE600B57492 /* MockProductPage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MockProductPage.json; sourceTree = "<group>"; };
 		36C0C094281287EE00B57492 /* NetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProviderTests.swift; sourceTree = "<group>"; };
-		36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSegmentedControl.swift; sourceTree = "<group>"; };
-		36F5422C2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSegmentedControlViewModel.swift; sourceTree = "<group>"; };
+		36F5422A28221A94008EB7F8 /* UnderlinedMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedMenuBar.swift; sourceTree = "<group>"; };
+		36F5422C2823CADA008EB7F8 /* UnderlinedMenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedMenuBarViewModel.swift; sourceTree = "<group>"; };
 		DE23D43C281149690097A8C3 /* NetworkProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE23D43E281149690097A8C3 /* MockNetworkProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkProviderTests.swift; sourceTree = "<group>"; };
 		DE23D44A281149DA0097A8C3 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
@@ -329,7 +329,7 @@
 				3625D0F42816C6EB00CD5043 /* BannerCell.swift */,
 				3625D0F62816C6F700CD5043 /* TableListCell.swift */,
 				3625D0F82816C70600CD5043 /* GridListCell.swift */,
-				36F5422A28221A94008EB7F8 /* MenuSegmentedControl.swift */,
+				36F5422A28221A94008EB7F8 /* UnderlinedMenuBar.swift */,
 				DEE6913B2828E874009BA91D /* HeaderView.swift */,
 				DEE6913F2829139D009BA91D /* FooterView.swift */,
 			);
@@ -340,7 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				DECD164F281672DD00F34993 /* ProductListViewModel.swift */,
-				36F5422C2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift */,
+				36F5422C2823CADA008EB7F8 /* UnderlinedMenuBarViewModel.swift */,
 				36B1D577282A16EA00999EC7 /* ProductListViewModelAction.swift */,
 			);
 			path = ViewModel;
@@ -490,7 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36F5422D2823CADA008EB7F8 /* MenuSegmentedControlViewModel.swift in Sources */,
+				36F5422D2823CADA008EB7F8 /* UnderlinedMenuBarViewModel.swift in Sources */,
 				DEB9B4B6282DECF400A0953B /* UIStackView+Style.swift in Sources */,
 				DEC3428C281030330046D916 /* URLSessionProtocol.swift in Sources */,
 				DEC3428528100E7F0046D916 /* DetailViewProduct.swift in Sources */,
@@ -525,7 +525,7 @@
 				DEC3428E281034400046D916 /* BaseURLProtocol.swift in Sources */,
 				3625D0F52816C6EB00CD5043 /* BannerCell.swift in Sources */,
 				3625D0FB2816D40300CD5043 /* Double+DecimalFormat.swift in Sources */,
-				36F5422B28221A94008EB7F8 /* MenuSegmentedControl.swift in Sources */,
+				36F5422B28221A94008EB7F8 /* UnderlinedMenuBar.swift in Sources */,
 				3625D0FD2816D40E00CD5043 /* UILabel+Style.swift in Sources */,
 				3625D0F92816C70600CD5043 /* GridListCell.swift in Sources */,
 			);
@@ -559,7 +559,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FA464JRW3F;
+				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -578,7 +578,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FA464JRW3F;
+				DEVELOPMENT_TEAM = XD7KFVM4LP;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -641,6 +641,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -695,6 +696,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -717,6 +719,7 @@
 				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -744,6 +747,7 @@
 				INFOPLIST_FILE = "OpenMarket-MVVM-Rx/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

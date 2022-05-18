@@ -5,8 +5,8 @@ class FlowCoordinator {
     weak private var navigationController: UINavigationController?
     private var productListViewController: ProductListViewController!
     private var productListViewModel: ProductListViewModel!
-    private var menuSegmentedControl: MenuSegmentedControl!
-    private var menuSegmentedControlViewModel: MenuSegmentedControlViewModel!
+    private var underlinedMenuBar: UnderlinedMenuBar!
+    private var underlinedMenuBarViewModel: UnderlinedMenuBarViewModel!
     
     // MARK: - Initializers
     init(navigationController: UINavigationController) {
@@ -18,11 +18,11 @@ class FlowCoordinator {
         let actions = ProductListViewModelAction(showProductDetail: showProductDetail)
         
         productListViewModel = ProductListViewModel(actions: actions)
-        menuSegmentedControlViewModel = MenuSegmentedControlViewModel()
-        menuSegmentedControl = MenuSegmentedControl(viewModel: menuSegmentedControlViewModel)
+        underlinedMenuBarViewModel = UnderlinedMenuBarViewModel()
+        underlinedMenuBar = UnderlinedMenuBar(viewModel: underlinedMenuBarViewModel)
         productListViewController = ProductListViewController(viewModel: productListViewModel,
-                                                              menuSegmentedControl: menuSegmentedControl)
-        menuSegmentedControlViewModel.delegate = productListViewController
+                                                              underlinedMenuBar: underlinedMenuBar)
+        underlinedMenuBarViewModel.delegate = productListViewController
 
         navigationController?.pushViewController(productListViewController, animated: false)
     }

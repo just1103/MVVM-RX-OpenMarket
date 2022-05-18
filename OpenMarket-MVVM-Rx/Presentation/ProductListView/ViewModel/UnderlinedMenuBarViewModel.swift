@@ -1,11 +1,11 @@
 import Foundation
 import RxSwift
 
-protocol MenuSegmentedControllViewModelDelegate: AnyObject {
-    func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton)
+protocol UnderlinedMenuBarViewModelDelegate: AnyObject {
+    func underlinedMenuBarTapped(_ currentSelectedButton: UnderlinedMenuBarViewModel.MenuButton)
 }
 
-final class MenuSegmentedControlViewModel {
+final class UnderlinedMenuBarViewModel {
     // MARK: - Nested Types
     enum MenuButton {
         case table
@@ -23,7 +23,7 @@ final class MenuSegmentedControlViewModel {
     }
     
     // MARK: - Properties
-    weak var delegate: MenuSegmentedControllViewModelDelegate?
+    weak var delegate: UnderlinedMenuBarViewModelDelegate?
     private(set) var currentSelectedButton: MenuButton = .grid
     private let disposeBag = DisposeBag()
     
@@ -42,7 +42,7 @@ final class MenuSegmentedControlViewModel {
         return inputObservable
             .map { [weak self] _ in
                 if self?.currentSelectedButton == .table {
-                    self?.delegate?.segmentedControlTapped(.grid)
+                    self?.delegate?.underlinedMenuBarTapped(.grid)
                 }
                 self?.currentSelectedButton = .grid
             }
@@ -52,7 +52,7 @@ final class MenuSegmentedControlViewModel {
         inputObservable
             .map { [weak self] _ in
                 if self?.currentSelectedButton == .grid {
-                    self?.delegate?.segmentedControlTapped(.table)
+                    self?.delegate?.underlinedMenuBarTapped(.table)
                 }
                 self?.currentSelectedButton = .table
             }

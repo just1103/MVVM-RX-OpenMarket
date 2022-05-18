@@ -64,7 +64,7 @@ final class ProductListViewController: UIViewController {
     private static var isGrid: Bool = true
     private var previousBannerPage: Int = 0
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private var menuSegmentedControl: MenuSegmentedControl!
+    private var underlinedMenuBar: UnderlinedMenuBar!
     private var dataSource: DiffableDataSource!
     private var snapshot: NSDiffableDataSourceSnapshot<SectionKind, UniqueProduct>!
     private var viewModel: ProductListViewModel!
@@ -81,10 +81,10 @@ final class ProductListViewController: UIViewController {
     private typealias FooterRegistration = UICollectionView.SupplementaryRegistration<FooterView>
     
     // MARK: - Initializer
-    convenience init(viewModel: ProductListViewModel, menuSegmentedControl: MenuSegmentedControl) {
+    convenience init(viewModel: ProductListViewModel, underlinedMenuBar: UnderlinedMenuBar) {
         self.init()
         self.viewModel = viewModel
-        self.menuSegmentedControl = menuSegmentedControl
+        self.underlinedMenuBar = underlinedMenuBar
     }
 
     // MARK: - Lifecycle Methods
@@ -142,18 +142,18 @@ final class ProductListViewController: UIViewController {
     }
     
     private func configureStackView() {
-        view.addSubview(menuSegmentedControl)
+        view.addSubview(underlinedMenuBar)
         view.addSubview(containerStackView)
         containerStackView.addArrangedSubview(listRefreshButton)
         containerStackView.addArrangedSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            menuSegmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuSegmentedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+            underlinedMenuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            underlinedMenuBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                           constant: 20),
-            menuSegmentedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+            underlinedMenuBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                            constant: -20),
-            menuSegmentedControl.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
+            underlinedMenuBar.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
@@ -382,9 +382,9 @@ extension ProductListViewController {
     }
 }
 
-// MARK: - MenuSegmentedControllViewModelDelegate
-extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
-    func segmentedControlTapped(_ currentSelectedButton: MenuSegmentedControlViewModel.MenuButton) {
+// MARK: - UnderlinedMenuBar ViewModelDelegate
+extension ProductListViewController: UnderlinedMenuBarViewModelDelegate {
+    func underlinedMenuBarTapped(_ currentSelectedButton: UnderlinedMenuBarViewModel.MenuButton) {
         switch currentSelectedButton {
         case .grid:
             ProductListViewController.isGrid = true
@@ -400,7 +400,7 @@ extension ProductListViewController: MenuSegmentedControllViewModelDelegate {
     }
 }
 
-// MARK: - CollectionViewDelegate
+// MARK: - CollectionView Delegate
 extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.section == 1 {
