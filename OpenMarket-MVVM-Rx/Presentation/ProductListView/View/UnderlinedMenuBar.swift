@@ -56,7 +56,7 @@ final class UnderlinedMenuBar: UIView {
         configureUI()
         bind()
     }
-
+    
     // MARK: - Methods
     private func configureUI() {
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +77,7 @@ final class UnderlinedMenuBar: UIView {
     
     func bind() {
         let input = UnderlinedMenuBarViewModel.Input(gridButtonDidTap: gridButton.rx.tap.asObservable(), 
-                                                        tableButtonDidTap: tableButton.rx.tap.asObservable())
+                                                     tableButtonDidTap: tableButton.rx.tap.asObservable())
         
         let output = viewModel.transform(input)
         

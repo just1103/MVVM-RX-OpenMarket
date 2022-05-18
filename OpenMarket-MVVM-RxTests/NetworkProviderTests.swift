@@ -5,23 +5,23 @@ import RxSwift
 class NetworkProviderTests: XCTestCase {
     var sut: NetworkProvider!
     var disposeBag: DisposeBag!
-
+    
     override func setUpWithError() throws {
         try super.setUpWithError()
         sut = NetworkProvider()
         disposeBag = DisposeBag()
     }
-
+    
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         sut = nil
         disposeBag = nil
     }
-  
+    
     // 서버 용량 제한으로 해당 id가 자동 삭제되어 테스트 Fail 발생 가능
     func test_getProductDetail가_정상작동_하는지() {
         let expectation = XCTestExpectation(description: "getProductDetail 비동기 테스트")
-
+        
         let observable = sut.fetchData(api: ProductDetailAPI(id: 600), decodingType: Product.self)
         _ = observable.subscribe(onNext: { product in
             XCTAssertEqual(product.id, 600)
@@ -29,13 +29,13 @@ class NetworkProviderTests: XCTestCase {
             expectation.fulfill()
         })
         .disposed(by: disposeBag)
-
+        
         wait(for: [expectation], timeout: 10.0)
     }
     
     func test_getProductPage가_정상작동_하는지() {
         let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
-
+        
         let observableData = sut.fetchData(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 10), decodingType: ProductPage.self)
         _ = observableData.subscribe(onNext: { productPage in
             XCTAssertEqual(productPage.pageNumber, 1)
@@ -54,7 +54,7 @@ class NetworkProviderTests: XCTestCase {
             var url: URL? = URL(string: "wrongURL")
             var method: HttpMethod = .get
         }
-
+        
         let observableData = sut.fetchData(api: TestAPI(), decodingType: ProductPage.self)
         _ = observableData.subscribe(onError: { error in
             XCTAssertEqual(error as? NetworkError, NetworkError.statusCodeError)
@@ -72,7 +72,7 @@ class NetworkProviderTests: XCTestCase {
             var url: URL?
             var method: HttpMethod = .get
         }
-
+        
         let observableData = sut.fetchData(api: TestAPI(), decodingType: ProductPage.self)
         _ = observableData.subscribe(onError: { error in
             XCTAssertEqual(error as? NetworkError, NetworkError.urlIsNil)
@@ -86,7 +86,7 @@ class NetworkProviderTests: XCTestCase {
     // 첫번째 프로덕트가 갱신될 수 있어 테스트 Fail 발생 가능
     func test_fetchData가_정상작동_하는지() {
         let expectation = XCTestExpectation(description: "getProductPage 비동기 테스트")
-
+        
         let observableData = sut.fetchData(api: ProductPageAPI(pageNumber: 1, itemsPerPage: 10),
                                            decodingType: ProductPage.self)
         _ = observableData.subscribe(onNext: { productPage in

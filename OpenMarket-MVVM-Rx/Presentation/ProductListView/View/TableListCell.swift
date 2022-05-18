@@ -139,7 +139,7 @@ final class TableListCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.2)
         ])
     }
-
+    
     private func changePriceAndDiscountedPriceLabel(price: Double,
                                                     discountedPrice: Double,
                                                     bargainPrice: Double,

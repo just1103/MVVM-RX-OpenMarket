@@ -160,7 +160,7 @@ final class ProductDetailViewController: UIViewController {
         view.backgroundColor = CustomColor.darkGreenColor
         view.addSubview(scrollView)
         scrollView.addSubview(containerStackView)
-
+        
         containerStackView.addArrangedSubview(imageCollectionView)
         containerStackView.addArrangedSubview(imagePageControl)
         containerStackView.addArrangedSubview(productInformationStackView)
@@ -186,7 +186,7 @@ final class ProductDetailViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             containerStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
             containerStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -274,17 +274,16 @@ extension ProductDetailViewController {
     private func configureProductDetail(with productDetail: Observable<DetailViewProduct>) {
         productDetail
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] productDetail in
-                guard let self = self else { return }
+            .flatMap { productDetail -> Observable<[ProductImage]> in
                 self.apply(data: productDetail)
-                let imagesObservable = Observable.just(productDetail.images)
-                _ = imagesObservable
-                    .bind(to: self.imageCollectionView.rx.items(cellIdentifier: String(describing: ProductDetailImageCell.self),
-                                                           cellType: ProductDetailImageCell.self)) { _, item, cell in
-                        cell.apply(with: item.url)
-                    }
-            })
-            .disposed(by: disposeBag)
+                return Observable.just(productDetail.images)
+            }
+            .bind(to: self.imageCollectionView.rx.items(
+                cellIdentifier: String(describing: ProductDetailImageCell.self),
+                cellType: ProductDetailImageCell.self)) { _, item, cell in
+                    cell.apply(with: item.url)
+                }
+                .disposed(by: disposeBag)
     }
     
     private func apply(data: DetailViewProduct) {

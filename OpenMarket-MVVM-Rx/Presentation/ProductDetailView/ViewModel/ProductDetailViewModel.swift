@@ -41,7 +41,7 @@ class ProductDetailViewModel {
     private func fetchProduct(with id: Int) -> Observable<DetailViewProduct> {
         let networkProvider = NetworkProvider()
         let observable = networkProvider.fetchData(api: ProductDetailAPI(id: id), decodingType: DetailViewProduct.self)
-                                        
+        
         return observable
     }
 }

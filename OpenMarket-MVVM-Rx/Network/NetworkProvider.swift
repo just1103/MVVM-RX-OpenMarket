@@ -25,7 +25,7 @@ struct NetworkProvider {
     init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
- 
+    
     func fetchData<T: Codable>(api: Gettable, decodingType: T.Type) -> Observable<T> {
         return Observable.create { emitter in
             guard let task = dataTask(api: api, emitter: emitter) else {
@@ -45,7 +45,7 @@ struct NetworkProvider {
                 return Disposables.create()
             }
             task.resume()
-
+            
             return Disposables.create {
                 task.cancel()
             }

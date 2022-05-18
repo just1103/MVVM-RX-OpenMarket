@@ -13,7 +13,7 @@ struct ProductPage: Codable {
     
     private enum CodingKeys: String, CodingKey {
         case itemsPerPage, totalCount, offset, limit, lastPage
-
+        
         case products = "pages"
         case pageNumber = "pageNo"
         case hasNextPage = "hasNext"

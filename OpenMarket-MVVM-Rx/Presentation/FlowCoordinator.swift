@@ -23,7 +23,7 @@ class FlowCoordinator {
         productListViewController = ProductListViewController(viewModel: productListViewModel,
                                                               underlinedMenuBar: underlinedMenuBar)
         underlinedMenuBarViewModel.delegate = productListViewController
-
+        
         navigationController?.pushViewController(productListViewController, animated: false)
     }
     

@@ -74,11 +74,9 @@ enum ContentDisposition {
     var bodyComponent: String {
         switch self {
         case .formData(let params):
-            return "Content-Disposition: form-data; name=\"\(params)\""
-                    + EncodingCharacters.doubleNewLine
+            return "Content-Disposition: form-data; name=\"\(params)\"" + EncodingCharacters.doubleNewLine
         case .imageFormData(let name, let filename):
-            return "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\""
-                    + EncodingCharacters.newLine
+            return "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"" + EncodingCharacters.newLine
         case .imageContentType(let type):
             return "Content-Type: \(type.description)" + EncodingCharacters.doubleNewLine
         }

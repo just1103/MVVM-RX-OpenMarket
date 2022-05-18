@@ -14,11 +14,11 @@ class MockURLSessionDataTask: URLSessionDataTask {
 class MockURLSession: URLSessionProtocol {
     var isRequestSuccess: Bool
     var sessionDataTask: MockURLSessionDataTask?
-
+    
     init(isRequestSuccess: Bool = true) {
         self.isRequestSuccess = isRequestSuccess
     }
-
+    
     func dataTask(with request: URLRequest,
                   completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         let sucessResponse = HTTPURLResponse(url: request.url!,
@@ -29,15 +29,15 @@ class MockURLSession: URLSessionProtocol {
                                               statusCode: 402,
                                               httpVersion: "2",
                                               headerFields: nil)
-
+        
         let sessionDataTask = MockURLSessionDataTask()
-
+        
         guard let path = Bundle(for: type(of: self)).path(forResource: "MockProduct", ofType: "json"),
               let jsonString = try? String(contentsOfFile: path) else {
-                  fatalError()
-              }
+            fatalError()
+        }
         let data = jsonString.data(using: .utf8)
-
+        
         if isRequestSuccess {
             sessionDataTask.resumeDidCall = {
                 completionHandler(data, sucessResponse, nil)

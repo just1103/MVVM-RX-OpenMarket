@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return .portrait
     }
-
+    
     // MARK: - UISceneSession Lifecycle
     func application(_ application: UIApplication,
                      configurationForConnecting connectingSceneSession: UISceneSession,

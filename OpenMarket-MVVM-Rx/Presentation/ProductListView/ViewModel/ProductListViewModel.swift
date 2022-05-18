@@ -40,7 +40,7 @@ final class ProductListViewModel {
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
         configureCellDidSelectObserver(by: input.cellDidSelect)
-
+        
         let output = Output(products: products,
                             newProductDidPost: newProductDidPost.asObservable(),
                             newPostedProducts: newPostedProducts,

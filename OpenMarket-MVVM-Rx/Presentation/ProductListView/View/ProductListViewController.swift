@@ -35,7 +35,7 @@ final class ProductListViewController: UIViewController {
             }
         }
     }
-        
+    
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
@@ -86,7 +86,7 @@ final class ProductListViewController: UIViewController {
         self.viewModel = viewModel
         self.underlinedMenuBar = underlinedMenuBar
     }
-
+    
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,16 +150,16 @@ final class ProductListViewController: UIViewController {
         NSLayoutConstraint.activate([
             underlinedMenuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             underlinedMenuBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                                                          constant: 20),
+                                                       constant: 20),
             underlinedMenuBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                                                           constant: -20),
+                                                        constant: -20),
             underlinedMenuBar.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
-        
+    
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -180,8 +180,8 @@ final class ProductListViewController: UIViewController {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: estimatedHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                         subitem: item,
-                                                         count: sectionKind.columnCount)
+                                                           subitem: item,
+                                                           count: sectionKind.columnCount)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
             section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
@@ -257,25 +257,25 @@ final class ProductListViewController: UIViewController {
         let footerRegistration = FooterRegistration(elementKind: SupplementaryKind.footer) { [weak self] view, _, indexPath in
             guard let self = self else { return }
             view.bind(input: self.currentBannerPage.asObservable(),
-                                   indexPath: indexPath,
-                                   pageNumber: Content.bannerCount)
+                      indexPath: indexPath,
+                      pageNumber: Content.bannerCount)
         }
         
         dataSource.supplementaryViewProvider = { [weak self] _, kind, index in
             switch kind {
             case SupplementaryKind.header:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration,
-                                                                                  for: index)
+                                                                                   for: index)
             case SupplementaryKind.footer:
                 return self?.collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration,
-                                                                                  for: index)
+                                                                                   for: index)
             default:
                 return UICollectionReusableView()
             }
         }
     }
 }
-    
+
 // MARK: - Rx Binding Methods
 extension ProductListViewController {
     private func bind() {
@@ -302,7 +302,7 @@ extension ProductListViewController {
                                                cellDidSelect: selectedCellObservable)
         
         let output = viewModel.transform(input)
-
+        
         configureItemsWith(output.products)
         showListRefreshButton(output.newProductDidPost)
         configureNewPostedItemsWith(output.newPostedProducts)
@@ -371,7 +371,7 @@ extension ProductListViewController {
         snapshot.appendItems(listProducts, toSection: .list)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
-        
+    
     private func configureNextPageItemsWith(_ nextPageProducts: Observable<[UniqueProduct]>) {
         nextPageProducts
             .observe(on: MainScheduler.instance)

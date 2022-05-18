@@ -9,7 +9,7 @@ class ProductListViewModelTests: XCTestCase {
         func mockAction(_ input: Int) { }
         sut = ProductListViewModel(actions: ProductListViewModelAction(showProductDetail: mockAction))
     }
-
+    
     override func tearDownWithError() throws {
         sut = nil
     }
