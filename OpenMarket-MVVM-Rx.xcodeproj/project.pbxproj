@@ -192,7 +192,7 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		36C0A082281027580031C83C /* Extensions */ = {
+		36C0A082281027580031C83C /* Extension */ = {
 			isa = PBXGroup;
 			children = (
 				36C0A083281028040031C83C /* DateFormatter+DateFormat.swift */,
@@ -202,7 +202,7 @@
 				3625D0FE2816D51000CD5043 /* UIImageView+Load+Cache.swift */,
 				DEB9B4B5282DECF400A0953B /* UIStackView+Style.swift */,
 			);
-			path = Extensions;
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		36C0C0962812A5B900B57492 /* Mock */ = {
@@ -255,8 +255,8 @@
 				DEC3427D281009300046D916 /* Model */,
 				36C0A081281027310031C83C /* Utility */,
 				DEC3428A28102FEC0046D916 /* Protocol */,
-				36C0A082281027580031C83C /* Extensions */,
-				DEC3427C2810085B0046D916 /* Resources */,
+				36C0A082281027580031C83C /* Extension */,
+				DEC3427C2810085B0046D916 /* Resource */,
 				DEC3426B280FDC650046D916 /* Info.plist */,
 			);
 			path = "OpenMarket-MVVM-Rx";
@@ -271,13 +271,13 @@
 			path = App;
 			sourceTree = "<group>";
 		};
-		DEC3427C2810085B0046D916 /* Resources */ = {
+		DEC3427C2810085B0046D916 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
 				DEC34266280FDC650046D916 /* Assets.xcassets */,
 				DEC34268280FDC650046D916 /* LaunchScreen.storyboard */,
 			);
-			path = Resources;
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		DEC3427D281009300046D916 /* Model */ = {
