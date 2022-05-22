@@ -150,7 +150,7 @@ final class ProductListViewModel {
             .disposed(by: disposeBag)
     }
     
-    // MARK: - 테스트코드
+    // MARK: - TestCodes
     @available(*, deprecated, message: "테스트에서만 호출할 코드입니다.")
     func test_fetchProducts() -> Observable<ProductPage> {
         return fetchProducts(at: 1, with: 20)

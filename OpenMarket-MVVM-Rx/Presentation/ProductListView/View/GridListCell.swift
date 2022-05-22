@@ -105,12 +105,6 @@ final class GridListCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(containerStackView)
-        NSLayoutConstraint.activate([
-            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
-            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
         containerStackView.addArrangedSubview(imageView)
         containerStackView.addArrangedSubview(nameAndStockStackView)
         containerStackView.addArrangedSubview(priceContainerStackView)
@@ -122,6 +116,13 @@ final class GridListCell: UICollectionViewCell {
         priceContainerStackView.addArrangedSubview(bargainRateLabel)
         priceAndBargainpriceStackView.addArrangedSubview(bargainPriceLabel)
         priceAndBargainpriceStackView.addArrangedSubview(priceLabel)
+        
+        NSLayoutConstraint.activate([
+            containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
     
     private func changePriceAndDiscountedPriceLabel(price: Double,

@@ -80,7 +80,7 @@ final class ProductListViewController: UIViewController {
     private typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<HeaderView>
     private typealias FooterRegistration = UICollectionView.SupplementaryRegistration<FooterView>
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     convenience init(viewModel: ProductListViewModel, underlinedMenuBar: UnderlinedMenuBar) {
         self.init()
         self.viewModel = viewModel
