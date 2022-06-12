@@ -51,15 +51,6 @@ final class ProductListViewController: UIViewController {
         button.isHidden = true
         return button
     }()
-    private let bannerPageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
-        pageControl.numberOfPages = Content.bannerCount
-        pageControl.currentPage = 0
-        return pageControl
-    }()
     
     private static var isGrid: Bool = true
     private var previousBannerPage: Int = 0
