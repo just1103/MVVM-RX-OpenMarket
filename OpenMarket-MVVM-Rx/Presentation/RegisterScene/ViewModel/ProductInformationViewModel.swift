@@ -12,42 +12,48 @@ final class ProductInformationViewModel {
     // MARK: - Nested Types
     struct Input {
         let invokedViewDidLoad: Observable<Void>
-        let leftBarButtonDidTap: Observable<Void>
-        let rightBarButtonDidTap: Observable<Void>
+        let leftBarButtonDidTap: Observable<Void>?
+        let rightBarButtonDidTap: Observable<Void>?
     }
     
     struct Output {
-        let productDetail: Observable<UniqueProduct>
+//        let productDetail: Observable<UniqueProduct>
     }
     
     // MARK: - Properties
     private weak var coordinator: ProductInformationCoordinator!
+    private let productInformationKind: ProductInformationKind!
     private var productDetail: UniqueProduct?
     private let disposeBag = DisposeBag()
-    private var productImages: [UIImage]?
+    private(set) var productImages: [UIImage]?
     
     // MARK: - Initializers
-    init(coordinator: ProductInformationCoordinator) {
+    init(coordinator: ProductInformationCoordinator, kind: ProductInformationKind) {
         self.coordinator = coordinator
+        self.productInformationKind = kind
+    }
+    
+    deinit {
+        coordinator.finish()
     }
     
     // MARK: - Methods
-//    func transform(_ input: Input) -> Output {
+    func transform(_ input: Input) -> Output {
 //        let products = configureViewDidLoadObserver(by: input.invokedViewDidLoad)
 //        let newProductDidPost = PublishSubject<Void>()
 //        let newPostedProducts = configureListRefreshButtonObserver(by: input.listRefreshButtonDidTap)
 //        let nextPageProducts = configureCellDidScrollObserver(by: input.cellDidScroll)
 //
+        configureLeftBarButtonDidTapObserver(by: input.leftBarButtonDidTap)
+        configureRightBarButtonDidTapObserver(by: input.rightBarButtonDidTap)
 //        configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
 //        configureCellDidSelectObserver(by: input.cellDidSelect)
 //
-//        let output = Output(products: products,
-//                            newProductDidPost: newProductDidPost.asObservable(),
-//                            newPostedProducts: newPostedProducts,
-//                            nextPageProducts: nextPageProducts)
-//
-//        return output
-//    }
+//        let output = Output(productDetail: Observable<UniqueProduct>)
+        let output = Output()
+        
+        return output
+    }
 //
 //    private func configureViewDidLoadObserver(by inputObserver: Observable<Void>) -> Observable<([UniqueProduct], [UniqueProduct])> {
 //        return inputObserver
@@ -155,4 +161,27 @@ final class ProductInformationViewModel {
 //            })
 //            .disposed(by: disposeBag)
 //    }
+    
+    private func configureLeftBarButtonDidTapObserver(by inputObserver: Observable<Void>?) {
+        inputObserver?
+            .subscribe(onNext: { [weak self] in
+                self?.coordinator.popCurrentPage()
+        })
+        .disposed(by: disposeBag)
+    }
+
+    private func configureRightBarButtonDidTapObserver(by inputObserver: Observable<Void>?) {
+        inputObserver?
+            .subscribe(onNext: { [weak self] in
+
+//                switch result {
+//                case .success(let success):
+//                    viewModel.
+//                case .failure(let error):
+        
+
+        })
+        .disposed(by: disposeBag)
+    }
+
 }

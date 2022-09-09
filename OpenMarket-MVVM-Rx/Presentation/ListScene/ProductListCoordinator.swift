@@ -40,6 +40,14 @@ final class ProductListCoordinator: CoordinatorProtocol {
     
     func showProductRegisterScene() {
         guard let navigationController = navigationController else { return }
+        let productInformationCoordinator = ProductInformationCoordinator(
+            navigationController: navigationController,
+            kind: .register
+        )
+        productInformationCoordinator.delegate = self
+        childCoordinators.append(productInformationCoordinator)
+        productInformationCoordinator.start()
+
 //        let productDetailCoordinator = ProductRegisterCoordinator(navigationController: navigationController)
 //        productDetailCoordinator.delegate = self
 //        childCoordinators.append(productDetailCoordinator)
@@ -47,7 +55,7 @@ final class ProductListCoordinator: CoordinatorProtocol {
     }
 }
 
-extension ProductListCoordinator: ProductDetailCoordinatorDelegate {
+extension ProductListCoordinator: ProductDetailCoordinatorDelegate, ProductInformationCoordinatorDelegate {
     func removeFromChildCoordinators(coordinator: CoordinatorProtocol) {
         let updatedChildCoordinators = childCoordinators.filter { $0 !== coordinator }
         childCoordinators = updatedChildCoordinators

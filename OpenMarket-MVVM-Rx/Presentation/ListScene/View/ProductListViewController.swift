@@ -144,11 +144,6 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
                                                             action: nil)
     }
     
-//    @objc
-//    private func touchUpProductRegisterButton() {
-//
-//    }
-    
     private func configureStackView() {
         view.addSubview(underlinedMenuBar)
         view.addSubview(containerStackView)

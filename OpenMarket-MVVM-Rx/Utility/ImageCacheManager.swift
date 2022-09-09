@@ -15,6 +15,18 @@ final class ImageCacheManager {
         NotificationCenter.default.removeObserver(self, name: memoryWarningNotification, object: nil)
     }
     
+    // MARK: - Methods
+    static func getObject(forKey key: String) -> UIImage? {
+        let cacheKey = NSString(string: key)
+        let cachedImage = shared.object(forKey: cacheKey)
+        return cachedImage
+    }
+    
+    static func setObject(image: UIImage, forKey key: String) {
+        let cacheKey = NSString(string: key)
+        shared.setObject(image, forKey: cacheKey)
+    }
+    
     @objc func removeAll() {
         ImageCacheManager.shared.removeAllObjects()
     }

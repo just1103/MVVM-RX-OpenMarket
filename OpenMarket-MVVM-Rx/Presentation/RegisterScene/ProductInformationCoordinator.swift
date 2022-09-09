@@ -13,14 +13,15 @@ protocol ProductInformationCoordinatorDelegate: AnyObject {
 
 final class ProductInformationCoordinator: CoordinatorProtocol {
     // MARK: - Properties
-    weak var delegate: ProductDetailCoordinatorDelegate?
+    weak var delegate: ProductInformationCoordinatorDelegate?
     weak var navigationController: UINavigationController?
     var childCoordinators = [CoordinatorProtocol]()
-    var type: CoordinatorType = .register  // TODO: 상품상세화면 -> 수정화면 추가
+    var type: CoordinatorType = .productInformation(.register)  // TODO: 상품상세화면 -> 수정화면 추가
     
     // MARK: - Initializers
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, kind: ProductInformationKind) {
         self.navigationController = navigationController
+        self.type = .productInformation(kind)
     }
     
     // MARK: - Methods
@@ -29,18 +30,19 @@ final class ProductInformationCoordinator: CoordinatorProtocol {
     }
     
     private func showRegisterScene() {
-//        guard let navigationController = navigationController else { return }
-//        
-//        let productDetailViewModel = ProductDetailViewModel(coordinator: self)
-//        let productDetailViewController = ProductDetailViewController(viewModel: productDetailViewModel)
-//        productDetailViewModel.setupProductID(productID)
-//        
-//        navigationController.pushViewController(productDetailViewController, animated: true)
+        guard let navigationController = navigationController else { return }
+        let productInformationViewModel = ProductInformationViewModel(coordinator: self, kind: .register)
+        let productInformationViewController = ProductInformationViewController(viewModel: productInformationViewModel)
+        navigationController.pushViewController(productInformationViewController, animated: true)
     }
     
-//    func popCurrentPage(){  // ???: 구현 안해도 자동으로 Navigation이 pop시킴
-//        navigationController?.popViewController(animated: true)
-//    }
+    private func showEditScene() {
+        
+    }
+    
+    func popCurrentPage(){
+        navigationController?.popViewController(animated: true)
+    }
     
     func finish() {
         delegate?.removeFromChildCoordinators(coordinator: self)

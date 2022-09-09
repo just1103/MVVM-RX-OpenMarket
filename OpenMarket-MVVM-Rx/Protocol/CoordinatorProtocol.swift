@@ -9,6 +9,10 @@ import UIKit
 
 enum CoordinatorType {
     case list, detail
+    case productInformation(ProductInformationKind)
+}
+
+enum ProductInformationKind {
     case register, edit
 }
 
