@@ -2,7 +2,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var flowCoordinator: FlowCoordinator?
+    var productListCoordinator: ProductListCoordinator?
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -12,10 +12,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navigationController = UINavigationController()
         window?.rootViewController = navigationController
-        
-        let flowCoordinator = FlowCoordinator(navigationController: navigationController)
-        flowCoordinator.start()
-        
         window?.makeKeyAndVisible()
+        
+        productListCoordinator = ProductListCoordinator(navigationController: navigationController)
+        productListCoordinator?.start()
     }
 }

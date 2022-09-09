@@ -135,6 +135,7 @@ final class ProductDetailViewController: UIViewController {
     
     private var viewModel: ProductDetailViewModel!
     private let invokedViewDidLoad = PublishSubject<Void>()
+//    private let leftBarButtonDidTap = PublishSubject<Void>()
     private let cellDidScroll = PublishSubject<IndexPath>()
     private let currentBannerPage = PublishSubject<Int>()
     private var previousBannerPage = 0
@@ -198,7 +199,16 @@ final class ProductDetailViewController: UIViewController {
     private func configureNavigationBar() {
         navigationController?.navigationBar.tintColor = CustomColor.backgroundColor
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor]
+//        navigationController?.navigationItem.hidesBackButton = true
+//        navigationController?.navigationItem.leftBarButtonItem = UIBarButtonItem(
+//            image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(didTapLeftBarButton)
+//        )
     }
+    
+//    @objc
+//    private func didTapLeftBarButton() {
+//        leftBarButtonDidTap.onNext(())
+//    }
     
     private func configureCollectionView() {
         imageCollectionView.register(ProductDetailImageCell.self,
@@ -265,6 +275,7 @@ final class ProductDetailViewController: UIViewController {
 extension ProductDetailViewController {
     private func bind() {
         let input = ProductDetailViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+//                                                 leftBarButtonDidTap: leftBarButtonDidTap.asObservable(),
                                                  cellDidScroll: cellDidScroll.asObservable())
         
         let output = viewModel.transform(input)
@@ -320,8 +331,7 @@ extension ProductDetailViewController {
         static let originalPriceLabelFont: UIFont = .preferredFont(forTextStyle: .callout)
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
         static let descriptionTextViewFont: UIFont = .preferredFont(forTextStyle: .body)
-        
-        static let accessoryImageName: String = "chevron.right"
+
         static let containerHorizontalInset: CGFloat = 20
     }
     

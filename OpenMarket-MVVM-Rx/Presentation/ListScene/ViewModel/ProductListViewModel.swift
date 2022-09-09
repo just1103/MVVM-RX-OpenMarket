@@ -20,7 +20,7 @@ final class ProductListViewModel {
     
     // MARK: - Properties
     weak var delegate: ActivityIndicatorSwitchable!
-    private let actions: ProductListViewModelAction?
+    private weak var coordinator: ProductListCoordinator!
     private var currentProductsCount: Int = 20
     private var currentProductPage: Int = 1
     private var latestProductID: Int!
@@ -28,8 +28,8 @@ final class ProductListViewModel {
     private var images: [UIImage]?
     
     // MARK: - Initializers
-    init(actions: ProductListViewModelAction) {
-        self.actions = actions
+    init(coordinator: ProductListCoordinator) {
+        self.coordinator = coordinator
     }
     
     // MARK: - Methods
@@ -152,7 +152,7 @@ final class ProductListViewModel {
     private func configureCellDidSelectObserver(by inputObservable: Observable<Int>) {
         inputObservable
             .subscribe(onNext: { [weak self] productID in
-                self?.actions?.showProductDetail(productID)
+                self?.coordinator.showProductDetailScene(with: productID)
             })
             .disposed(by: disposeBag)
     }
