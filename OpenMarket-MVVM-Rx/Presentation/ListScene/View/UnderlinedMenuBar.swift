@@ -32,7 +32,7 @@ final class UnderlinedMenuBar: UIView {
     private let selectorView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 3).isActive = true
         view.backgroundColor = CustomColor.backgroundColor
         view.setContentHuggingPriority(.required, for: .horizontal)
         return view
@@ -69,7 +69,7 @@ final class UnderlinedMenuBar: UIView {
             buttonStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             buttonStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             buttonStackView.bottomAnchor.constraint(equalTo: selectorView.topAnchor),
-            selectorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -7),
+            selectorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -2),
             selectorView.widthAnchor.constraint(equalTo: gridButton.widthAnchor)
         ])
         changeSelectedUI(sender: .grid)

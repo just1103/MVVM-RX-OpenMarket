@@ -8,8 +8,7 @@ protocol UnderlinedMenuBarViewModelDelegate: AnyObject {
 final class UnderlinedMenuBarViewModel {
     // MARK: - Nested Types
     enum MenuButton {
-        case table
-        case grid
+        case table, grid
     }
     
     struct Input {

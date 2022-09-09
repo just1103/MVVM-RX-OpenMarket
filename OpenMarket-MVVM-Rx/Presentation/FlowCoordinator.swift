@@ -1,6 +1,6 @@
 import UIKit
 
-class FlowCoordinator {
+final class FlowCoordinator {
     // MARK: - Properties
     weak private var navigationController: UINavigationController?
     private var productListViewController: ProductListViewController!

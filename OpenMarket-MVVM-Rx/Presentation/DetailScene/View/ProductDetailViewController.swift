@@ -31,6 +31,7 @@ final class ProductDetailViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
+        pageControl.hidesForSinglePage = true
         return pageControl
     }()
     private let productInformationStackView: UIStackView = {
@@ -292,7 +293,6 @@ extension ProductDetailViewController {
         navigationItem.backBarButtonItem?.customView?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         imagePageControl.numberOfPages = data.images.count
-        imagePageControl.hidesForSinglePage = true
         nameLabel.text = data.name
         changePriceAndDiscountedPriceLabel(price: data.price,
                                            discountedPrice: data.discountedPrice,

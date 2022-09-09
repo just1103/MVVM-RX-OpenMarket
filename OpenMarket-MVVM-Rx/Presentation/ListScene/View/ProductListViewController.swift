@@ -10,8 +10,7 @@ final class ProductListViewController: UIViewController {
     }
     
     private enum SectionKind: Int {
-        case banner
-        case list
+        case banner, list
         
         var columnCount: Int {
             switch self {
@@ -51,9 +50,15 @@ final class ProductListViewController: UIViewController {
         button.isHidden = true
         return button
     }()
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.style = .large
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
     
     private static var isGrid: Bool = true
-    private var previousBannerPage: Int = 0
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var underlinedMenuBar: UnderlinedMenuBar!
     private var dataSource: DiffableDataSource!
@@ -113,7 +118,7 @@ final class ProductListViewController: UIViewController {
     private func showErrorVersionAlert() {
         let okAlertAction = UIAlertAction(title: Content.okAlertActionTitle, style: .default)
         let alert = AlertFactory().createAlert(title: Content.versionErrorTitle,
-                                               message: Content.versionErrorMessage ,
+                                               message: Content.versionErrorMessage,
                                                actions: okAlertAction)
         present(alert, animated: true)
     }

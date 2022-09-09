@@ -1,77 +1,64 @@
 import UIKit
 
-final class TableListCell: UICollectionViewCell {
+final class GridListCell: UICollectionViewCell {
     // MARK: - Properties
     private let containerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill, spacing: 8)
-        stackView.setupMargins(verticalInset: 10, horizontalInset: 10)
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill, spacing: 8)
+        stackView.setupMargins(verticalInset: 15, horizontalInset: 15)
         return stackView
     }()
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         imageView.layer.cornerRadius = 6
         imageView.clipsToBounds = true
-        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
-    }()
-    private let verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.style(axis: .vertical, alignment: .fill, distribution: .fillEqually)
-        return stackView
     }()
     private let nameAndStockStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill, spacing: 10)
+        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill)
         return stackView
     }()
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.nameLabelFont, textColor: Design.nameLabelTextColor)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     private let stockLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .right, font: Design.stockLabelFont, textColor: Design.stockLabelTextColor)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
-    private let accessoryImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: Design.accessoryImageName)
-        imageView.tintColor = Design.accessoryImageViewColor
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-        return imageView
-    }()
-    private let priceAndBargainStackView: UIStackView = {
+    private let priceContainerStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.style(axis: .horizontal, alignment: .fill, distribution: .fill, spacing: 8)
+        stackView.style(axis: .horizontal, alignment: .top, distribution: .fill, spacing: 8)
+        return stackView
+    }()
+    private let priceAndBargainpriceStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.style(axis: .vertical, alignment: .fill, distribution: .fill)
         return stackView
     }()
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
     private let bargainPriceLabel: UILabel = {
         let label = UILabel()
-        label.style(textAlignment: .left, font: Design.bargainPriceLabelFont, textColor: Design.bargainPriceLabelTextColor)
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.style(textAlignment: .left, font: Design.priceLabelFont, textColor: Design.priceLabelTextColor)
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
     private let bargainRateLabel: UILabel = {
         let label = UILabel()
         label.style(textAlignment: .right, font: Design.bargainRateLabelFont, textColor: Design.bargainRateLabelTextColor)
-        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -85,7 +72,8 @@ final class TableListCell: UICollectionViewCell {
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        configureUI()
     }
     
     // MARK: - Lifecycle Methods
@@ -119,24 +107,22 @@ final class TableListCell: UICollectionViewCell {
     private func configureUI() {
         addSubview(containerStackView)
         containerStackView.addArrangedSubview(imageView)
-        containerStackView.addArrangedSubview(verticalStackView)
-        containerStackView.addArrangedSubview(accessoryImageView)
+        containerStackView.addArrangedSubview(nameAndStockStackView)
+        containerStackView.addArrangedSubview(priceContainerStackView)
         
-        verticalStackView.addArrangedSubview(nameAndStockStackView)
         nameAndStockStackView.addArrangedSubview(nameLabel)
         nameAndStockStackView.addArrangedSubview(stockLabel)
         
-        verticalStackView.addArrangedSubview(priceAndBargainStackView)
-        priceAndBargainStackView.addArrangedSubview(bargainPriceLabel)
-        priceAndBargainStackView.addArrangedSubview(priceLabel)
-        priceAndBargainStackView.addArrangedSubview(bargainRateLabel)
+        priceContainerStackView.addArrangedSubview(priceAndBargainpriceStackView)
+        priceContainerStackView.addArrangedSubview(bargainRateLabel)
+        priceAndBargainpriceStackView.addArrangedSubview(bargainPriceLabel)
+        priceAndBargainpriceStackView.addArrangedSubview(priceLabel)
         
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: self.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.2)
+            containerStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
     
@@ -144,7 +130,7 @@ final class TableListCell: UICollectionViewCell {
                                                     discountedPrice: Double,
                                                     bargainPrice: Double,
                                                     currency: Currency) {
-        if discountedPrice == .zero {
+        if discountedPrice == 0 {
             priceLabel.text = "\(currency.rawValue) \(price.formattedWithComma())"
         } else {
             let priceText = "\(currency.rawValue) \(price.formattedWithComma())"
@@ -156,11 +142,9 @@ final class TableListCell: UICollectionViewCell {
     }
     
     private func changeStockLabel(by stock: Int) {
-        if stock == .zero {
+        if stock == 0 {
             stockLabel.isHidden = false
             stockLabel.text = Content.outOfStockLabelText
-        } else {
-            stockLabel.isHidden = true
         }
     }
     
@@ -174,20 +158,17 @@ final class TableListCell: UICollectionViewCell {
 }
 
 // MARK: - NameSpaces
-extension TableListCell {
+extension GridListCell {
     private enum Design {
         static let nameLabelTextColor: UIColor = .black
         static let stockLabelTextColor: UIColor = .systemOrange
-        static let accessoryImageViewColor: UIColor = CustomColor.darkGreenColor
         static let priceLabelTextColor: UIColor = .systemRed
         static let discountedPriceLabelTextColor: UIColor = .systemGray
-        static let bargainPriceLabelTextColor: UIColor = .systemRed
         static let bargainRateLabelTextColor: UIColor = .systemRed
         
         static let nameLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let stockLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
         static let priceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
-        static let bargainPriceLabelFont: UIFont = .preferredFont(forTextStyle: .headline)
         static let bargainRateLabelFont: UIFont = .preferredFont(forTextStyle: .body)
         
         static let accessoryImageName: String = "chevron.right"

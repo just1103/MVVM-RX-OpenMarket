@@ -145,13 +145,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		36B1D56E282A06A400999EC7 /* ProductDetailView */ = {
+		36B1D56E282A06A400999EC7 /* DetailScene */ = {
 			isa = PBXGroup;
 			children = (
 				36B1D56F282A06D800999EC7 /* View */,
 				36B1D570282A06DE00999EC7 /* ViewModel */,
 			);
-			path = ProductDetailView;
+			path = DetailScene;
 			sourceTree = "<group>";
 		};
 		36B1D56F282A06D800999EC7 /* View */ = {
@@ -307,19 +307,19 @@
 			isa = PBXGroup;
 			children = (
 				DECD164D28166FDA00F34993 /* FlowCoordinator.swift */,
-				DECD164928166F7000F34993 /* ProductListView */,
-				36B1D56E282A06A400999EC7 /* ProductDetailView */,
+				DECD164928166F7000F34993 /* ListScene */,
+				36B1D56E282A06A400999EC7 /* DetailScene */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
 		};
-		DECD164928166F7000F34993 /* ProductListView */ = {
+		DECD164928166F7000F34993 /* ListScene */ = {
 			isa = PBXGroup;
 			children = (
 				DECD164B28166FB700F34993 /* View */,
 				DECD164C28166FBC00F34993 /* ViewModel */,
 			);
-			path = ProductListView;
+			path = ListScene;
 			sourceTree = "<group>";
 		};
 		DECD164B28166FB700F34993 /* View */ = {
