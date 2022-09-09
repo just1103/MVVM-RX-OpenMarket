@@ -2,7 +2,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class ProductListViewController: UIViewController {
+
+protocol ActivityIndicatorSwitchable: AnyObject {
+    func showActivityIndicator()
+}
+
+final class ProductListViewController: UIViewController, ActivityIndicatorSwitchable {
     // MARK: - Nested Types
     private enum SupplementaryKind {
         static let header = "header-element-kind"
@@ -140,6 +145,7 @@ final class ProductListViewController: UIViewController {
     private func configureStackView() {
         view.addSubview(underlinedMenuBar)
         view.addSubview(containerStackView)
+        view.addSubview(activityIndicator)
         containerStackView.addArrangedSubview(listRefreshButton)
         containerStackView.addArrangedSubview(collectionView)
         
@@ -152,7 +158,9 @@ final class ProductListViewController: UIViewController {
             underlinedMenuBar.bottomAnchor.constraint(equalTo: containerStackView.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            containerStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
@@ -310,6 +318,7 @@ extension ProductListViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
                 self?.drawBannerAndList(with: products)
+                self?.hideActivityIndicator()
             })
             .disposed(by: disposeBag)
     }
@@ -353,6 +362,7 @@ extension ProductListViewController {
                 self?.drawNewList(with: products)
                 self?.listRefreshButton.isHidden = true
                 self?.collectionView.setContentOffset(CGPoint.zero, animated: true)
+                self?.hideActivityIndicator()
             })
             .disposed(by: disposeBag)
     }
@@ -373,6 +383,7 @@ extension ProductListViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] products in
                 self?.drawBannerAndList(with: (products, []))
+                self?.hideActivityIndicator()
             })
             .disposed(by: disposeBag)
     }
@@ -402,6 +413,19 @@ extension ProductListViewController: UICollectionViewDelegate {
         if indexPath.section == 1 {
             cellDidScroll.onNext(indexPath)
         }
+    }
+}
+
+// MARK: - Activity Indicator
+extension ProductListViewController {
+    func showActivityIndicator() {
+        DispatchQueue.main.async { [weak self] in
+            self?.activityIndicator.startAnimating()
+        }
+    }
+    
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
     }
 }
 

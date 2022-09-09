@@ -19,6 +19,7 @@ final class ProductListViewModel {
     }
     
     // MARK: - Properties
+    weak var delegate: ActivityIndicatorSwitchable!
     private let actions: ProductListViewModelAction?
     private var currentProductsCount: Int = 20
     private var currentProductPage: Int = 1
@@ -53,6 +54,8 @@ final class ProductListViewModel {
         return inputObserver
             .flatMap { [weak self] _ -> Observable<([UniqueProduct], [UniqueProduct])> in
                 guard let self = self else { return Observable.just(([], [])) }
+                self.delegate.showActivityIndicator()
+                
                 return self.fetchProducts(at: 1, with: 20).map { productPage -> ([UniqueProduct], [UniqueProduct]) in
                     let uniqueListProducts = self.makeHashable(from: productPage.products)
                     let recentBargainProducts = productPage.products.filter { product in
@@ -116,6 +119,8 @@ final class ProductListViewModel {
         inputObservable
             .flatMap { [weak self] _ -> Observable<[UniqueProduct]> in
                 guard let self = self else { return Observable.just([]) }
+                self.delegate.showActivityIndicator()
+                
                 return self.fetchProducts(at: 1, with: 20).map { productPage -> [UniqueProduct] in
                     guard let firstProductID = productPage.products.first?.id else { return [] }
                     self.latestProductID = firstProductID
@@ -134,6 +139,8 @@ final class ProductListViewModel {
             }
             .flatMap { [weak self] _ -> Observable<[UniqueProduct]> in
                 guard let self = self else { return Observable.just([]) }
+                self.delegate.showActivityIndicator()
+                
                 self.currentProductPage += 1
                 self.currentProductsCount += 20
                 return self.fetchProducts(at: self.currentProductPage, with: 20).map { productPage -> [UniqueProduct] in

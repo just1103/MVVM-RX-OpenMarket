@@ -31,14 +31,14 @@ final class FooterView: UICollectionReusableView {
     // MARK: - Methods
     func bind(input: Observable<Int>, indexPath: IndexPath, pageNumber: Int) {
         bannerPageControl.numberOfPages = pageNumber
-        if indexPath.section == 1 {
-            self.isHidden = true
-        } else {
+        if indexPath.section == 0 {
             input
                 .subscribe(onNext: { [weak self] currentPage in
                     self?.bannerPageControl.currentPage = currentPage
                 })
                 .disposed(by: disposeBag)
+        } else {
+            self.isHidden = true
         }
     }
     
