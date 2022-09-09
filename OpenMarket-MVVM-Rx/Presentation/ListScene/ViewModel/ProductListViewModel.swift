@@ -1,4 +1,3 @@
-import Foundation
 import RxSwift
 import UIKit
 
@@ -6,6 +5,7 @@ final class ProductListViewModel {
     // MARK: - Nested Types
     struct Input {
         let invokedViewDidLoad: Observable<Void>
+        let rightBarButtonDidTap: Observable<Void>?
         let listRefreshButtonDidTap: Observable<Void>
         let cellDidScroll: Observable<IndexPath>
         let cellDidSelect: Observable<Int>
@@ -41,6 +41,7 @@ final class ProductListViewModel {
         
         configureViewDidLoadObserver(by: input.invokedViewDidLoad, newProductDidPostOutput: newProductDidPost)
         configureCellDidSelectObserver(by: input.cellDidSelect)
+        configureRightBarButtonDidTapObserver(by: input.rightBarButtonDidTap)
         
         let output = Output(products: products,
                             newProductDidPost: newProductDidPost.asObservable(),
@@ -153,6 +154,14 @@ final class ProductListViewModel {
         inputObservable
             .subscribe(onNext: { [weak self] productID in
                 self?.coordinator.showProductDetailScene(with: productID)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureRightBarButtonDidTapObserver(by inputObserver: Observable<Void>?) {
+        inputObserver?
+            .subscribe(onNext: { [weak self] in
+                self?.coordinator.showProductRegisterScene()
             })
             .disposed(by: disposeBag)
     }

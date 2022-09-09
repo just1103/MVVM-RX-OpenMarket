@@ -8,7 +8,7 @@ final class FooterView: UICollectionReusableView {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.pageIndicatorTintColor = .systemGray2
-        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
+        pageControl.currentPageIndicatorTintColor = UIColor.darkGreenColor
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
         return pageControl
@@ -33,7 +33,7 @@ final class FooterView: UICollectionReusableView {
         bannerPageControl.numberOfPages = pageNumber
         if indexPath.section == 0 {
             input
-                .subscribe(onNext: { [weak self] currentPage in
+                .subscribe(onNext: { [weak self] currentPage in  // FIXME: N번 Subscribe 되는 문제
                     self?.bannerPageControl.currentPage = currentPage
                 })
                 .disposed(by: disposeBag)

@@ -179,7 +179,7 @@ extension TableListCell {
     private enum Design {
         static let nameLabelTextColor: UIColor = .black
         static let stockLabelTextColor: UIColor = .systemOrange
-        static let accessoryImageViewColor: UIColor = CustomColor.darkGreenColor
+        static let accessoryImageViewColor: UIColor = UIColor.darkGreenColor
         static let priceLabelTextColor: UIColor = .systemRed
         static let discountedPriceLabelTextColor: UIColor = .systemGray
         static let bargainPriceLabelTextColor: UIColor = .systemRed

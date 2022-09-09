@@ -6,7 +6,7 @@ final class ProductDetailViewController: UIViewController {
     // MARK: - Properties
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = CustomColor.backgroundColor
+        scrollView.backgroundColor = .backgroundColor
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
@@ -20,7 +20,7 @@ final class ProductDetailViewController: UIViewController {
                                               collectionViewLayout: UICollectionViewLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 0.85).isActive = true
-        collectionView.backgroundColor = CustomColor.backgroundColor
+        collectionView.backgroundColor = .backgroundColor
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -28,7 +28,7 @@ final class ProductDetailViewController: UIViewController {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.pageIndicatorTintColor = .systemGray
-        pageControl.currentPageIndicatorTintColor = CustomColor.darkGreenColor
+        pageControl.currentPageIndicatorTintColor = .darkGreenColor
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
         pageControl.hidesForSinglePage = true
@@ -122,7 +122,7 @@ final class ProductDetailViewController: UIViewController {
     private let descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = CustomColor.backgroundColor
+        textView.backgroundColor = .backgroundColor
         textView.font = Design.descriptionTextViewFont
         textView.textColor = Design.descriptionTextViewTextColor
         textView.isEditable = false
@@ -159,7 +159,7 @@ final class ProductDetailViewController: UIViewController {
     
     // MARK: - Methods
     private func configureUI() {
-        view.backgroundColor = CustomColor.darkGreenColor
+        view.backgroundColor = .darkGreenColor
         view.addSubview(scrollView)
         scrollView.addSubview(containerStackView)
         
@@ -197,8 +197,8 @@ final class ProductDetailViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        navigationController?.navigationBar.tintColor = CustomColor.backgroundColor
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor]
+        navigationController?.navigationBar.tintColor = .backgroundColor
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.backgroundColor]
 //        navigationController?.navigationItem.hidesBackButton = true
 //        navigationController?.navigationItem.leftBarButtonItem = UIBarButtonItem(
 //            image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(didTapLeftBarButton)

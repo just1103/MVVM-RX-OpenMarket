@@ -33,7 +33,7 @@ final class UnderlinedMenuBar: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 3).isActive = true
-        view.backgroundColor = CustomColor.backgroundColor
+        view.backgroundColor = UIColor.backgroundColor
         view.setContentHuggingPriority(.required, for: .horizontal)
         return view
     }()
@@ -138,6 +138,6 @@ extension UnderlinedMenuBar {
         static let highlightedButtonTitleFont: UIFont = .boldSystemFont(ofSize: 23)
         
         static let defaultButtonTitleColor: UIColor = .systemGray
-        static let highlightedButtonTitleColor: UIColor = CustomColor.backgroundColor
+        static let highlightedButtonTitleColor: UIColor = UIColor.backgroundColor
     }
 }

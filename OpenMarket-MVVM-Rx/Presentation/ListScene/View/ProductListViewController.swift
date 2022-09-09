@@ -2,7 +2,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-
 protocol ActivityIndicatorSwitchable: AnyObject {
     func showActivityIndicator()
 }
@@ -49,7 +48,7 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
     private let listRefreshButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.numberOfLines = 0
-        button.backgroundColor = CustomColor.lightGreenColor
+        button.backgroundColor = UIColor.lightGreenColor
         button.setTitle(Content.listRefreshButtonTitle, for: .normal)
         button.titleLabel?.font = Design.listRefreshButtonTitleFont
         button.isHidden = true
@@ -101,7 +100,7 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor,
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.backgroundColor,
                                                                    .font: UIFont.preferredFont(forTextStyle: .title1)]
     }
     
@@ -135,12 +134,20 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
     }
     
     private func configureNavigationBar() {
-        view.backgroundColor = CustomColor.darkGreenColor
+        view.backgroundColor = UIColor.darkGreenColor
         navigationItem.title = Content.navigationTitle
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CustomColor.backgroundColor,
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.backgroundColor,
                                                                    .font: UIFont.preferredFont(forTextStyle: .title1)]
         navigationItem.backButtonDisplayMode = .minimal
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                            target: nil,
+                                                            action: nil)
     }
+    
+//    @objc
+//    private func touchUpProductRegisterButton() {
+//
+//    }
     
     private func configureStackView() {
         view.addSubview(underlinedMenuBar)
@@ -167,7 +174,7 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = CustomColor.backgroundColor
+        collectionView.backgroundColor = UIColor.backgroundColor
         let layout = createLayout()
         collectionView.collectionViewLayout = layout
     }
@@ -301,6 +308,7 @@ extension ProductListViewController {
             }
         
         let input = ProductListViewModel.Input(invokedViewDidLoad: invokedViewDidLoad.asObservable(),
+                                               rightBarButtonDidTap: navigationItem.rightBarButtonItem?.rx.tap.asObservable(),
                                                listRefreshButtonDidTap: listRefreshButton.rx.tap.asObservable(),
                                                cellDidScroll: cellDidScroll.asObservable(),
                                                cellDidSelect: selectedCellObservable)

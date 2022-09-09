@@ -4,7 +4,7 @@ final class HeaderView: UICollectionReusableView {
     // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.style(textAlignment: .left, font: Design.titleLabelFont, textColor: CustomColor.darkGreenColor)
+        label.style(textAlignment: .left, font: Design.titleLabelFont, textColor: UIColor.darkGreenColor)
         return label
     }()
     
