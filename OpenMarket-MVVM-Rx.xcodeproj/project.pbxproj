@@ -35,7 +35,6 @@
 		36C41C2828CB73FB006BC3B2 /* ProductInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C2728CB73FB006BC3B2 /* ProductInformationViewController.swift */; };
 		36C41C2A28CB795B006BC3B2 /* UICollectionView+Register+Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C2928CB795B006BC3B2 /* UICollectionView+Register+Reuse.swift */; };
 		36C41C2C28CB796F006BC3B2 /* UICollectionViewCell+Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C2B28CB796F006BC3B2 /* UICollectionViewCell+Identifier.swift */; };
-		36C41C2E28CB7C21006BC3B2 /* ProductInformationScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C2D28CB7C21006BC3B2 /* ProductInformationScrollView.swift */; };
 		36C41C3028CB7CF1006BC3B2 /* RoundedRectTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C2F28CB7CF1006BC3B2 /* RoundedRectTextField.swift */; };
 		36C41C3228CB7F64006BC3B2 /* UserInputChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C3128CB7F63006BC3B2 /* UserInputChecker.swift */; };
 		36C41C3428CB7F94006BC3B2 /* ProductDetailToRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C41C3328CB7F94006BC3B2 /* ProductDetailToRegister.swift */; };
@@ -114,7 +113,6 @@
 		36C41C2728CB73FB006BC3B2 /* ProductInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInformationViewController.swift; sourceTree = "<group>"; };
 		36C41C2928CB795B006BC3B2 /* UICollectionView+Register+Reuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Register+Reuse.swift"; sourceTree = "<group>"; };
 		36C41C2B28CB796F006BC3B2 /* UICollectionViewCell+Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Identifier.swift"; sourceTree = "<group>"; };
-		36C41C2D28CB7C21006BC3B2 /* ProductInformationScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInformationScrollView.swift; sourceTree = "<group>"; };
 		36C41C2F28CB7CF1006BC3B2 /* RoundedRectTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectTextField.swift; sourceTree = "<group>"; };
 		36C41C3128CB7F63006BC3B2 /* UserInputChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputChecker.swift; sourceTree = "<group>"; };
 		36C41C3328CB7F94006BC3B2 /* ProductDetailToRegister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailToRegister.swift; sourceTree = "<group>"; };
@@ -278,7 +276,6 @@
 			isa = PBXGroup;
 			children = (
 				36C41C2728CB73FB006BC3B2 /* ProductInformationViewController.swift */,
-				36C41C2D28CB7C21006BC3B2 /* ProductInformationScrollView.swift */,
 				36C41C2F28CB7CF1006BC3B2 /* RoundedRectTextField.swift */,
 				36C41C3728CB82E7006BC3B2 /* ProductImageCollectionView.swift */,
 				36C41C3928CB8AFC006BC3B2 /* ProductImageCell.swift */,
@@ -572,7 +569,6 @@
 				DEC3428528100E7F0046D916 /* DetailViewProduct.swift in Sources */,
 				36C41C2828CB73FB006BC3B2 /* ProductInformationViewController.swift in Sources */,
 				DECD16582816885B00F34993 /* ProductListViewController.swift in Sources */,
-				36C41C2E28CB7C21006BC3B2 /* ProductInformationScrollView.swift in Sources */,
 				DEC34294281036D90046D916 /* URLRequest+Initializer.swift in Sources */,
 				36B1D572282A074700999EC7 /* ProductDetailViewModel.swift in Sources */,
 				36C41C3E28CB8CD0006BC3B2 /* UICollectionReusableView+Identifier.swift in Sources */,

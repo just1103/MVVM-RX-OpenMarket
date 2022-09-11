@@ -137,11 +137,9 @@ final class ProductListViewController: UIViewController, ActivityIndicatorSwitch
         view.backgroundColor = UIColor.darkGreenColor
         navigationItem.title = Content.navigationTitle
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.backgroundColor,
-                                                                   .font: UIFont.preferredFont(forTextStyle: .title1)]
+                                                                   .font: UIFont.preferredFont(forTextStyle: .title2)]
         navigationItem.backButtonDisplayMode = .minimal
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                            target: nil,
-                                                            action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
     }
     
     private func configureStackView() {
@@ -314,6 +312,11 @@ extension ProductListViewController {
         showListRefreshButton(output.newProductDidPost)
         configureNewPostedItemsWith(output.newPostedProducts)
         configureNextPageItemsWith(output.nextPageProducts)
+        
+        // FIXME: Diffable이라서 이걸 못쓰는듯?
+//        currentBannerPage
+//            .asDriver(onErrorJustReturn: 0)
+//            .drive(collectionView.headerView.pageControl.rx.currentPage)
     }
     
     private func configureItemsWith(_ products: Observable<([UniqueProduct], [UniqueProduct])>) {

@@ -2,6 +2,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+// TODO: Input-output modeling을 쓰지 말아보자
 final class ProductDetailViewController: UIViewController {
     // MARK: - Properties
     private let scrollView: UIScrollView = {
@@ -16,8 +17,7 @@ final class ProductDetailViewController: UIViewController {
         return stackView
     }()
     private let imageCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero,
-                                              collectionViewLayout: UICollectionViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 0.85).isActive = true
         collectionView.backgroundColor = .backgroundColor

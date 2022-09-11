@@ -25,12 +25,16 @@ final class ProductInformationViewModel {
     private let productInformationKind: ProductInformationKind!
     private var productDetail: UniqueProduct?
     private let disposeBag = DisposeBag()
-    private(set) var productImages: [UIImage]?
+    
+    // FIXME: Test
+    private(set) var productImages: PublishSubject<[UIImage]> = PublishSubject()
     
     // MARK: - Initializers
     init(coordinator: ProductInformationCoordinator, kind: ProductInformationKind) {
         self.coordinator = coordinator
         self.productInformationKind = kind
+        productImages.onNext([UIImage(systemName: "plus")!])
+//        self.productImages = Observable.just([UIImage(systemName: "plus")!])
     }
     
     deinit {
@@ -173,15 +177,8 @@ final class ProductInformationViewModel {
     private func configureRightBarButtonDidTapObserver(by inputObserver: Observable<Void>?) {
         inputObserver?
             .subscribe(onNext: { [weak self] in
-
-//                switch result {
-//                case .success(let success):
-//                    viewModel.
-//                case .failure(let error):
-        
-
+                // TODO: POST
         })
         .disposed(by: disposeBag)
     }
-
 }

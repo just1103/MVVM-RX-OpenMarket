@@ -11,10 +11,14 @@ import RxCocoa
 
 class ProductInformationViewController: UIViewController { // TODO: subclass - 상품 등록, 상품 수정
     // MARK: - Properties
+//    var imagePicker = ProductRegisterImagePicker()
+    
+    
     private let productInfoScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
+        let scrollView = UIScrollView(frame: .zero)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .backgroundColor
+        scrollView.isScrollEnabled = true
         return scrollView
     }()
     private let containerStackView: UIStackView = {
@@ -30,7 +34,6 @@ class ProductInformationViewController: UIViewController { // TODO: subclass - �
     private let priceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.style(axis: .horizontal, alignment: .top, distribution: .fillProportionally, spacing: 8)
-//        stackView.setContentHuggingPriority(.required, for: .vertical)
         return stackView
     }()
     private(set) var priceTextField = RoundedRectTextField()
@@ -72,6 +75,9 @@ class ProductInformationViewController: UIViewController { // TODO: subclass - �
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        setupImageCollectionView()
+        setupTextFields()
+        setupDescriptionTextView()
         configureNavigationBar()
         bind()
         invokedViewDidLoad.onNext(())
@@ -81,38 +87,26 @@ class ProductInformationViewController: UIViewController { // TODO: subclass - �
     private func configureUI() {
         view.backgroundColor = .darkGreenColor
         view.addSubview(productInfoScrollView)
-        setupVerticalStackView()
-        setupImageCollectionView()
-        setupTextFields()
-        setupDescriptionTextView()
+        productInfoScrollView.addSubview(containerStackView)
+        containerStackView.addArrangedSubview(imageCollectionView)
+        containerStackView.addArrangedSubview(nameTextField)
+        priceStackView.addArrangedSubview(priceTextField)
+        priceStackView.addArrangedSubview(currencySegmentedControl)
+        containerStackView.addArrangedSubview(priceStackView)
+        containerStackView.addArrangedSubview(discountedPriceTextField)
+        containerStackView.addArrangedSubview(stockTextField)
+        containerStackView.addArrangedSubview(descriptionTextView)
 
         NSLayoutConstraint.activate([
             productInfoScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             productInfoScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             productInfoScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             productInfoScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            // FIXME: Scroll 구역을 인지 못하는 문제
-//            productInfoScrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: view.widthAnchor),
             productInfoScrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: productInfoScrollView.widthAnchor),
-        ])
-    }
-    
-    private func setupVerticalStackView() {
-        view.addSubview(containerStackView)
-        containerStackView.addArrangedSubview(imageCollectionView)
-        containerStackView.addArrangedSubview(nameTextField)
-        containerStackView.addArrangedSubview(priceStackView)
-        containerStackView.addArrangedSubview(discountedPriceTextField)
-        containerStackView.addArrangedSubview(stockTextField)
-        containerStackView.addArrangedSubview(descriptionTextView)
-        priceStackView.addArrangedSubview(priceTextField)
-        priceStackView.addArrangedSubview(currencySegmentedControl)
-        
-        NSLayoutConstraint.activate([
-            containerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: productInfoScrollView.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: productInfoScrollView.trailingAnchor),
+            containerStackView.topAnchor.constraint(equalTo: productInfoScrollView.topAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: productInfoScrollView.bottomAnchor),
             imageCollectionView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.35),
         ])
     }
@@ -126,6 +120,8 @@ class ProductInformationViewController: UIViewController { // TODO: subclass - �
         imageCollectionView.register(cellType: ProductImageCell.self)
         imageCollectionView.register(reusableFooterViewType: ProductRegisterImageFooterView.self)
         imageCollectionView.delegate = self
+        imageCollectionView.showsVerticalScrollIndicator = false
+        imageCollectionView.showsHorizontalScrollIndicator = true
     }
     
     private func setupTextFields() {
@@ -185,8 +181,30 @@ extension ProductInformationViewController {
         )
         
         let output = viewModel.transform(input)
+        
+        viewModel.productImages
+            .bind(to: imageCollectionView.rx.items(
+            cellIdentifier: ProductImageCell.reuseIdentifier,
+            cellType: ProductImageCell.self)
+        ) { [weak self] indexPath, image, cell in
+            cell.setupProductImage(with: image)
+            cell.updateIndexPath(at: indexPath)
+         }
+         .disposed(by: disposeBag)
+            
     }
 }
+
+// MARK: - ImageCollectionView DataSource
+//extension ProductImageCollectionView: UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        <#code#>
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        <#code#>
+//    }
+//}
 
 // MARK: - ImageCollectionView Delegate
 extension ProductInformationViewController: UICollectionViewDelegateFlowLayout {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum CoordinatorType {
+enum CoordinatorType {  // 이걸 ViewModel
     case list, detail
     case productInformation(ProductInformationKind)
 }

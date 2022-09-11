@@ -15,7 +15,7 @@ final class ProductRegisterImageFooterView: UICollectionReusableView {
 //        configureUI()
 //    }
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect) { // FIXME: 호출이 안되는 문제
         super.init(frame: frame)
         configureUI()
     }

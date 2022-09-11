@@ -20,15 +20,6 @@ final class ProductImageCell: UICollectionViewCell {
         configureUI()
         setupButton()
     }
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setup()
-//        setupButton()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     // MARK: - Lifecycle Methods
     override func prepareForReuse() {
@@ -41,8 +32,8 @@ final class ProductImageCell: UICollectionViewCell {
         imageView.image = image
     }
     
-    func updateIndexPath(at indexPath: IndexPath) {
-        self.indexPath = indexPath
+    func updateIndexPath(at indexPath: Int) {
+        self.indexPath?.row = indexPath
     }
     
     private func configureUI() {
